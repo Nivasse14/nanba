@@ -602,6 +602,240 @@ const i18n = {
 
 const currencyLabel = 'EUR';
 
+const brokerI18n = {
+  FR: {
+    accessText: 'Connectez-vous ou creez votre compte broker pour gerer vos biens et vos demandes.',
+    login: 'Connexion',
+    signup: 'Inscription',
+    comparisonTitle: 'Comparatif des offres',
+    criteria: 'Criteres',
+    companyInfo: 'Informations societe',
+    features: {
+      requests: 'Voir les demandes clients',
+      fiveContacts: '5 coordonnees par jour',
+      unlimitedContacts: 'Coordonnees illimitees',
+      contactClients: 'Contacter les clients',
+      beContacted: 'Etre contacte par les clients',
+      alerts: 'Notifications ciblees',
+      listings: 'Publier ses biens',
+    },
+  },
+  EN: {
+    accessText: 'Log in or create your broker account to manage listings and client requests.',
+    login: 'Log in',
+    signup: 'Sign up',
+    comparisonTitle: 'Plan comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company information',
+    features: {
+      requests: 'View client requests',
+      fiveContacts: '5 contact details per day',
+      unlimitedContacts: 'Unlimited contact details',
+      contactClients: 'Contact clients',
+      beContacted: 'Be contacted by clients',
+      alerts: 'Targeted notifications',
+      listings: 'Publish listings',
+    },
+  },
+  TA: {
+    accessText: 'உங்கள் broker account-ல் login செய்யவும் அல்லது புதிய account உருவாக்கவும்.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests பார்க்க',
+      fiveContacts: 'ஒரு நாளுக்கு 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients-ஐ contact செய்ய',
+      beContacted: 'Clients contact செய்யலாம்',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish செய்ய',
+    },
+  },
+  HI: {
+    accessText: 'अपना broker account login करें या नया account बनाएं.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests देखें',
+      fiveContacts: 'हर दिन 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients को contact करें',
+      beContacted: 'Clients आपसे contact करें',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish करें',
+    },
+  },
+  ML: {
+    accessText: 'Broker account login ചെയ്യുക അല്ലെങ്കില്‍ പുതിയ account സൃഷ്ടിക്കുക.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests കാണുക',
+      fiveContacts: 'ദിവസം 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients-നെ contact ചെയ്യുക',
+      beContacted: 'Clients contact ചെയ്യാം',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish ചെയ്യുക',
+    },
+  },
+  TE: {
+    accessText: 'Broker account login చేయండి లేదా కొత్త account సృష్టించండి.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests చూడండి',
+      fiveContacts: 'రోజుకు 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients contact చేయండి',
+      beContacted: 'Clients contact చేయగలరు',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish చేయండి',
+    },
+  },
+  KN: {
+    accessText: 'Broker account login ಮಾಡಿ ಅಥವಾ ಹೊಸ account ರಚಿಸಿ.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests ನೋಡಿ',
+      fiveContacts: 'ದಿನಕ್ಕೆ 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients contact ಮಾಡಿ',
+      beContacted: 'Clients contact ಮಾಡಬಹುದು',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish ಮಾಡಿ',
+    },
+  },
+  PA: {
+    accessText: 'Broker account login ਕਰੋ ਜਾਂ ਨਵਾਂ account ਬਣਾਓ.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests ਵੇਖੋ',
+      fiveContacts: 'ਰੋਜ਼ 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients contact ਕਰੋ',
+      beContacted: 'Clients contact ਕਰ ਸਕਦੇ ਹਨ',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish ਕਰੋ',
+    },
+  },
+  GU: {
+    accessText: 'Broker account login કરો અથવા નવું account બનાવો.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests જુઓ',
+      fiveContacts: 'દરરોજ 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients contact કરો',
+      beContacted: 'Clients contact કરી શકે',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish કરો',
+    },
+  },
+  BN: {
+    accessText: 'Broker account login করুন অথবা নতুন account তৈরি করুন.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests দেখুন',
+      fiveContacts: 'প্রতিদিন 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients contact করুন',
+      beContacted: 'Clients contact করতে পারে',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish করুন',
+    },
+  },
+  MR: {
+    accessText: 'Broker account login करा किंवा नवीन account तयार करा.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests पहा',
+      fiveContacts: 'दररोज 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients contact करा',
+      beContacted: 'Clients contact करू शकतात',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish करा',
+    },
+  },
+  UR: {
+    accessText: 'Broker account login کریں یا نیا account بنائیں.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests دیکھیں',
+      fiveContacts: 'روزانہ 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients contact کریں',
+      beContacted: 'Clients contact کر سکتے ہیں',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish کریں',
+    },
+  },
+  OR: {
+    accessText: 'Broker account login କରନ୍ତୁ କିମ୍ବା ନୂଆ account ତିଆରି କରନ୍ତୁ.',
+    login: 'Login',
+    signup: 'Sign up',
+    comparisonTitle: 'Offer comparison',
+    criteria: 'Criteria',
+    companyInfo: 'Company info',
+    features: {
+      requests: 'Client requests ଦେଖନ୍ତୁ',
+      fiveContacts: 'ଦିନକୁ 5 contacts',
+      unlimitedContacts: 'Unlimited contacts',
+      contactClients: 'Clients contact କରନ୍ତୁ',
+      beContacted: 'Clients contact କରିପାରିବେ',
+      alerts: 'Targeted notifications',
+      listings: 'Listings publish କରନ୍ତୁ',
+    },
+  },
+};
+
+const brokerFeatureRows = [
+  { key: 'requests', free: true, pro: true },
+  { key: 'fiveContacts', free: true, pro: true },
+  { key: 'unlimitedContacts', free: false, pro: true },
+  { key: 'contactClients', free: false, pro: true },
+  { key: 'beContacted', free: false, pro: true },
+  { key: 'alerts', free: false, pro: true },
+  { key: 'listings', free: true, pro: true },
+];
+
 export default function App() {
   const [tab, setTab] = useState('client');
   const [language, setLanguage] = useState(languages[0]);
@@ -611,6 +845,7 @@ export default function App() {
   const [maxRent, setMaxRent] = useState('1200');
 
   const t = i18n[language.code] || i18n.FR;
+  const brokerText = brokerI18n[language.code] || brokerI18n.FR;
 
   const filteredListings = useMemo(() => {
     const rent = Number(maxRent) || 99999;
@@ -701,13 +936,22 @@ export default function App() {
           <>
             <View style={styles.panel}>
               <Text style={styles.panelTitle}>{t.brokerSpace}</Text>
+              <Text style={styles.panelText}>{brokerText.accessText}</Text>
+              <View style={styles.authRow}>
+                <Pressable style={[styles.authButton, styles.authButtonSecondary]}>
+                  <Text style={styles.authButtonSecondaryText}>{brokerText.login}</Text>
+                </Pressable>
+                <Pressable style={[styles.authButton, styles.authButtonPrimary]}>
+                  <Text style={styles.authButtonPrimaryText}>{brokerText.signup}</Text>
+                </Pressable>
+              </View>
+            </View>
+            <BrokerComparison brokerText={brokerText} t={t} />
+            <View style={styles.panel}>
+              <Text style={styles.panelTitle}>{brokerText.companyInfo}</Text>
               <TextInput style={styles.input} placeholder={t.companyPlaceholder} placeholderTextColor="#8d8275" />
               <TextInput style={styles.input} placeholder={t.contactPlaceholder} placeholderTextColor="#8d8275" />
               <TextInput style={styles.input} placeholder={t.propertiesPlaceholder} placeholderTextColor="#8d8275" />
-            </View>
-            <View style={styles.pricingRow}>
-              <Plan title={t.freeTitle} price={t.freePrice} text={t.freeText} />
-              <Plan highlighted title={t.proTitle} price={t.proPrice} text={t.proText} />
             </View>
             <View style={styles.panel}>
               <Text style={styles.panelTitle}>{t.notifications}</Text>
@@ -815,12 +1059,38 @@ function Listing({ index, item, t }) {
   );
 }
 
-function Plan({ highlighted, price, text, title }) {
+function BrokerComparison({ brokerText, t }) {
   return (
-    <View style={[styles.plan, highlighted && styles.planHighlighted]}>
-      <Text style={[styles.planTitle, highlighted && styles.planTitleHighlighted]}>{title}</Text>
-      <Text style={[styles.planPrice, highlighted && styles.planTitleHighlighted]}>{price}</Text>
-      <Text style={[styles.planText, highlighted && styles.planTextHighlighted]}>{text}</Text>
+    <View style={styles.comparisonPanel}>
+      <Text style={styles.panelTitle}>{brokerText.comparisonTitle}</Text>
+      <View style={styles.comparisonHeader}>
+        <Text style={[styles.comparisonHeaderText, styles.comparisonCriteria]}>{brokerText.criteria}</Text>
+        <View style={styles.comparisonPlanHeader}>
+          <Text style={styles.comparisonPlanTitle}>{t.freeTitle}</Text>
+          <Text style={styles.comparisonPlanPrice}>{t.freePrice}</Text>
+        </View>
+        <View style={[styles.comparisonPlanHeader, styles.comparisonPlanHeaderPro]}>
+          <Text style={[styles.comparisonPlanTitle, styles.comparisonPlanTitlePro]}>{t.proTitle}</Text>
+          <Text style={[styles.comparisonPlanPrice, styles.comparisonPlanPricePro]}>{t.proPrice}</Text>
+        </View>
+      </View>
+      {brokerFeatureRows.map((row) => (
+        <View key={row.key} style={styles.comparisonRow}>
+          <Text style={styles.comparisonFeature}>{brokerText.features[row.key]}</Text>
+          <FeatureMark available={row.free} />
+          <FeatureMark available={row.pro} />
+        </View>
+      ))}
+    </View>
+  );
+}
+
+function FeatureMark({ available }) {
+  return (
+    <View style={styles.featureMarkCell}>
+      <Text style={[styles.featureMark, available ? styles.featureMarkYes : styles.featureMarkNo]}>
+        {available ? '✓' : '×'}
+      </Text>
     </View>
   );
 }
@@ -861,6 +1131,13 @@ const styles = StyleSheet.create({
   primaryButtonText: { color: '#16201b', fontWeight: '900', textAlign: 'center' },
   panel: { backgroundColor: '#ffffff', borderRadius: 24, padding: 16, borderWidth: 1, borderColor: '#eadfd2', gap: 10 },
   panelTitle: { fontSize: 20, fontWeight: '900', color: '#16201b' },
+  panelText: { color: '#6d6257', lineHeight: 20, fontWeight: '700' },
+  authRow: { flexDirection: 'row', gap: 10, marginTop: 4 },
+  authButton: { flex: 1, minHeight: 48, borderRadius: 16, alignItems: 'center', justifyContent: 'center', paddingHorizontal: 10 },
+  authButtonSecondary: { backgroundColor: '#fff8f0', borderWidth: 1, borderColor: '#eadfd2' },
+  authButtonPrimary: { backgroundColor: '#16201b' },
+  authButtonSecondaryText: { color: '#16201b', fontWeight: '900', textAlign: 'center' },
+  authButtonPrimaryText: { color: '#ffffff', fontWeight: '900', textAlign: 'center' },
   input: { backgroundColor: '#fff8f0', borderWidth: 1, borderColor: '#eadfd2', borderRadius: 16, paddingHorizontal: 14, paddingVertical: 12, color: '#16201b' },
   secondaryButton: { marginTop: 4, backgroundColor: '#e84d35', borderRadius: 16, paddingVertical: 12, paddingHorizontal: 12, alignItems: 'center' },
   secondaryButtonText: { color: '#ffffff', fontWeight: '900', textAlign: 'center' },
@@ -876,14 +1153,22 @@ const styles = StyleSheet.create({
   price: { color: '#e84d35', fontSize: 18, fontWeight: '900' },
   cardMeta: { color: '#6d6257', lineHeight: 20 },
   tag: { backgroundColor: '#eef4ef', color: '#315342', paddingHorizontal: 10, paddingVertical: 6, borderRadius: 12, overflow: 'hidden', fontWeight: '800' },
-  pricingRow: { flexDirection: 'row', gap: 10 },
-  plan: { flex: 1, backgroundColor: '#ffffff', borderRadius: 22, padding: 14, borderWidth: 1, borderColor: '#eadfd2', gap: 8 },
-  planHighlighted: { backgroundColor: '#16201b', borderColor: '#16201b' },
-  planTitle: { color: '#16201b', fontSize: 18, fontWeight: '900' },
-  planTitleHighlighted: { color: '#ffffff' },
-  planPrice: { color: '#e84d35', fontWeight: '900' },
-  planText: { color: '#6d6257', lineHeight: 18, fontSize: 12 },
-  planTextHighlighted: { color: '#c9d8cd' },
+  comparisonPanel: { backgroundColor: '#ffffff', borderRadius: 24, padding: 14, borderWidth: 1, borderColor: '#eadfd2', gap: 8 },
+  comparisonHeader: { minHeight: 70, flexDirection: 'row', alignItems: 'stretch', gap: 6 },
+  comparisonHeaderText: { color: '#6d6257', fontSize: 12, fontWeight: '900' },
+  comparisonCriteria: { flex: 1.55, alignSelf: 'center' },
+  comparisonPlanHeader: { flex: 1, borderRadius: 16, backgroundColor: '#fff8f0', borderWidth: 1, borderColor: '#eadfd2', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4 },
+  comparisonPlanHeaderPro: { backgroundColor: '#16201b', borderColor: '#16201b' },
+  comparisonPlanTitle: { color: '#16201b', fontSize: 14, fontWeight: '900', textAlign: 'center' },
+  comparisonPlanTitlePro: { color: '#ffffff' },
+  comparisonPlanPrice: { marginTop: 2, color: '#e84d35', fontSize: 11, fontWeight: '900', textAlign: 'center' },
+  comparisonPlanPricePro: { color: '#f7c84b' },
+  comparisonRow: { minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 6, borderTopWidth: 1, borderTopColor: '#f0e4d6', paddingTop: 8 },
+  comparisonFeature: { flex: 1.55, color: '#16201b', fontSize: 13, lineHeight: 17, fontWeight: '800' },
+  featureMarkCell: { flex: 1, alignItems: 'center', justifyContent: 'center' },
+  featureMark: { width: 30, height: 30, borderRadius: 15, overflow: 'hidden', textAlign: 'center', lineHeight: 30, fontSize: 19, fontWeight: '900' },
+  featureMarkYes: { color: '#137a4d', backgroundColor: '#e7f5ed' },
+  featureMarkNo: { color: '#c7352a', backgroundColor: '#fde8e4' },
   newsItem: { paddingVertical: 12, borderTopWidth: 1, borderTopColor: '#eadfd2', gap: 6 },
   newsTitle: { color: '#16201b', fontWeight: '900', fontSize: 16, lineHeight: 21 },
 });
