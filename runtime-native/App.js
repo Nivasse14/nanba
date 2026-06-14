@@ -624,6 +624,7 @@ const brokerI18n = {
     offerChoice: 'Choisir une offre',
     settingsTitle: 'Parametres broker',
     saveSettings: 'Enregistrer',
+    manageAccount: 'Gerer mon compte',
     logout: 'Se deconnecter',
     comparisonTitle: 'Comparatif des offres',
     criteria: 'Criteres',
@@ -661,6 +662,7 @@ const brokerI18n = {
     offerChoice: 'Choose a plan',
     settingsTitle: 'Broker settings',
     saveSettings: 'Save',
+    manageAccount: 'Manage my account',
     logout: 'Log out',
     comparisonTitle: 'Plan comparison',
     criteria: 'Criteria',
@@ -1022,11 +1024,17 @@ export default function App() {
                         {brokerText.offerLabel} : {brokerAccount.offer === 'pro' ? t.proTitle : t.freeTitle}
                       </Text>
                     </View>
-                    <Pressable style={styles.settingsButton} onPress={() => setBrokerSettingsVisible(true)}>
-                      <Text style={styles.settingsButtonText}>⚙</Text>
-                    </Pressable>
+                    <Text style={[
+                      styles.brokerAccountBadge,
+                      brokerAccount.offer === 'free' && styles.brokerAccountBadgeFree,
+                    ]}>
+                      {brokerAccount.offer === 'pro' ? t.proTitle : t.freeTitle}
+                    </Text>
                   </View>
                   <Text style={styles.panelText}>{brokerText.connectedText}</Text>
+                  <Pressable style={styles.manageAccountButton} onPress={() => setBrokerSettingsVisible(true)}>
+                    <Text style={styles.manageAccountButtonText}>{brokerText.manageAccount}</Text>
+                  </Pressable>
                   <Pressable style={[styles.authButton, styles.authButtonSecondary]} onPress={() => setBrokerAccount(null)}>
                     <Text style={styles.authButtonSecondaryText}>{brokerText.logout}</Text>
                   </Pressable>
@@ -1437,8 +1445,9 @@ const styles = StyleSheet.create({
   brokerAccountName: { color: '#16201b', fontSize: 18, fontWeight: '900', marginTop: 2 },
   brokerOfferText: { marginTop: 4, color: '#6d6257', fontSize: 13, fontWeight: '900' },
   brokerAccountBadge: { backgroundColor: '#16201b', color: '#f7c84b', paddingHorizontal: 12, paddingVertical: 7, borderRadius: 14, overflow: 'hidden', fontWeight: '900' },
-  settingsButton: { width: 46, height: 46, borderRadius: 23, backgroundColor: '#fff8f0', borderWidth: 1, borderColor: '#eadfd2', alignItems: 'center', justifyContent: 'center' },
-  settingsButtonText: { color: '#16201b', fontSize: 22, fontWeight: '900' },
+  brokerAccountBadgeFree: { backgroundColor: '#eef4ef', color: '#315342' },
+  manageAccountButton: { minHeight: 44, borderRadius: 16, backgroundColor: '#fff8f0', borderWidth: 1, borderColor: '#eadfd2', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 12 },
+  manageAccountButtonText: { color: '#16201b', fontWeight: '900', textAlign: 'center' },
   offerPicker: { gap: 8 },
   offerRow: { flexDirection: 'row', gap: 10 },
   offerOption: { flex: 1, minHeight: 64, borderRadius: 16, backgroundColor: '#fff8f0', borderWidth: 1, borderColor: '#eadfd2', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8 },
