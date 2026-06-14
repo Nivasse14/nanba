@@ -609,7 +609,7 @@ const brokerI18n = {
     signup: 'Inscription',
     loginTitle: 'Connexion broker',
     signupTitle: 'Inscription broker',
-    companySignupPlaceholder: 'Nom de la societe',
+    companySignupPlaceholder: 'Nom',
     emailPlaceholder: 'Email professionnel',
     phonePlaceholder: 'Telephone professionnel',
     passwordPlaceholder: 'Mot de passe',
@@ -624,13 +624,15 @@ const brokerI18n = {
     criteria: 'Criteres',
     companyInfo: 'Informations societe',
     features: {
-      requests: 'Voir les demandes clients',
-      fiveContacts: '5 coordonnees par jour',
-      unlimitedContacts: 'Coordonnees illimitees',
-      contactClients: 'Contacter les clients',
-      beContacted: 'Etre contacte par les clients',
-      alerts: 'Notifications ciblees',
-      listings: 'Publier ses biens',
+      contactDetails: 'Voir les coordonnées de clients',
+      housingRequestSectorAlert: "Notifications lorsqu'un client formule une demande de logement dans votre secteur",
+      ownerListingSectorAlert: "Notification lorsqu'un propriétaire propose son bien à la location dans votre secteur",
+      publishAvailableListings: 'Publiez vos biens disponibles',
+      messaging: 'Messagerie',
+    },
+    featureValues: {
+      fivePerDay: '5 coordonnées/jour',
+      unlimited: 'illimité',
     },
   },
   EN: {
@@ -639,7 +641,7 @@ const brokerI18n = {
     signup: 'Sign up',
     loginTitle: 'Broker login',
     signupTitle: 'Broker sign up',
-    companySignupPlaceholder: 'Company name',
+    companySignupPlaceholder: 'Name',
     emailPlaceholder: 'Business email',
     phonePlaceholder: 'Business phone',
     passwordPlaceholder: 'Password',
@@ -654,13 +656,15 @@ const brokerI18n = {
     criteria: 'Criteria',
     companyInfo: 'Company information',
     features: {
-      requests: 'View client requests',
-      fiveContacts: '5 contact details per day',
-      unlimitedContacts: 'Unlimited contact details',
-      contactClients: 'Contact clients',
-      beContacted: 'Be contacted by clients',
-      alerts: 'Targeted notifications',
-      listings: 'Publish listings',
+      contactDetails: 'View client contact details',
+      housingRequestSectorAlert: 'Notifications when a client submits a housing request in your area',
+      ownerListingSectorAlert: 'Notifications when an owner offers a rental property in your area',
+      publishAvailableListings: 'Publish your available properties',
+      messaging: 'Messaging',
+    },
+    featureValues: {
+      fivePerDay: '5 contact details/day',
+      unlimited: 'unlimited',
     },
   },
   TA: {
@@ -853,18 +857,21 @@ const brokerI18n = {
 };
 
 const brokerFeatureRows = [
-  { key: 'requests', free: true, pro: true },
-  { key: 'fiveContacts', free: true, pro: true },
-  { key: 'unlimitedContacts', free: false, pro: true },
-  { key: 'contactClients', free: false, pro: true },
-  { key: 'beContacted', free: false, pro: true },
-  { key: 'alerts', free: false, pro: true },
-  { key: 'listings', free: true, pro: true },
+  { key: 'contactDetails', freeValueKey: 'fivePerDay', proValueKey: 'unlimited' },
+  { key: 'housingRequestSectorAlert', free: false, pro: true },
+  { key: 'ownerListingSectorAlert', free: false, pro: true },
+  { key: 'publishAvailableListings', free: false, pro: true },
+  { key: 'messaging', free: false, pro: true },
 ];
 
 function getBrokerText(code) {
   const text = brokerI18n[code] || brokerI18n.FR;
-  return { ...brokerI18n.FR, ...text, features: { ...brokerI18n.FR.features, ...text.features } };
+  return {
+    ...brokerI18n.FR,
+    ...text,
+    features: { ...brokerI18n.FR.features, ...(text.features || {}) },
+    featureValues: { ...brokerI18n.FR.featureValues, ...(text.featureValues || {}) },
+  };
 }
 
 export default function App() {
@@ -1219,19 +1226,27 @@ function BrokerComparison({ brokerText, t }) {
       {brokerFeatureRows.map((row) => (
         <View key={row.key} style={styles.comparisonRow}>
           <Text style={styles.comparisonFeature}>{brokerText.features[row.key]}</Text>
-          <FeatureMark available={row.free} />
-          <FeatureMark available={row.pro} />
+          <FeatureMark value={row.freeValueKey ? brokerText.featureValues[row.freeValueKey] : row.free} />
+          <FeatureMark value={row.proValueKey ? brokerText.featureValues[row.proValueKey] : row.pro} />
         </View>
       ))}
     </View>
   );
 }
 
-function FeatureMark({ available }) {
+function FeatureMark({ value }) {
+  if (typeof value === 'string') {
+    return (
+      <View style={styles.featureMarkCell}>
+        <Text style={styles.featureValue}>{value}</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.featureMarkCell}>
-      <Text style={[styles.featureMark, available ? styles.featureMarkYes : styles.featureMarkNo]}>
-        {available ? '✓' : '×'}
+      <Text style={[styles.featureMark, value ? styles.featureMarkYes : styles.featureMarkNo]}>
+        {value ? '✓' : '×'}
       </Text>
     </View>
   );
@@ -1306,19 +1321,20 @@ const styles = StyleSheet.create({
   comparisonPanel: { backgroundColor: '#ffffff', borderRadius: 24, padding: 14, borderWidth: 1, borderColor: '#eadfd2', gap: 8 },
   comparisonHeader: { minHeight: 70, flexDirection: 'row', alignItems: 'stretch', gap: 6 },
   comparisonHeaderText: { color: '#6d6257', fontSize: 12, fontWeight: '900' },
-  comparisonCriteria: { flex: 1.55, alignSelf: 'center' },
+  comparisonCriteria: { flex: 1.7, alignSelf: 'center' },
   comparisonPlanHeader: { flex: 1, borderRadius: 16, backgroundColor: '#fff8f0', borderWidth: 1, borderColor: '#eadfd2', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 4 },
   comparisonPlanHeaderPro: { backgroundColor: '#16201b', borderColor: '#16201b' },
   comparisonPlanTitle: { color: '#16201b', fontSize: 14, fontWeight: '900', textAlign: 'center' },
   comparisonPlanTitlePro: { color: '#ffffff' },
   comparisonPlanPrice: { marginTop: 2, color: '#e84d35', fontSize: 11, fontWeight: '900', textAlign: 'center' },
   comparisonPlanPricePro: { color: '#f7c84b' },
-  comparisonRow: { minHeight: 48, flexDirection: 'row', alignItems: 'center', gap: 6, borderTopWidth: 1, borderTopColor: '#f0e4d6', paddingTop: 8 },
-  comparisonFeature: { flex: 1.55, color: '#16201b', fontSize: 13, lineHeight: 17, fontWeight: '800' },
+  comparisonRow: { minHeight: 62, flexDirection: 'row', alignItems: 'center', gap: 6, borderTopWidth: 1, borderTopColor: '#f0e4d6', paddingTop: 8 },
+  comparisonFeature: { flex: 1.7, color: '#16201b', fontSize: 12, lineHeight: 16, fontWeight: '800' },
   featureMarkCell: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   featureMark: { width: 30, height: 30, borderRadius: 15, overflow: 'hidden', textAlign: 'center', lineHeight: 30, fontSize: 19, fontWeight: '900' },
   featureMarkYes: { color: '#137a4d', backgroundColor: '#e7f5ed' },
   featureMarkNo: { color: '#c7352a', backgroundColor: '#fde8e4' },
+  featureValue: { minHeight: 34, borderRadius: 14, overflow: 'hidden', backgroundColor: '#e7f5ed', color: '#137a4d', paddingHorizontal: 6, paddingVertical: 5, textAlign: 'center', fontSize: 10, lineHeight: 12, fontWeight: '900' },
   newsItem: { paddingVertical: 12, borderTopWidth: 1, borderTopColor: '#eadfd2', gap: 6 },
   newsTitle: { color: '#16201b', fontWeight: '900', fontSize: 16, lineHeight: 21 },
 });
