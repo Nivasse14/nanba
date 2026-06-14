@@ -1017,28 +1017,32 @@ export default function App() {
               )}
             </View>
             <BrokerComparison brokerText={brokerText} t={t} />
-            <View style={styles.panel}>
-              <Text style={styles.panelTitle}>{brokerText.companyInfo}</Text>
-              <TextInput style={styles.input} placeholder={t.companyPlaceholder} placeholderTextColor="#8d8275" />
-              <TextInput style={styles.input} placeholder={t.contactPlaceholder} placeholderTextColor="#8d8275" />
-              <TextInput style={styles.input} placeholder={t.propertiesPlaceholder} placeholderTextColor="#8d8275" />
-            </View>
-            <View style={styles.panel}>
-              <Text style={styles.panelTitle}>{t.notifications}</Text>
-              <Text style={styles.label}>{t.departmentLabel}</Text>
-              <View style={styles.wrap}>{departments.map((item) => <Text key={item} style={styles.tag}>{item}</Text>)}</View>
-              <Text style={styles.label}>{t.housingTypes}</Text>
-              <View style={styles.wrap}>{typeOptions.map((item) => <Text key={item} style={styles.tag}>{t.types[item]}</Text>)}</View>
-              <Text style={styles.label}>{t.tenantMaxRent}</Text>
-              <TextInput style={styles.input} value={`1200 ${currencyLabel}`} editable={false} />
-            </View>
-            {requests.map((item) => (
-              <View key={item.id} style={styles.card}>
-                <Text style={styles.cardTitle}>{t.requestLine(item.name, t.requestNeeds[item.id])}</Text>
-                <Text style={styles.cardMeta}>{item.area} · {t.budgetLabel} {item.budget} {currencyLabel} · {t.requestTimings[item.id]}</Text>
-                <Pressable style={styles.secondaryButton}><Text style={styles.secondaryButtonText}>{t.viewContact}</Text></Pressable>
-              </View>
-            ))}
+            {brokerAccount && (
+              <>
+                <View style={styles.panel}>
+                  <Text style={styles.panelTitle}>{brokerText.companyInfo}</Text>
+                  <TextInput style={styles.input} placeholder={t.companyPlaceholder} placeholderTextColor="#8d8275" />
+                  <TextInput style={styles.input} placeholder={t.contactPlaceholder} placeholderTextColor="#8d8275" />
+                  <TextInput style={styles.input} placeholder={t.propertiesPlaceholder} placeholderTextColor="#8d8275" />
+                </View>
+                <View style={styles.panel}>
+                  <Text style={styles.panelTitle}>{t.notifications}</Text>
+                  <Text style={styles.label}>{t.departmentLabel}</Text>
+                  <View style={styles.wrap}>{departments.map((item) => <Text key={item} style={styles.tag}>{item}</Text>)}</View>
+                  <Text style={styles.label}>{t.housingTypes}</Text>
+                  <View style={styles.wrap}>{typeOptions.map((item) => <Text key={item} style={styles.tag}>{t.types[item]}</Text>)}</View>
+                  <Text style={styles.label}>{t.tenantMaxRent}</Text>
+                  <TextInput style={styles.input} value={`1200 ${currencyLabel}`} editable={false} />
+                </View>
+                {requests.map((item) => (
+                  <View key={item.id} style={styles.card}>
+                    <Text style={styles.cardTitle}>{t.requestLine(item.name, t.requestNeeds[item.id])}</Text>
+                    <Text style={styles.cardMeta}>{item.area} · {t.budgetLabel} {item.budget} {currencyLabel} · {t.requestTimings[item.id]}</Text>
+                    <Pressable style={styles.secondaryButton}><Text style={styles.secondaryButtonText}>{t.viewContact}</Text></Pressable>
+                  </View>
+                ))}
+              </>
+            )}
           </>
         )}
 
