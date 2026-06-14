@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Modal, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native';
 
 const departments = ['75', '92', '93', '94', '77', '78', '91', '95'];
@@ -617,8 +617,13 @@ const brokerI18n = {
     signupSubmit: 'Creer mon compte',
     switchToSignup: 'Creer un compte broker',
     switchToLogin: 'J ai deja un compte',
+    connectedStatus: 'Connecté',
     connectedTitle: 'Compte broker connecte',
     connectedText: 'Vous pouvez maintenant gerer vos biens, vos notifications et les demandes clients.',
+    offerLabel: 'Offre choisie',
+    offerChoice: 'Choisir une offre',
+    settingsTitle: 'Parametres broker',
+    saveSettings: 'Enregistrer',
     logout: 'Se deconnecter',
     comparisonTitle: 'Comparatif des offres',
     criteria: 'Criteres',
@@ -649,8 +654,13 @@ const brokerI18n = {
     signupSubmit: 'Create my account',
     switchToSignup: 'Create a broker account',
     switchToLogin: 'I already have an account',
+    connectedStatus: 'Connected',
     connectedTitle: 'Broker account connected',
     connectedText: 'You can now manage listings, notifications and client requests.',
+    offerLabel: 'Selected plan',
+    offerChoice: 'Choose a plan',
+    settingsTitle: 'Broker settings',
+    saveSettings: 'Save',
     logout: 'Log out',
     comparisonTitle: 'Plan comparison',
     criteria: 'Criteria',
@@ -880,6 +890,7 @@ export default function App() {
   const [languageModalVisible, setLanguageModalVisible] = useState(false);
   const [brokerAuthMode, setBrokerAuthMode] = useState(null);
   const [brokerAccount, setBrokerAccount] = useState(null);
+  const [brokerSettingsVisible, setBrokerSettingsVisible] = useState(false);
   const [type, setType] = useState('all');
   const [department, setDepartment] = useState('all');
   const [maxRent, setMaxRent] = useState('1200');
@@ -930,6 +941,19 @@ export default function App() {
         }}
         onSwitch={(mode) => setBrokerAuthMode(mode)}
         visible={brokerAuthMode !== null}
+        t={t}
+      />
+
+      <BrokerSettingsModal
+        account={brokerAccount}
+        brokerText={brokerText}
+        onClose={() => setBrokerSettingsVisible(false)}
+        onSave={(account) => {
+          setBrokerAccount(account);
+          setBrokerSettingsVisible(false);
+        }}
+        t={t}
+        visible={brokerSettingsVisible}
       />
 
       <View style={styles.tabs}>
@@ -992,10 +1016,15 @@ export default function App() {
                 <View style={styles.brokerAccountBox}>
                   <View style={styles.brokerAccountHeader}>
                     <View>
-                      <Text style={styles.brokerAccountTitle}>{brokerText.connectedTitle}</Text>
+                      <Text style={styles.brokerConnectedStatus}>{brokerText.connectedStatus}</Text>
                       <Text style={styles.brokerAccountName}>{brokerAccount.company}</Text>
+                      <Text style={styles.brokerOfferText}>
+                        {brokerText.offerLabel} : {brokerAccount.offer === 'pro' ? t.proTitle : t.freeTitle}
+                      </Text>
                     </View>
-                    <Text style={styles.brokerAccountBadge}>Pro</Text>
+                    <Pressable style={styles.settingsButton} onPress={() => setBrokerSettingsVisible(true)}>
+                      <Text style={styles.settingsButtonText}>⚙</Text>
+                    </Pressable>
                   </View>
                   <Text style={styles.panelText}>{brokerText.connectedText}</Text>
                   <Pressable style={[styles.authButton, styles.authButtonSecondary]} onPress={() => setBrokerAccount(null)}>
@@ -1016,7 +1045,7 @@ export default function App() {
                 </>
               )}
             </View>
-            <BrokerComparison brokerText={brokerText} t={t} />
+            {(!brokerAccount || brokerAccount.offer === 'free') && <BrokerComparison brokerText={brokerText} t={t} />}
             {brokerAccount && (
               <>
                 <View style={styles.panel}>
@@ -1100,18 +1129,20 @@ function LanguagePicker({ currentLanguage, onClose, onSelect, t, visible }) {
   );
 }
 
-function BrokerAuthModal({ brokerText, mode, onClose, onSubmit, onSwitch, visible }) {
+function BrokerAuthModal({ brokerText, mode, onClose, onSubmit, onSwitch, t, visible }) {
   const isSignup = mode === 'signup';
   const [company, setCompany] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [offer, setOffer] = useState('free');
 
   const submit = () => {
     onSubmit({
       company: company.trim() || 'Nanba Broker',
       email: email.trim() || 'broker@nanba.app',
       phone: phone.trim(),
+      offer,
     });
     setPassword('');
   };
@@ -1131,13 +1162,16 @@ function BrokerAuthModal({ brokerText, mode, onClose, onSubmit, onSwitch, visibl
           </View>
 
           {isSignup && (
-            <TextInput
-              style={styles.input}
-              value={company}
-              onChangeText={setCompany}
-              placeholder={brokerText.companySignupPlaceholder}
-              placeholderTextColor="#8d8275"
-            />
+            <>
+              <TextInput
+                style={styles.input}
+                value={company}
+                onChangeText={setCompany}
+                placeholder={brokerText.companySignupPlaceholder}
+                placeholderTextColor="#8d8275"
+              />
+              <OfferPicker brokerText={brokerText} offer={offer} onChange={setOffer} t={t} />
+            </>
           )}
           <TextInput
             autoCapitalize="none"
@@ -1176,6 +1210,99 @@ function BrokerAuthModal({ brokerText, mode, onClose, onSubmit, onSwitch, visibl
         </Pressable>
       </Pressable>
     </Modal>
+  );
+}
+
+function BrokerSettingsModal({ account, brokerText, onClose, onSave, t, visible }) {
+  const [company, setCompany] = useState(account?.company || '');
+  const [email, setEmail] = useState(account?.email || '');
+  const [phone, setPhone] = useState(account?.phone || '');
+  const [offer, setOffer] = useState(account?.offer || 'free');
+
+  useEffect(() => {
+    setCompany(account?.company || '');
+    setEmail(account?.email || '');
+    setPhone(account?.phone || '');
+    setOffer(account?.offer || 'free');
+  }, [account, visible]);
+
+  if (!account) {
+    return null;
+  }
+
+  return (
+    <Modal animationType="slide" transparent visible={visible} onRequestClose={onClose}>
+      <Pressable style={styles.modalBackdrop} onPress={onClose}>
+        <Pressable style={styles.authSheet}>
+          <View style={styles.sheetHeader}>
+            <View>
+              <Text style={styles.sheetTitle}>{brokerText.settingsTitle}</Text>
+              <Text style={styles.sheetSubtitle}>{brokerText.connectedText}</Text>
+            </View>
+            <Pressable style={styles.closeButton} onPress={onClose}>
+              <Text style={styles.closeButtonText}>X</Text>
+            </Pressable>
+          </View>
+
+          <TextInput
+            style={styles.input}
+            value={company}
+            onChangeText={setCompany}
+            placeholder={brokerText.companySignupPlaceholder}
+            placeholderTextColor="#8d8275"
+          />
+          <TextInput
+            autoCapitalize="none"
+            keyboardType="email-address"
+            style={styles.input}
+            value={email}
+            onChangeText={setEmail}
+            placeholder={brokerText.emailPlaceholder}
+            placeholderTextColor="#8d8275"
+          />
+          <TextInput
+            keyboardType="phone-pad"
+            style={styles.input}
+            value={phone}
+            onChangeText={setPhone}
+            placeholder={brokerText.phonePlaceholder}
+            placeholderTextColor="#8d8275"
+          />
+          <OfferPicker brokerText={brokerText} offer={offer} onChange={setOffer} t={t} />
+
+          <Pressable
+            style={styles.secondaryButton}
+            onPress={() => onSave({
+              ...account,
+              company: company.trim() || account.company,
+              email: email.trim() || account.email,
+              phone: phone.trim(),
+              offer,
+            })}
+          >
+            <Text style={styles.secondaryButtonText}>{brokerText.saveSettings}</Text>
+          </Pressable>
+        </Pressable>
+      </Pressable>
+    </Modal>
+  );
+}
+
+function OfferPicker({ brokerText, offer, onChange, t }) {
+  return (
+    <View style={styles.offerPicker}>
+      <Text style={styles.label}>{brokerText.offerChoice}</Text>
+      <View style={styles.offerRow}>
+        <Pressable style={[styles.offerOption, offer === 'free' && styles.offerOptionActive]} onPress={() => onChange('free')}>
+          <Text style={[styles.offerOptionTitle, offer === 'free' && styles.offerOptionTitleActive]}>{t.freeTitle}</Text>
+          <Text style={[styles.offerOptionPrice, offer === 'free' && styles.offerOptionPriceActive]}>{t.freePrice}</Text>
+        </Pressable>
+        <Pressable style={[styles.offerOption, offer === 'pro' && styles.offerOptionActive]} onPress={() => onChange('pro')}>
+          <Text style={[styles.offerOptionTitle, offer === 'pro' && styles.offerOptionTitleActive]}>{t.proTitle}</Text>
+          <Text style={[styles.offerOptionPrice, offer === 'pro' && styles.offerOptionPriceActive]}>{t.proPrice}</Text>
+        </Pressable>
+      </View>
+    </View>
   );
 }
 
@@ -1305,9 +1432,21 @@ const styles = StyleSheet.create({
   authSwitchText: { color: '#e84d35', fontWeight: '900', textAlign: 'center' },
   brokerAccountBox: { gap: 10 },
   brokerAccountHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
+  brokerConnectedStatus: { color: '#137a4d', fontSize: 13, fontWeight: '900' },
   brokerAccountTitle: { color: '#137a4d', fontSize: 13, fontWeight: '900' },
   brokerAccountName: { color: '#16201b', fontSize: 18, fontWeight: '900', marginTop: 2 },
+  brokerOfferText: { marginTop: 4, color: '#6d6257', fontSize: 13, fontWeight: '900' },
   brokerAccountBadge: { backgroundColor: '#16201b', color: '#f7c84b', paddingHorizontal: 12, paddingVertical: 7, borderRadius: 14, overflow: 'hidden', fontWeight: '900' },
+  settingsButton: { width: 46, height: 46, borderRadius: 23, backgroundColor: '#fff8f0', borderWidth: 1, borderColor: '#eadfd2', alignItems: 'center', justifyContent: 'center' },
+  settingsButtonText: { color: '#16201b', fontSize: 22, fontWeight: '900' },
+  offerPicker: { gap: 8 },
+  offerRow: { flexDirection: 'row', gap: 10 },
+  offerOption: { flex: 1, minHeight: 64, borderRadius: 16, backgroundColor: '#fff8f0', borderWidth: 1, borderColor: '#eadfd2', alignItems: 'center', justifyContent: 'center', paddingHorizontal: 8 },
+  offerOptionActive: { backgroundColor: '#16201b', borderColor: '#16201b' },
+  offerOptionTitle: { color: '#16201b', fontWeight: '900', textAlign: 'center' },
+  offerOptionTitleActive: { color: '#ffffff' },
+  offerOptionPrice: { marginTop: 3, color: '#e84d35', fontSize: 12, fontWeight: '900', textAlign: 'center' },
+  offerOptionPriceActive: { color: '#f7c84b' },
   input: { backgroundColor: '#fff8f0', borderWidth: 1, borderColor: '#eadfd2', borderRadius: 16, paddingHorizontal: 14, paddingVertical: 12, color: '#16201b' },
   secondaryButton: { marginTop: 4, backgroundColor: '#e84d35', borderRadius: 16, paddingVertical: 12, paddingHorizontal: 12, alignItems: 'center' },
   secondaryButtonText: { color: '#ffffff', fontWeight: '900', textAlign: 'center' },
