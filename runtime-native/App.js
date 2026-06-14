@@ -1,9 +1,34 @@
 import React, { useMemo, useState } from 'react';
-import { Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native';
+import { Modal, Pressable, SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, TextInput, View } from 'react-native';
 
 const departments = ['75', '92', '93', '94', '77', '78', '91', '95'];
 const types = ['Studio', 'T1', 'T2', 'T3', 'T4', 'T5+'];
-const languages = ['FR', 'தமிழ்', 'മലയാളം', 'हिन्दी', 'తెలుగు'];
+const languages = [
+  { code: 'FR', name: 'Francais', nativeName: 'Francais' },
+  { code: 'EN', name: 'Anglais', nativeName: 'English' },
+  { code: 'HI', name: 'Hindi', nativeName: 'हिन्दी' },
+  { code: 'TA', name: 'Tamoul', nativeName: 'தமிழ்' },
+  { code: 'ML', name: 'Malayalam', nativeName: 'മലയാളം' },
+  { code: 'TE', name: 'Telougou', nativeName: 'తెలుగు' },
+  { code: 'BN', name: 'Bengali', nativeName: 'বাংলা' },
+  { code: 'MR', name: 'Marathi', nativeName: 'मराठी' },
+  { code: 'GU', name: 'Gujarati', nativeName: 'ગુજરાતી' },
+  { code: 'PA', name: 'Pendjabi', nativeName: 'ਪੰਜਾਬੀ' },
+  { code: 'KN', name: 'Kannada', nativeName: 'ಕನ್ನಡ' },
+  { code: 'OR', name: 'Odia', nativeName: 'ଓଡ଼ିଆ' },
+  { code: 'AS', name: 'Assamais', nativeName: 'অসমীয়া' },
+  { code: 'UR', name: 'Ourdou', nativeName: 'اردو' },
+  { code: 'SA', name: 'Sanskrit', nativeName: 'संस्कृतम्' },
+  { code: 'KS', name: 'Cachemiri', nativeName: 'کٲشُر' },
+  { code: 'SD', name: 'Sindhi', nativeName: 'سنڌي' },
+  { code: 'NE', name: 'Nepali', nativeName: 'नेपाली' },
+  { code: 'KO', name: 'Konkani', nativeName: 'कोंकणी' },
+  { code: 'DO', name: 'Dogri', nativeName: 'डोगरी' },
+  { code: 'MAI', name: 'Maithili', nativeName: 'मैथिली' },
+  { code: 'BOD', name: 'Bodo', nativeName: 'बड़ो' },
+  { code: 'MNI', name: 'Manipuri', nativeName: 'মৈতৈলোন্' },
+  { code: 'SAT', name: 'Santali', nativeName: 'ᱥᱟᱱᱛᱟᱲᱤ' },
+];
 
 const listings = [
   { id: '1', title: 'Studio meuble proche metro', city: 'Paris 13e', department: '75', type: 'Studio', rent: 820, surface: 22, broker: 'Maison Tamil France' },
@@ -24,7 +49,8 @@ const news = [
 
 export default function App() {
   const [tab, setTab] = useState('client');
-  const [language, setLanguage] = useState('FR');
+  const [language, setLanguage] = useState(languages[0]);
+  const [languageModalVisible, setLanguageModalVisible] = useState(false);
   const [type, setType] = useState('Tous');
   const [department, setDepartment] = useState('Tous');
   const [maxRent, setMaxRent] = useState('1200');
@@ -46,16 +72,20 @@ export default function App() {
           <Text style={styles.logo}>Nanba</Text>
           <Text style={styles.subtitle}>Logement, brokers et news pour la communaute indienne en France</Text>
         </View>
-        <View style={styles.languageBadge}><Text style={styles.languageBadgeText}>{language}</Text></View>
+        <Pressable style={styles.languageBadge} onPress={() => setLanguageModalVisible(true)}>
+          <Text style={styles.languageBadgeText}>{language.code}</Text>
+        </Pressable>
       </View>
 
-      <View style={styles.rail}>
-        {languages.map((item) => (
-          <Pressable key={item} onPress={() => setLanguage(item)} style={[styles.langChip, language === item && styles.langChipActive]}>
-            <Text style={[styles.langText, language === item && styles.langTextActive]}>{item}</Text>
-          </Pressable>
-        ))}
-      </View>
+      <LanguagePicker
+        currentLanguage={language}
+        onClose={() => setLanguageModalVisible(false)}
+        onSelect={(item) => {
+          setLanguage(item);
+          setLanguageModalVisible(false);
+        }}
+        visible={languageModalVisible}
+      />
 
       <View style={styles.tabs}>
         {[
@@ -146,6 +176,44 @@ export default function App() {
   );
 }
 
+function LanguagePicker({ currentLanguage, onClose, onSelect, visible }) {
+  return (
+    <Modal animationType="fade" transparent visible={visible} onRequestClose={onClose}>
+      <Pressable style={styles.modalBackdrop} onPress={onClose}>
+        <Pressable style={styles.languageSheet}>
+          <View style={styles.sheetHeader}>
+            <View>
+              <Text style={styles.sheetTitle}>Langue</Text>
+              <Text style={styles.sheetSubtitle}>Choisir la langue de l'application</Text>
+            </View>
+            <Pressable style={styles.closeButton} onPress={onClose}>
+              <Text style={styles.closeButtonText}>X</Text>
+            </Pressable>
+          </View>
+          <ScrollView showsVerticalScrollIndicator={false}>
+            {languages.map((item) => {
+              const active = currentLanguage.code === item.code;
+              return (
+                <Pressable
+                  key={item.code}
+                  onPress={() => onSelect(item)}
+                  style={[styles.languageOption, active && styles.languageOptionActive]}
+                >
+                  <View style={styles.languageOptionTextBlock}>
+                    <Text style={[styles.languageOptionName, active && styles.languageOptionNameActive]}>{item.name}</Text>
+                    <Text style={[styles.languageOptionNative, active && styles.languageOptionNativeActive]}>{item.nativeName}</Text>
+                  </View>
+                  <Text style={[styles.languageOptionCode, active && styles.languageOptionCodeActive]}>{item.code}</Text>
+                </Pressable>
+              );
+            })}
+          </ScrollView>
+        </Pressable>
+      </Pressable>
+    </Modal>
+  );
+}
+
 function RequestForm() {
   return (
     <View style={styles.panel}>
@@ -194,13 +262,24 @@ const styles = StyleSheet.create({
   topBar: { paddingHorizontal: 18, paddingTop: 8, paddingBottom: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
   logo: { fontSize: 30, fontWeight: '900', color: '#16201b' },
   subtitle: { width: 260, marginTop: 2, color: '#6d6257', fontSize: 12, lineHeight: 16 },
-  languageBadge: { backgroundColor: '#16201b', paddingHorizontal: 12, paddingVertical: 9, borderRadius: 18 },
+  languageBadge: { minWidth: 58, minHeight: 58, backgroundColor: '#16201b', borderRadius: 29, alignItems: 'center', justifyContent: 'center' },
   languageBadgeText: { color: '#ffffff', fontWeight: '800' },
-  rail: { paddingHorizontal: 18, flexDirection: 'row', gap: 8, marginBottom: 12 },
-  langChip: { paddingHorizontal: 10, paddingVertical: 7, borderRadius: 16, backgroundColor: '#ffffff', borderWidth: 1, borderColor: '#eadfd2' },
-  langChipActive: { backgroundColor: '#e84d35', borderColor: '#e84d35' },
-  langText: { color: '#4e443b', fontWeight: '700' },
-  langTextActive: { color: '#ffffff' },
+  modalBackdrop: { flex: 1, backgroundColor: 'rgba(22, 32, 27, 0.38)', justifyContent: 'flex-end' },
+  languageSheet: { maxHeight: '78%', backgroundColor: '#fff8f0', borderTopLeftRadius: 28, borderTopRightRadius: 28, padding: 18, gap: 14 },
+  sheetHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 12, marginBottom: 8 },
+  sheetTitle: { color: '#16201b', fontSize: 24, fontWeight: '900' },
+  sheetSubtitle: { color: '#6d6257', marginTop: 2, fontWeight: '700' },
+  closeButton: { width: 42, height: 42, borderRadius: 21, backgroundColor: '#16201b', alignItems: 'center', justifyContent: 'center' },
+  closeButtonText: { color: '#ffffff', fontSize: 16, fontWeight: '900' },
+  languageOption: { minHeight: 64, backgroundColor: '#ffffff', borderWidth: 1, borderColor: '#eadfd2', borderRadius: 18, paddingHorizontal: 14, paddingVertical: 10, marginBottom: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', gap: 14 },
+  languageOptionActive: { backgroundColor: '#16201b', borderColor: '#16201b' },
+  languageOptionTextBlock: { flex: 1 },
+  languageOptionName: { color: '#16201b', fontSize: 16, fontWeight: '900' },
+  languageOptionNameActive: { color: '#ffffff' },
+  languageOptionNative: { marginTop: 3, color: '#6d6257', fontSize: 18, fontWeight: '800' },
+  languageOptionNativeActive: { color: '#c9d8cd' },
+  languageOptionCode: { color: '#e84d35', fontWeight: '900' },
+  languageOptionCodeActive: { color: '#f7c84b' },
   tabs: { marginHorizontal: 18, padding: 4, borderRadius: 20, backgroundColor: '#f0e4d6', flexDirection: 'row', gap: 4 },
   tab: { flex: 1, paddingVertical: 10, borderRadius: 16, alignItems: 'center' },
   tabActive: { backgroundColor: '#ffffff' },
