@@ -1,0 +1,33 @@
+# Dependencies
+node_modules/
+runtime-native/node_modules/
+
+# Expo / React Native caches
+.expo/
+.expo-home/
+.home/
+.npm-cache/
+.pnpm-store/
+.metro-cache/
+
+# Native build outputs
+ios/Pods/
+ios/build/
+android/.gradle/
+android/build/
+android/app/build/
+
+# Logs and local files
+*.log
+.DS_Store
+*.tmp
+*.local
+
+# Generated package manager caches
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Existing corrupted legacy app folders kept locally only
+src/
+assets/

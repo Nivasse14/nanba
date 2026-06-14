@@ -1,0 +1,15 @@
+{
+  "expo": {
+    "name": "Nanba",
+    "slug": "nanba-super-app",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "bundleIdentifier": "com.nanba.superapp"
+    },
+    "android": {
+      "package": "com.nanba.superapp"
+    }
+  }
+}
