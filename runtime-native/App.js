@@ -1234,6 +1234,7 @@ function BrokerComparison({ brokerText, t }) {
           <FeatureMark value={row.proValueKey ? brokerText.featureValues[row.proValueKey] : row.pro} />
         </View>
       ))}
+      <Text style={styles.comparisonContact}>contact mail app.nanba@gmail.com</Text>
     </View>
   );
 }
@@ -1339,6 +1340,7 @@ const styles = StyleSheet.create({
   featureMarkYes: { color: '#137a4d', backgroundColor: '#e7f5ed' },
   featureMarkNo: { color: '#c7352a', backgroundColor: '#fde8e4' },
   featureValue: { minHeight: 34, borderRadius: 14, overflow: 'hidden', backgroundColor: '#e7f5ed', color: '#137a4d', paddingHorizontal: 6, paddingVertical: 5, textAlign: 'center', fontSize: 10, lineHeight: 12, fontWeight: '900' },
+  comparisonContact: { marginTop: 4, color: '#8d8275', fontSize: 12, fontWeight: '800', textAlign: 'center' },
   newsItem: { paddingVertical: 12, borderTopWidth: 1, borderTopColor: '#eadfd2', gap: 6 },
   newsTitle: { color: '#16201b', fontWeight: '900', fontSize: 16, lineHeight: 21 },
 });
