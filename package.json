@@ -1,0 +1,11 @@
+{
+  "name": "nanba-deployment",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "runtime-native"
+  ],
+  "scripts": {
+    "build": "npm --workspace nanba-runtime-native run build:web"
+  }
+}
