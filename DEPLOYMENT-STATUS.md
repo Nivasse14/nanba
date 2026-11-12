@@ -1,51 +1,12 @@
-# Pilote WhatsApp — 12 novembre 2026
+# Nanba Ensemble — WhatsApp complet v2
 
-Déploiement autorisé sur Render, My Workspace. Budget approuvé : application 512 Mo à 7 $/mois, WAHA 2 Go à 25 $/mois, deux volumes 1 Go à 0,50 $/mois au total. Région Frankfurt, services privés/publics séparés, aucune donnée de démonstration en production.
+Source locale : `f382dd992c52356a6eb283e66aca890d8e16d6b5`.
+Version : `whatsapp-complete-v2`.
+65 tests réussis, build et TypeScript validés ; formatage et syntaxe navigateur valides.
 
-Branche distante `nanba-ensemble-pilot` de `https://github.com/Nivasse14/nanba`. Publication par l’interface GitHub : `Dockerfile.ensemble`, `render.ensemble.yaml`, `nanba-ensemble-source.tar.gz` à la racine. Commit publié : `4f920410db67f47f4c118f490974c15d0758ee7c`. Aucun changement au code mobile existant. Synchronisation et déploiement automatiques désactivés. Secrets API/HMAC/chiffrement générés par Render et partagés par références, jamais en Git.
+Les huit parcours métier, leurs confirmations et leur gestion sont accessibles dans WhatsApp. Les opérations personnelles utilisent une conversation privée reliée à une communauté autorisée. Guide : WHATSAPP-COMMANDS.md.
 
-`PILOT_SETUP_HASH` est ajouté séparément via la configuration Render. Il contient uniquement le SHA-256 d’une clé d’activation aléatoire. Cette clé est remise au propriétaire dans un fichier privé, n’apparaît ni dans les logs ni dans Git. L’activation exige ce secret et crée un seul administrateur ; elle est fermée dès le premier compte administrateur de plateforme.
+Cette publication met à jour le pilote existant. Le déploiement Render reste à déclencher puis vérifier. Aucun nouveau service ni changement de budget. Les essais avec un téléphone réel attendent l’association du propriétaire. Aucun message tiers envoyé pendant le développement. IA libre, traduction/transcription automatique, paiement et catalogue Nanba externe non connectés.
 
-Le propriétaire ouvre le lien privé #whatsapp-start/SECRET, scanne le QR depuis WhatsApp puis active son test personnel. Aucun compte web requis pour ce test : la discussion WhatsApp « Vous » devient la seule destination privée autorisée. Le connecteur ne répond qu’aux messages adressés à Nanba. Les groupes nécessitent une autorisation administrative explicite. Les réponses guidées sont automatiques ; fournisseur IA généraliste et paiement non connectés.
-
-WAHA session `default`, WEBJS 2026.10.1. Le code source officiel épinglé confirme GET /api/{session}/auth/qr, PUT /api/sessions/{session}, POST /api/sessions et POST /api/sessions/{session}/start. Le QR n’est accessible qu’au compte plateforme authentifié ou au détenteur de la clé privée avant création du compte plateforme ; aucun accès direct public à WAHA.
-
-Validation locale après ajout du parcours direct WhatsApp : 48 tests réussis, compilation TypeScript réussie, schéma JSON du Blueprint valide. La validation Render et les contrôles après déploiement sont suivis séparément.
-
-## État distant vérifié
-
-La publication GitHub a réussi après connexion et validation 2FA du propriétaire. Le connecteur GitHub renvoyait auparavant HTTP 403 « Resource not accessible by integration » ; le propriétaire a autorisé le passage par l’interface. La branche dédiée contient les trois fichiers nécessaires au déploiement.
-
-Blueprint Render créé : `exs-dbr32mg8v5cc738qeue0`, nom `Nanba Ensemble · pilote WhatsApp`, workspace `tea-d9bb2v6rnols73dbkog0`. `autoSync: false`, ressources nouvelles, configuration `render.ensemble.yaml` sur la branche `nanba-ensemble-pilot`.
-
-Le propriétaire a ajouté son moyen de paiement. La planification `exe-dbr35rrrjlhs73e25100` a réussi, sans avertissement ni variable manuelle obligatoire, et le déploiement autorisé a été lancé. Le budget de 32,50 $/mois et le déploiement sont déjà autorisés : ne pas redemander cet accord.
-
-Application : `srv-dbr36g0n74is73d71k8g`, `https://nanba-ensemble-pilot-ufgg.onrender.com`. Déploiement actif après ajout de `PILOT_SETUP_HASH` : `dep-dbr36pb1vc2s739pd470`, état `live`. Disque `dsk-dbr36ggn74is73d71l40`, `/app/data`, 1 Go.
-
-WAHA privé : `srv-dbr3600n74is73d704p0`, disque `dsk-dbr3600n74is73d7053g`, `/app/.sessions`, 1 Go. Image réellement téléchargée : `docker.io/devlikeapro/waha:latest-2026.10.1`, digest `sha256:a033abb9381a80246b9b3ec52141bfd7259e48bcea52286f53db25a013e526e0`. Le premier déploiement `dep-dbr3610n74is73d707d0` a atteint `live`. Correction du port privé : Render annonce `nanba-ensemble-waha-pilot-ufgg:10000`, donc `PORT=10000` et `WHATSAPP_API_PORT=10000`; `WAHA_PRINT_QR=false` évite les codes dans les logs. Déploiement de cette correction : `dep-dbr38t88v5cc738r1kr0`. Render a confirmé la détection du port 10000 dans ses logs.
-
-Contrôles publics réellement exécutés : `/health` 200 avec mode `waha`; `/api/config` 200 avec `demo:false`, `setup:true`; `/` et `/app.js` 200; `/api/whatsapp/status` et `/api/whatsapp/qr` 401 sans authentification; POST `/api/setup` avec une mauvaise clé 403 `invalid_setup_key`. Page de connexion et formulaire d’activation vérifiés dans le navigateur. Preuves : `live-validation.json`. Aucun compte propriétaire créé par l’agent, aucun téléphone associé, aucun message réel envoyé.
-
-L’accès propriétaire a été remis dans un fichier privé à usage unique. Seul son hash est configuré dans Render. Il ne doit pas être ajouté à ce dépôt.
-
-L’archive publiée ne contient pas la spécification privée originale, ni données, sessions, clés ou node_modules.
-
-## Reprise pour la recette WhatsApp
-
-1. Vérifier l’état actuel des deux déploiements existants ; ne pas créer de nouveaux services ni réinitialiser les volumes.
-2. Le propriétaire ouvre son lien privé actualisé #whatsapp-start/SECRET, scanne le QR, clique « Activer mon test personnel ». Ne jamais ajouter ce secret à Git.
-3. Dans WhatsApp, ouvrir sa discussion avec soi-même et écrire « Nanba aide », puis « Nanba proposer une sortie à Paris ». Répondre à chaque étape avec le préfixe Nanba, confirmer, puis « Nanba sondage CODE » et « Nanba résultats CODE ». Les autres conversations sont ignorées. La création ultérieure d’un compte plateforme ferme les routes de démarrage privées et transfère le profil personnel.
-4. Vérifier réception et votes réels, provenance du groupe, absence de doublons et persistance après redémarrage. Ces contrôles attendent le téléphone du propriétaire.
-5. Actualiser les limites/tests réalisés dans PROGRESS.md. Pour de futurs changements d’infrastructure, replanifier le Blueprint existant; `autoSync:false` et les déploiements automatiques restent désactivés.
-
-## Assistant WhatsApp guidé v1
-
-Migration additive 002 : état de conversation persistant, reprise après redémarrage. `message.any` reçoit aussi les messages du propriétaire ; les échos API et les réponses du bot sont ignorés. Déduplication inbox/outbox, limites de débit, droits à l’exécution, seuils et votes backend. Le test personnel autorise exclusivement le propre identifiant retourné par WAHA après association ; aucun numéro fourni par le navigateur ne devient une destination. Un sondage annoncé comme en file d’envoi n’est pas encore une publication confirmée. « Nanba stop » suspend les réponses.
-
-Contrôles ajoutés : dialogue persistant jusqu’au sondage et au vote, consentement, révocation, isolation des groupes, limitation de débit, absence de boucle, QR privé HTTP, refus de clé erronée et de requête intersite, fermeture du démarrage après création du compte. La réception/envoi sur un téléphone réel reste à valider après scan du propriétaire.
-
-## Déploiement du pilote conversationnel
-
-Publication applicative : `b4584c5cbaf64a1f062a71031721f2efb2d89b15`, déploiement `dep-dbr3l1u7bikc73foneh0` confirmé live. Endpoint public `/api/config` : mode waha, demo false, assistant whatsapp-guided-v1. Contrôles HTTP réels : clé absente 401, clé erronée 403, requête intersite 403, activation sans consentement 403. Page #whatsapp-start contrôlée dans le navigateur.
-
-Le premier démarrage de session a révélé une erreur réseau vers WAHA. Le port WAHA avait été modifié après la création du Blueprint ; les références fromService ne sont rafraîchies que lors d’une synchronisation Blueprint, selon la documentation Render vérifiée. Rafraîchissement ciblé de WAHA_PRIVATE_HOSTPORT vers l’adresse actuellement exposée par Render, `nanba-ensemble-waha-pilot-ufgg:10000`, sans modification des secrets. Le prochain sync Blueprint doit conserver la référence fromService et cette valeur effective. Déploiement de configuration : `dep-dbr3mum1egvs73ef0mqg`. Déploiement confirmé live. Démarrage réel de session réussi (HTTP 200), puis état SCAN_QR_CODE. Récupération du QR privé réussie : HTTP 200, PNG valide de 4772 octets. Ni le contenu du QR ni le secret ne sont conservés dans les preuves. Téléphone non encore associé ; aucun message réel envoyé.
+Archive source sans base, identifiants, clé, session, node_modules ou spécification privée.
+SHA-256 : `20bd867bd2653d4ad3dd1253c8c100443dbe0536da7a5c34f5aab1ccf6fc5219`.
