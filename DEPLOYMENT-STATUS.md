@@ -4,13 +4,13 @@ Déploiement autorisé sur Render, My Workspace. Budget approuvé : application 
 
 Branche distante `nanba-ensemble-pilot` de `https://github.com/Nivasse14/nanba`. Publication par l’interface GitHub : `Dockerfile.ensemble`, `render.ensemble.yaml`, `nanba-ensemble-source.tar.gz` à la racine. Commit publié : `4f920410db67f47f4c118f490974c15d0758ee7c`. Aucun changement au code mobile existant. Synchronisation et déploiement automatiques désactivés. Secrets API/HMAC/chiffrement générés par Render et partagés par références, jamais en Git.
 
-`PILOT_SETUP_HASH` est ajouté séparément via la configuration Render. Il contient uniquement le SHA-256 d’une clé d’activation aléatoire. Cette clé est remise au propriétaire dans un fichier privé, n’apparaît ni dans les logs ni dans Git. L’activation exige ce secret et crée un seul administrateur ; elle est fermée dès le premier compte.
+`PILOT_SETUP_HASH` est ajouté séparément via la configuration Render. Il contient uniquement le SHA-256 d’une clé d’activation aléatoire. Cette clé est remise au propriétaire dans un fichier privé, n’apparaît ni dans les logs ni dans Git. L’activation exige ce secret et crée un seul administrateur ; elle est fermée dès le premier compte administrateur de plateforme.
 
-Le propriétaire définit son mot de passe puis ouvre Connexion WhatsApp. Il demande le QR, le scanne depuis le téléphone du bot, choisit un groupe consentant et peut envoyer un vrai sondage de test. Le serveur reste capable de gérer les inscriptions pendant une déconnexion du transport. Les réponses aux commandes restent des brouillons administratifs. Fournisseur IA et paiement non connectés.
+Le propriétaire ouvre le lien privé #whatsapp-start/SECRET, scanne le QR depuis WhatsApp puis active son test personnel. Aucun compte web requis pour ce test : la discussion WhatsApp « Vous » devient la seule destination privée autorisée. Le connecteur ne répond qu’aux messages adressés à Nanba. Les groupes nécessitent une autorisation administrative explicite. Les réponses guidées sont automatiques ; fournisseur IA généraliste et paiement non connectés.
 
-WAHA session `default`, WEBJS 2026.10.1. Le code source officiel épinglé confirme GET /api/{session}/auth/qr, PUT /api/sessions/{session}, POST /api/sessions et POST /api/sessions/{session}/start. Le QR n’est accessible qu’au compte plateforme authentifié ; aucun accès direct public à WAHA.
+WAHA session `default`, WEBJS 2026.10.1. Le code source officiel épinglé confirme GET /api/{session}/auth/qr, PUT /api/sessions/{session}, POST /api/sessions et POST /api/sessions/{session}/start. Le QR n’est accessible qu’au compte plateforme authentifié ou au détenteur de la clé privée avant création du compte plateforme ; aucun accès direct public à WAHA.
 
-Validation locale : 41 tests réussis, compilation TypeScript réussie, schéma JSON du Blueprint valide. La validation Render et les contrôles après déploiement sont suivis séparément.
+Validation locale après ajout du parcours direct WhatsApp : 48 tests réussis, compilation TypeScript réussie, schéma JSON du Blueprint valide. La validation Render et les contrôles après déploiement sont suivis séparément.
 
 ## État distant vérifié
 
@@ -33,7 +33,13 @@ L’archive publiée ne contient pas la spécification privée originale, ni don
 ## Reprise pour la recette WhatsApp
 
 1. Vérifier l’état actuel des deux déploiements existants ; ne pas créer de nouveaux services ni réinitialiser les volumes.
-2. Le propriétaire ouvre son lien d’activation privé et définit son mot de passe. Dès le premier compte créé, `/api/setup` se ferme définitivement.
-3. Dans « Connexion WhatsApp », il lance la session, scanne le QR, autorise un groupe pilote consentant puis lance le sondage réel.
+2. Le propriétaire ouvre son lien privé actualisé #whatsapp-start/SECRET, scanne le QR, clique « Activer mon test personnel ». Ne jamais ajouter ce secret à Git.
+3. Dans WhatsApp, ouvrir sa discussion avec soi-même et écrire « Nanba aide », puis « Nanba proposer une sortie à Paris ». Répondre à chaque étape avec le préfixe Nanba, confirmer, puis « Nanba sondage CODE » et « Nanba résultats CODE ». Les autres conversations sont ignorées. La création ultérieure d’un compte plateforme ferme les routes de démarrage privées et transfère le profil personnel.
 4. Vérifier réception et votes réels, provenance du groupe, absence de doublons et persistance après redémarrage. Ces contrôles attendent le téléphone du propriétaire.
 5. Actualiser les limites/tests réalisés dans PROGRESS.md. Pour de futurs changements d’infrastructure, replanifier le Blueprint existant; `autoSync:false` et les déploiements automatiques restent désactivés.
+
+## Assistant WhatsApp guidé v1
+
+Migration additive 002 : état de conversation persistant, reprise après redémarrage. `message.any` reçoit aussi les messages du propriétaire ; les échos API et les réponses du bot sont ignorés. Déduplication inbox/outbox, limites de débit, droits à l’exécution, seuils et votes backend. Le test personnel autorise exclusivement le propre identifiant retourné par WAHA après association ; aucun numéro fourni par le navigateur ne devient une destination. Un sondage annoncé comme en file d’envoi n’est pas encore une publication confirmée. « Nanba stop » suspend les réponses.
+
+Contrôles ajoutés : dialogue persistant jusqu’au sondage et au vote, consentement, révocation, isolation des groupes, limitation de débit, absence de boucle, QR privé HTTP, refus de clé erronée et de requête intersite, fermeture du démarrage après création du compte. La réception/envoi sur un téléphone réel reste à valider après scan du propriétaire.
