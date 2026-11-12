@@ -18,15 +18,22 @@ La publication GitHub a réussi après connexion et validation 2FA du propriéta
 
 Blueprint Render créé : `exs-dbr32mg8v5cc738qeue0`, nom `Nanba Ensemble · pilote WhatsApp`, workspace `tea-d9bb2v6rnols73dbkog0`. `autoSync: false`, ressources nouvelles, configuration `render.ensemble.yaml` sur la branche `nanba-ensemble-pilot`.
 
-La première planification Render a échoué avec `need_payment_info` pour les deux services (`services[0]`, `services[1]`). Le contrôle `get_blueprint` confirme `status: created`, `resources: []`. Aucun service créé, aucun déploiement lancé, aucune URL de pilote active, aucune connexion WhatsApp réelle. Le propriétaire doit ajouter un moyen de paiement dans les réglages de facturation Render. Le budget de 32,50 $/mois et le déploiement sont déjà autorisés : ne pas redemander cet accord.
+Le propriétaire a ajouté son moyen de paiement. La planification `exe-dbr35rrrjlhs73e25100` a réussi, sans avertissement ni variable manuelle obligatoire, et le déploiement autorisé a été lancé. Le budget de 32,50 $/mois et le déploiement sont déjà autorisés : ne pas redemander cet accord.
+
+Application : `srv-dbr36g0n74is73d71k8g`, `https://nanba-ensemble-pilot-ufgg.onrender.com`. Déploiement actif après ajout de `PILOT_SETUP_HASH` : `dep-dbr36pb1vc2s739pd470`, état `live`. Disque `dsk-dbr36ggn74is73d71l40`, `/app/data`, 1 Go.
+
+WAHA privé : `srv-dbr3600n74is73d704p0`, disque `dsk-dbr3600n74is73d7053g`, `/app/.sessions`, 1 Go. Image réellement téléchargée : `docker.io/devlikeapro/waha:latest-2026.10.1`, digest `sha256:a033abb9381a80246b9b3ec52141bfd7259e48bcea52286f53db25a013e526e0`. Le premier déploiement `dep-dbr3610n74is73d707d0` a atteint `live`. Correction du port privé : Render annonce `nanba-ensemble-waha-pilot-ufgg:10000`, donc `PORT=10000` et `WHATSAPP_API_PORT=10000`; `WAHA_PRINT_QR=false` évite les codes dans les logs. Déploiement de cette correction : `dep-dbr38t88v5cc738r1kr0`. Render a confirmé la détection du port 10000 dans ses logs.
+
+Contrôles publics réellement exécutés : `/health` 200 avec mode `waha`; `/api/config` 200 avec `demo:false`, `setup:true`; `/` et `/app.js` 200; `/api/whatsapp/status` et `/api/whatsapp/qr` 401 sans authentification; POST `/api/setup` avec une mauvaise clé 403 `invalid_setup_key`. Page de connexion et formulaire d’activation vérifiés dans le navigateur. Preuves : `live-validation.json`. Aucun compte propriétaire créé par l’agent, aucun téléphone associé, aucun message réel envoyé.
+
+L’accès propriétaire a été remis dans un fichier privé à usage unique. Seul son hash est configuré dans Render. Il ne doit pas être ajouté à ce dépôt.
 
 L’archive publiée ne contient pas la spécification privée originale, ni données, sessions, clés ou node_modules.
 
-## Reprise après ajout de la carte
+## Reprise pour la recette WhatsApp
 
-1. Replanifier le Blueprint existant avec `plan_blueprint`; ne pas en créer un deuxième.
-2. Vérifier le plan des deux services Frankfurt et des deux volumes 1 Go. Appliquer avec `approve_blueprint` seulement si la planification a réussi et respecte le déploiement déjà autorisé.
-3. Suivre les deux déploiements jusqu’à `live`, corriger toute erreur observée et vérifier `/health`, `/api/config` et la protection de `/api/whatsapp/*`.
-4. Générer une clé propriétaire à usage unique et ajouter uniquement son SHA-256 dans `PILOT_SETUP_HASH` par mise à jour ciblée de l’environnement. Ne jamais inscrire cette clé dans Git ou les logs. Déployer la configuration si nécessaire.
-5. Remettre au propriétaire son accès d’activation privé. Il choisit son mot de passe, scanne le QR WhatsApp, autorise son groupe pilote puis lance le sondage réel.
-6. Vérifier le parcours réel avec le propriétaire et actualiser les limites/test réalisés dans PROGRESS.md.
+1. Vérifier l’état actuel des deux déploiements existants ; ne pas créer de nouveaux services ni réinitialiser les volumes.
+2. Le propriétaire ouvre son lien d’activation privé et définit son mot de passe. Dès le premier compte créé, `/api/setup` se ferme définitivement.
+3. Dans « Connexion WhatsApp », il lance la session, scanne le QR, autorise un groupe pilote consentant puis lance le sondage réel.
+4. Vérifier réception et votes réels, provenance du groupe, absence de doublons et persistance après redémarrage. Ces contrôles attendent le téléphone du propriétaire.
+5. Actualiser les limites/tests réalisés dans PROGRESS.md. Pour de futurs changements d’infrastructure, replanifier le Blueprint existant; `autoSync:false` et les déploiements automatiques restent désactivés.

@@ -13,7 +13,11 @@ services:
       sizeGB: 1
     envVars:
       - key: PORT
-        value: '3000'
+        value: '10000'
+      - key: WHATSAPP_API_PORT
+        value: '10000'
+      - key: WAHA_PRINT_QR
+        value: 'false'
       - key: WHATSAPP_DEFAULT_ENGINE
         value: WEBJS
       - key: WAHA_API_KEY
