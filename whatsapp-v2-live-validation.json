@@ -1,0 +1,56 @@
+{
+  "verifiedAt": "2026-11-12T23:25:29.809456+00:00",
+  "application": "https://nanba-ensemble-pilot-ufgg.onrender.com",
+  "assistant": "whatsapp-complete-v2",
+  "sourceCommit": "f382dd992c52356a6eb283e66aca890d8e16d6b5",
+  "publishedSourceCommit": "4d2510a66195183e5e17becb9dbf8a34023f1ace",
+  "deployId": "dep-dbr4jo95efls73dmtteg",
+  "deployStatus": "live",
+  "archiveSha256": "20bd867bd2653d4ad3dd1253c8c100443dbe0536da7a5c34f5aab1ccf6fc5219",
+  "automatedTests": 65,
+  "httpChecks": [
+    {
+      "path": "/health",
+      "status": 200,
+      "data": {
+        "ok": true,
+        "mode": "waha"
+      }
+    },
+    {
+      "path": "/api/config",
+      "status": 200,
+      "data": {
+        "mode": "waha",
+        "demo": false,
+        "setup": true,
+        "assistant": "whatsapp-complete-v2",
+        "registration": "Invitation par administrateur",
+        "logo": "wordmark_placeholder"
+      }
+    },
+    {
+      "path": "/app.js",
+      "status": 200,
+      "data": {
+        "groupActivationCommand": true,
+        "guidedFormsMention": true
+      }
+    },
+    {
+      "path": "/api/admin/groups",
+      "status": 401
+    },
+    {
+      "path": "/api/pairing/status",
+      "status": 401
+    }
+  ],
+  "pairingStatusObserved": {
+    "status": "SCAN_QR_CODE",
+    "connected": false,
+    "personalTestReady": false
+  },
+  "realPhoneTested": false,
+  "thirdPartyMessagesSent": false
+}
