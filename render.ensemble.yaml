@@ -1,0 +1,76 @@
+services:
+  - type: pserv
+    name: nanba-ensemble-waha-pilot
+    runtime: image
+    image:
+      url: docker.io/devlikeapro/waha:latest-2026.10.1
+    plan: 1c-2g
+    region: frankfurt
+    autoDeployTrigger: 'off'
+    disk:
+      name: whatsapp-session
+      mountPath: /app/.sessions
+      sizeGB: 1
+    envVars:
+      - key: PORT
+        value: '3000'
+      - key: WHATSAPP_DEFAULT_ENGINE
+        value: WEBJS
+      - key: WAHA_API_KEY
+        generateValue: true
+      - key: WAHA_DASHBOARD_ENABLED
+        value: 'false'
+      - key: WHATSAPP_SWAGGER_ENABLED
+        value: 'false'
+      - key: WAHA_LOG_LEVEL
+        value: warn
+      - key: WHATSAPP_RESTART_ALL_SESSIONS
+        value: 'true'
+  - type: web
+    name: nanba-ensemble-pilot
+    runtime: docker
+    repo: https://github.com/Nivasse14/nanba
+    branch: nanba-ensemble-pilot
+    dockerContext: .
+    dockerfilePath: ./Dockerfile.ensemble
+    plan: 0.5c-512mb
+    region: frankfurt
+    autoDeployTrigger: 'off'
+    healthCheckPath: /health
+    disk:
+      name: nanba-database
+      mountPath: /app/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: '3000'
+      - key: DATABASE_PATH
+        value: /app/data/pilot.db
+      - key: WHATSAPP_MODE
+        value: waha
+      - key: WAHA_ENGINE
+        value: WEBJS
+      - key: WAHA_SESSION
+        value: default
+      - key: ALLOW_REAL_SEND
+        value: 'true'
+      - key: WAHA_PRIVATE_HOSTPORT
+        fromService:
+          type: pserv
+          name: nanba-ensemble-waha-pilot
+          property: hostport
+      - key: WAHA_API_KEY
+        fromService:
+          type: pserv
+          name: nanba-ensemble-waha-pilot
+          envVarKey: WAHA_API_KEY
+      - key: IDENTITY_ENCRYPTION_KEY_BASE64
+        generateValue: true
+      - key: WAHA_WEBHOOK_SECRET
+        generateValue: true
+      - key: RETENTION_DAYS
+        value: '90'

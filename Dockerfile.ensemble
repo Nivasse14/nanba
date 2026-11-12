@@ -1,0 +1,7 @@
+FROM node:24.22.1-bookworm-slim
+WORKDIR /app
+ADD nanba-ensemble-source.tar.gz /app/
+RUN npm ci --ignore-scripts && npm run build && npm prune --omit=dev && mkdir -p /app/data
+ENV HOST=0.0.0.0 PORT=3000
+EXPOSE 3000
+CMD ["sh", "scripts/start-container.sh"]
