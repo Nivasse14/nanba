@@ -1,0 +1,53 @@
+{
+  "checked_at": "2026-11-12T22:18:03.182233+00:00",
+  "deployment": "dep-dbr3l1u7bikc73foneh0",
+  "commit": "b4584c5cbaf64a1f062a71031721f2efb2d89b15",
+  "checks": [
+    {
+      "path": "/health",
+      "status": 200,
+      "expected": 200
+    },
+    {
+      "path": "/api/pairing/status",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/api/pairing/qr",
+      "status": 401,
+      "expected": 401
+    },
+    {
+      "path": "/api/pairing/qr",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "path": "/api/pairing/connect",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "path": "/api/pairing/self-test",
+      "status": 403,
+      "expected": 403
+    },
+    {
+      "path": "/api/pairing/connect",
+      "status": 500,
+      "state": null,
+      "error": "internal_error"
+    }
+  ],
+  "after_private_address_refresh": {
+    "checked_at": "2026-11-12T22:21:34.112624+00:00",
+    "deployment": "dep-dbr3mum1egvs73ef0mqg",
+    "session_status": "SCAN_QR_CODE",
+    "connected": false,
+    "real_messages_sent": false,
+    "qr_http": 200,
+    "qr_valid_png": true,
+    "qr_bytes": 4772
+  }
+}
