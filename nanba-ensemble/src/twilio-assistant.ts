@@ -713,8 +713,10 @@ export class TwilioAssistant {
         !this.db.get(
           "SELECT 1 FROM twilio_jobs WHERE state IN('queued','ready') AND schedule_id IS NULL LIMIT 1",
         )
-      )
+      ) {
+        await this.companion.catalogue.tick().catch(() => {});
         await this.companion.schedule();
+      }
       const job = this.db.tx(() => {
         const j = this.db.get(
           "SELECT j.* FROM twilio_jobs j WHERE j.state IN('queued','ready') AND (j.parent_sid IS NULL OR EXISTS(SELECT 1 FROM twilio_jobs p WHERE p.sid=j.parent_sid AND p.state='sent' AND COALESCE(p.delivery,'') NOT IN('failed','undelivered'))) ORDER BY (j.schedule_id IS NOT NULL), j.seq LIMIT 1",
@@ -728,6 +730,13 @@ export class TwilioAssistant {
         return j;
       });
       if (!job) return;
+      if (!(await this.companion.catalogue.deliveryAvailable(job))) {
+        this.db.run(
+          "UPDATE twilio_jobs SET state='cancelled',error='catalogue_no_longer_available' WHERE sid=?",
+          job.sid,
+        );
+        return;
+      }
       if (
         !this.support.allowed(job) ||
         !this.companion.routines.deliveryAllowed(job)

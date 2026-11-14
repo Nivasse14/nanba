@@ -16,6 +16,7 @@ export const services = [
   "kids",
   "cuisine",
   "housing",
+  "market",
   "jobs",
   "services",
   "events",
@@ -142,7 +143,7 @@ export class NanbaServices {
         ? value?.[locale] || value?.fr || value?.en || ""
         : value;
     if (a.service === "news") return c.news(identity, a);
-    if (["housing", "jobs", "services", "events"].includes(a.service))
+    if (["housing", "jobs", "market", "services", "events"].includes(a.service))
       return c.listings(identity, { ...a, target: a.service });
     if (a.service === "cinema") {
       const country = ["FR", "IN"].includes(a.country) ? a.country : "FR";

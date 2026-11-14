@@ -284,6 +284,8 @@ export class Routines {
     return "";
   }
   deliveryAllowed(job: Row) {
+    if (job.schedule_id?.startsWith("catalogue:"))
+      return this.c.catalogue.allowed(job);
     if (!job.schedule_id) return true;
     const task = this.c.db.get(
       "SELECT * FROM nanba_tasks WHERE id=?",
