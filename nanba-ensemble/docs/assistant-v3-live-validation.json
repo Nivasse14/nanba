@@ -1,0 +1,75 @@
+{
+  "date": "2026-11-13",
+  "service": "srv-dbr36g0n74is73d71k8g",
+  "deployment": "dep-dbrnflsipgvc739kqie0",
+  "priorValidatedDeployment": "dep-dbrndggu01pc73e22j6g",
+  "version": "assistant-v3",
+  "tests": {
+    "canonical": 105,
+    "exactProductionPreload": 105,
+    "postPdfPolishTargeted": 10
+  },
+  "liveIsolatedDiagnostic": {
+    "sentToWhatsApp": false,
+    "realOpenAI": true,
+    "realVoice": true,
+    "profileReplyMode": "both",
+    "pdfBytes": 10389,
+    "mp3Bytes": 89664,
+    "audioSeconds": 11.208,
+    "mp3SampleRate": 24000,
+    "separateTextPdfAudio": true,
+    "checksPassed": true
+  },
+  "verifiedAdministrators": 1,
+  "privateUserMessagesSentDuringTesting": 0,
+  "templates": {
+    "support": "pending",
+    "support_en": "pending",
+    "support_ta": "pending",
+    "otherExistingTemplates": "pending"
+  },
+  "notes": [
+    "Generated French and Tamil PDFs rendered and inspected.",
+    "French live MP3 decoded successfully.",
+    "Duplicate signature in supplied letter body is not repeated.",
+    "Audio/PDF freeform attachments remain limited to active WhatsApp conversation window."
+  ],
+  "deploymentStatus": "live",
+  "deployedAt": "2026-11-13T20:50:03.186328Z",
+  "sourceCommit": "b658c72",
+  "healthReadyAfterDeployment": true,
+  "voiceRequestFix": {
+    "sourceCommit": "307cdfb",
+    "deployment": "dep-dbrnj759fdbs738q2okg",
+    "status": "live",
+    "deployedAt": "2026-11-13T20:57:51.520486Z",
+    "canonicalTests": 108,
+    "exactProductionPreloadTests": 108,
+    "realDiagnostic": {
+      "request": "Envoie-moi un audio en tamoul pour me souhaiter une bonne soirée.",
+      "previousAssistantRefusalPresent": true,
+      "generatedAudioBytes": 72960,
+      "voiceError": null,
+      "persistentProfileUnchanged": true,
+      "sentToWhatsApp": false,
+      "outboundIntercepted": true
+    }
+  },
+  "readAndTyping": {
+    "sourceCommit": "2fb6f05",
+    "deployment": "dep-dbrnmd3bc2fs73clsceg",
+    "deployedAt": "2026-11-13T21:04:43.067592Z",
+    "status": "live",
+    "enabled": true,
+    "canonicalTests": 112,
+    "exactProductionPreloadTests": 112,
+    "providerProbe": {
+      "sentToWhatsApp": false,
+      "noMessageIdOrRecipient": true,
+      "httpStatus": 400,
+      "validationReached": true
+    },
+    "nativeEmojiReactionImplemented": false
+  }
+}

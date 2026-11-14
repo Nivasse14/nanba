@@ -1,0 +1,12 @@
+{
+  "checkedAt": "2026-11-13T16:51:04.024747+00:00",
+  "deployId": "dep-dbrjuimi0phs7382se0g",
+  "status": {
+    "status": "WORKING",
+    "connected": true,
+    "session": "default",
+    "personalTestReady": false
+  },
+  "moduleSha256": "d3adb46c0a9357b80472fed2fc20066b9a38deb10e969009454e5aeb8e7fdc78",
+  "evidence": "Authenticated private status API; no message sent or account identifier recorded"
+}

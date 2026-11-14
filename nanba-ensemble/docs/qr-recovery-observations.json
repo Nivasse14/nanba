@@ -1,0 +1,47 @@
+[
+  {
+    "time": "2026-11-13T16:09:47.764880+00:00",
+    "deployId": "dep-dbrjcbei0phs7381cok0",
+    "error": "HTTPError"
+  },
+  {
+    "time": "2026-11-13T16:10:17.771553+00:00",
+    "deployId": "dep-dbrjcbei0phs7381cok0",
+    "status": {
+      "status": "STARTING",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    }
+  },
+  {
+    "time": "2026-11-13T16:10:47.955830+00:00",
+    "deployId": "dep-dbrjcbei0phs7381cok0",
+    "status": {
+      "status": "STARTING",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    }
+  },
+  {
+    "time": "2026-11-13T16:11:17.514988+00:00",
+    "deployId": "dep-dbrjcbei0phs7381cok0",
+    "status": {
+      "status": "FAILED",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    }
+  },
+  {
+    "time": "2026-11-13T16:11:47.741632+00:00",
+    "deployId": "dep-dbrjcbei0phs7381cok0",
+    "status": {
+      "status": "STARTING",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    }
+  }
+]

@@ -1,0 +1,81 @@
+{
+  "checkedAt": "2026-11-13T18:53:46.266Z",
+  "implementationCommit": "a7cb1e9",
+  "renderService": "srv-dbr36g0n74is73d71k8g",
+  "renderDeploy": "dep-dbrlom4ipgvc739fpp9g",
+  "deployment": "live",
+  "deploymentFinishedAt": "2026-11-13T18:52:53.211071Z",
+  "preloadSha256": "c72933927178eeb0b6787990611e42dde669342c515dfa9a9d7657de62a6b19d",
+  "localTests": {
+    "pass": 85,
+    "fail": 0
+  },
+  "originalPilotSourceWithNewPreloadTests": {
+    "pass": 85,
+    "fail": 0
+  },
+  "realProviderTests": {
+    "audio": {
+      "model": "gpt-transcribe",
+      "format": "audio/ogg; codecs=opus",
+      "fixture": "Synthetic English speech",
+      "success": true
+    },
+    "image": {
+      "model": "gpt-5.6-terra",
+      "format": "image/png",
+      "fixture": "Generated non-personal text image",
+      "expectedText": "NANBA TEST 42",
+      "recognizedText": "NANBA TEST 42",
+      "success": true
+    }
+  },
+  "publicHealth": {
+    "implemented": true,
+    "ready": true,
+    "version": "media-v1",
+    "capabilities": {
+      "text": true,
+      "images": true,
+      "audio": true,
+      "reply": "text"
+    }
+  },
+  "privateStatus": {
+    "ready": true,
+    "configured": true,
+    "enabled": true,
+    "model": "gpt-5.6-terra",
+    "dailyLimit": 50,
+    "capabilities": {
+      "text": true,
+      "images": true,
+      "audio": true,
+      "reply": "text",
+      "maxAttachments": 4,
+      "imageMaxBytes": 5242880,
+      "audioMaxBytes": 16777216,
+      "totalMaxBytes": 20971520
+    },
+    "transcriptionModel": "gpt-transcribe",
+    "webhookUrl": "https://nanba-ensemble-pilot-ufgg.onrender.com/api/webhooks/twilio",
+    "callbackUrl": "https://nanba-ensemble-pilot-ufgg.onrender.com/api/webhooks/twilio/status",
+    "sender": "whatsapp:+12…536",
+    "jobs": [
+      {
+        "state": "sent",
+        "count": 15
+      }
+    ],
+    "lastMessageAt": 1794595811680,
+    "lastDelivery": {
+      "delivery": "delivered",
+      "error": null
+    }
+  },
+  "realIncomingWhatsAppMediaVerified": false,
+  "outboundWhatsAppTestSent": false,
+  "remaining": [
+    "First real voice note and image received through Twilio and delivered reply"
+  ]
+}

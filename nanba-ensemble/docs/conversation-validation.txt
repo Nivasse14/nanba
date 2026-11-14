@@ -1,0 +1,72 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nanba-ensemble@0.1.0 check
+> npm run build && npm test
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nanba-ensemble@0.1.0 build
+> tsc --noEmit && node scripts/build.ts
+
+Validated TypeScript backend; copied browser assets to dist/public. Node 24 runs source TypeScript.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nanba-ensemble@0.1.0 test
+> node --test --test-concurrency=1 tests/*.test.ts
+
+✔ personal WhatsApp help responds immediately; replay and API echoes never duplicate it (53.957769ms)
+✔ proposal wizard survives a new worker and finishes with real backend poll/results semantics (60.095487ms)
+✔ group participation is explicit and cannot grant admin rights or revive a revoked membership (50.802432ms)
+✔ automatic replies honor pause, scope, rate limits and revoked permissions at send time (62.962478ms)
+✔ bootstrap self-test authorizes only provider-confirmed owner chat and preserves web owner activation (78.555168ms)
+✔ WAHA permits a personal reply only for explicitly authorized private chat IDs (0.99633ms)
+✔ 1 · full collective flow persists poll, votes, confirmed offer and accepted terms after reopening (55.131917ms)
+✔ permissions separate groups, private housing and professional organizations (45.069526ms)
+✔ verified identity linking reconciles app and WhatsApp without arbitrary reassignment (41.502345ms)
+✔ poll changes, withdrawals, duplicate and out-of-order events; decrypt failure never withdraws (43.025697ms)
+✔ unorderable votes become uncertain; multi-choice snapshot and deadline are enforced (42.248048ms)
+✔ threshold notification is idempotent even after withdrawal and recrossing (39.889284ms)
+✔ offer requires author confirmation and explicit current terms; material change forces reconfirmation (41.216034ms)
+✔ capacity is bounded and a released place is offered, not silently confirmed (40.897273ms)
+✔ 2 · meeting acceptance protects coordination; cancellation offers seat, expired offer advances queue (39.956787ms)
+✔ 3 · housing availability is stale and revoking consent immediately hides proposals from partner (41.519199ms)
+✔ 4 · volunteer slot is held after proposal, requires both acceptances, cancellation releases it (41.066938ms)
+✔ volunteer limits and pause are enforced without public reputation penalties (38.908098ms)
+✔ 5 · radar expires under a controlled clock, disappears from current results, reconfirms with traceable version (38.909399ms)
+✔ 6 · cohort enrollment, resource and progress persist privately, activity must be enrolled (44.599508ms)
+✔ 7 · challenge freezes denominator, scores deterministically, rejects duplicates and late submissions (62.885643ms)
+✔ 8 · author validates bilingual version and channels; withdrawal invalidates public surfaces and queued sends (44.101647ms)
+✔ story edits invalidate author approval and cannot authorize another publishing channel (38.500434ms)
+✔ payment cannot be marked paid by browser; authentic but mismatched events do not validate another order (39.556794ms)
+✔ privacy export is scoped and erasure removes linked votes, private content and sessions (76.569518ms)
+✔ waitlist replay preserves FIFO position and a closed activity never promotes anyone (39.913833ms)
+✔ erasing an organizer cancels owned registrations and frees volunteer commitments (72.663786ms)
+✔ real concurrent SQLite connections cannot overbook the last place (279.958524ms)
+✔ HTTP session/CSRF/group authorization and complete first-module flow with process restart (282.002697ms)
+✔ production refuses simulated mode and development identity shortcuts (0.50456ms)
+✔ private pairing HTTP capability protects QR, requires consent, and cannot authorize an arbitrary chat (83.874347ms)
+✔ pilot setup is secret-bound, single-use, persistent and creates no authorized destination (71.249333ms)
+✔ Render configuration keeps secrets private and only permits the explicit private address (0.731451ms)
+✔ pilot pairing is platform-admin-only, redacts provider secrets and uses pinned QR/session contracts (44.371127ms)
+✔ HTTP setup needs a key; live WhatsApp management rejects anonymous requests (47.211302ms)
+✔ WAHA documented sha512 HMAC authenticates raw body and rejects forgery/other algorithm (1.742173ms)
+✔ pinned WAHA group vote contract maps stable options, seconds, failures, group and session (46.727164ms)
+✔ bot ignores own and unrelated group messages before any model sees content (41.685742ms)
+✔ WAHA adapter emits exact poll contract; network ambiguity is never success (3.049091ms)
+✔ timeout is durable uncertain and never automatically republished; restart preserves uncertainty (39.929048ms)
+✔ disconnect leaves queued item pending; recovery sends it once as simulated (39.081311ms)
+✔ permissions revoked before execution cancel pending publications, including planned digest (38.725105ms)
+✔ pause cancels scheduled messages and resuming does not replay them (38.923774ms)
+✔ digest is previewable, authorized, deduplicated and source revocation is rechecked at execution (41.387609ms)
+✔ collector prevents private ranges, oversized XML entities and unknown formats; refresh needs review (49.848553ms)
+✔ administrative knowledge cannot be verified from a non-official domain (37.902486ms)
+✔ AI missing key returns explicit unconfigured state; typed tools cannot publish or override context (38.155258ms)
+✔ AI provider failure preserves deterministic features and records failure budget (39.838241ms)
+ℹ tests 48
+ℹ suites 0
+ℹ pass 48
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 3327.606006

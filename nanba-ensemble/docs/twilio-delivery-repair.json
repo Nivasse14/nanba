@@ -1,0 +1,80 @@
+{
+  "checkedAt": "2026-11-13T18:38:57.757Z",
+  "incident": "Twilio recorded the incoming WhatsApp message but Nanba had no job and no outgoing reply.",
+  "incomingBeforeRepair": [
+    {
+      "sid": "SMdecd184a6534a0110b05861bb6b19707",
+      "direction": "inbound",
+      "status": "received",
+      "date_created": "Fri, 13 Nov 2026 18:33:12 +0000",
+      "date_sent": "Fri, 13 Nov 2026 18:33:14 +0000",
+      "error_code": null,
+      "error_message": null,
+      "num_media": "0",
+      "bodyLength": 13
+    }
+  ],
+  "routingRepair": {
+    "repaired": true,
+    "serviceSid": "MG8fca5fbd2c7542329e4b9752d3cdb26c",
+    "before": {
+      "inbound_request_url": "",
+      "inbound_method": "POST",
+      "use_inbound_webhook_on_number": true,
+      "fallback_url": "",
+      "status_callback": null
+    },
+    "after": {
+      "inbound_request_url": "https://nanba-ensemble-pilot-ufgg.onrender.com/api/webhooks/twilio",
+      "inbound_method": "POST",
+      "use_inbound_webhook_on_number": false,
+      "fallback_url": "",
+      "status_callback": null
+    },
+    "senderCount": 1,
+    "checkedAt": "2026-11-13T18:37:38.348254+00:00"
+  },
+  "recovery": {
+    "replayHttp": 200,
+    "acknowledged": true,
+    "method": "Replay of the real Twilio inbound message with its original MessageSid, recipient and text; official Twilio SDK signature, application deduplication retained.",
+    "noSyntheticRecipient": true
+  },
+  "outgoingAfterRecovery": [
+    {
+      "sid": "SM16bb7b4e74f820f401267c16d7a622fb",
+      "direction": "outbound-api",
+      "status": "delivered",
+      "date_created": "Fri, 13 Nov 2026 18:38:18 +0000",
+      "date_sent": "Fri, 13 Nov 2026 18:38:19 +0000",
+      "error_code": null,
+      "error_message": null,
+      "num_media": "0",
+      "bodyLength": 49
+    }
+  ],
+  "assistantAfterRecovery": {
+    "ready": true,
+    "configured": true,
+    "enabled": true,
+    "model": "gpt-5.6-terra",
+    "dailyLimit": 50,
+    "webhookUrl": "https://nanba-ensemble-pilot-ufgg.onrender.com/api/webhooks/twilio",
+    "callbackUrl": "https://nanba-ensemble-pilot-ufgg.onrender.com/api/webhooks/twilio/status",
+    "sender": "whatsapp:+12…536",
+    "jobs": [
+      {
+        "state": "sent",
+        "count": 1
+      }
+    ],
+    "lastMessageAt": 1794595095666,
+    "lastDelivery": {
+      "delivery": "delivered",
+      "error": null
+    }
+  },
+  "deliveredReplyVerified": true,
+  "signedDeliveryCallbackVerified": true,
+  "directNewIncomingAfterRoutingRepairVerified": false
+}

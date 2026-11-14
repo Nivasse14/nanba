@@ -1,0 +1,23 @@
+{
+  "version": "assistant-v4.1",
+  "sourceCommit": "d1a0115",
+  "deployId": "dep-dbs3jo3bc2fs73afj5t0",
+  "liveAt": "2026-11-14T10:38:06.518009Z",
+  "canonicalTests": 132,
+  "productionPreloadTests": 132,
+  "healthReady": true,
+  "birthDateHoroscope": true,
+  "realAiDiagnostic": {
+    "realMessagesSent": 0,
+    "interceptedMessages": 3,
+    "onboardingAsksBirthDate": true,
+    "calculatedCorrectly": true,
+    "unknownTimeHandled": true
+  },
+  "notes": [
+    "Existing public Nanba birthplace API and local Lahiri model reused.",
+    "Each number retains its own encrypted birth profile.",
+    "Unknown time preserves only stable fields; no fabricated noon birth.",
+    "No production member subscribed or messaged during validation."
+  ]
+}

@@ -1,0 +1,65 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nanba-ensemble@0.1.0 check
+> npm run build && npm test
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nanba-ensemble@0.1.0 build
+> tsc --noEmit && node scripts/build.ts
+
+Validated TypeScript backend; copied browser assets to dist/public. Node 24 runs source TypeScript.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nanba-ensemble@0.1.0 test
+> node --test --test-concurrency=1 tests/*.test.ts
+
+✔ 1 · full collective flow persists poll, votes, confirmed offer and accepted terms after reopening (106.035736ms)
+✔ permissions separate groups, private housing and professional organizations (43.447638ms)
+✔ verified identity linking reconciles app and WhatsApp without arbitrary reassignment (42.21352ms)
+✔ poll changes, withdrawals, duplicate and out-of-order events; decrypt failure never withdraws (40.464666ms)
+✔ unorderable votes become uncertain; multi-choice snapshot and deadline are enforced (40.869725ms)
+✔ threshold notification is idempotent even after withdrawal and recrossing (39.148673ms)
+✔ offer requires author confirmation and explicit current terms; material change forces reconfirmation (39.90991ms)
+✔ capacity is bounded and a released place is offered, not silently confirmed (39.931322ms)
+✔ 2 · meeting acceptance protects coordination; cancellation offers seat, expired offer advances queue (39.19898ms)
+✔ 3 · housing availability is stale and revoking consent immediately hides proposals from partner (40.68685ms)
+✔ 4 · volunteer slot is held after proposal, requires both acceptances, cancellation releases it (39.535546ms)
+✔ volunteer limits and pause are enforced without public reputation penalties (38.459666ms)
+✔ 5 · radar expires under a controlled clock, disappears from current results, reconfirms with traceable version (38.659908ms)
+✔ 6 · cohort enrollment, resource and progress persist privately, activity must be enrolled (39.078798ms)
+✔ 7 · challenge freezes denominator, scores deterministically, rejects duplicates and late submissions (45.985541ms)
+✔ 8 · author validates bilingual version and channels; withdrawal invalidates public surfaces and queued sends (40.38779ms)
+✔ story edits invalidate author approval and cannot authorize another publishing channel (37.385567ms)
+✔ payment cannot be marked paid by browser; authentic but mismatched events do not validate another order (39.481855ms)
+✔ privacy export is scoped and erasure removes linked votes, private content and sessions (73.16635ms)
+✔ waitlist replay preserves FIFO position and a closed activity never promotes anyone (39.552331ms)
+✔ erasing an organizer cancels owned registrations and frees volunteer commitments (75.346653ms)
+✔ real concurrent SQLite connections cannot overbook the last place (248.53199ms)
+✔ HTTP session/CSRF/group authorization and complete first-module flow with process restart (269.998917ms)
+✔ production refuses simulated mode and development identity shortcuts (0.53105ms)
+✔ pilot setup is secret-bound, single-use, persistent and creates no authorized destination (75.851634ms)
+✔ Render configuration keeps secrets private and only permits the explicit private address (0.645002ms)
+✔ pilot pairing is platform-admin-only, redacts provider secrets and uses pinned QR/session contracts (45.344706ms)
+✔ HTTP setup needs a key; live WhatsApp management rejects anonymous requests (73.766544ms)
+✔ WAHA documented sha512 HMAC authenticates raw body and rejects forgery/other algorithm (2.074054ms)
+✔ pinned WAHA group vote contract maps stable options, seconds, failures, group and session (63.417416ms)
+✔ bot ignores own and unrelated group messages before any model sees content (42.460942ms)
+✔ WAHA adapter emits exact poll contract; network ambiguity is never success (3.153509ms)
+✔ timeout is durable uncertain and never automatically republished; restart preserves uncertainty (44.764717ms)
+✔ disconnect leaves queued item pending; recovery sends it once as simulated (40.372898ms)
+✔ permissions revoked before execution cancel pending publications, including planned digest (40.71348ms)
+✔ pause cancels scheduled messages and resuming does not replay them (40.390344ms)
+✔ digest is previewable, authorized, deduplicated and source revocation is rechecked at execution (52.563859ms)
+✔ collector prevents private ranges, oversized XML entities and unknown formats; refresh needs review (59.452575ms)
+✔ administrative knowledge cannot be verified from a non-official domain (52.277181ms)
+✔ AI missing key returns explicit unconfigured state; typed tools cannot publish or override context (65.994668ms)
+✔ AI provider failure preserves deterministic features and records failure budget (46.066644ms)
+ℹ tests 41
+ℹ suites 0
+ℹ pass 41
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 2869.587658

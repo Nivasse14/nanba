@@ -1,0 +1,89 @@
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nanba-ensemble@0.1.0 check
+> npm run build && npm test
+
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nanba-ensemble@0.1.0 build
+> tsc --noEmit && node scripts/build.ts
+
+Validated TypeScript backend; copied browser assets to dist/public. Node 24 runs source TypeScript.
+npm warn Unknown env config "http-proxy". This will stop working in the next major version of npm.
+
+> nanba-ensemble@0.1.0 test
+> node --test --test-concurrency=1 tests/*.test.ts
+
+✔ personal WhatsApp help responds immediately; replay and API echoes never duplicate it (54.646116ms)
+✔ proposal wizard survives a new worker and finishes with real backend poll/results semantics (60.320652ms)
+✔ group participation is explicit and cannot grant admin rights or revive a revoked membership (44.60843ms)
+✔ automatic replies honor pause, scope, rate limits and revoked permissions at send time (64.740699ms)
+✔ bootstrap self-test authorizes only provider-confirmed owner chat and preserves web owner activation (75.948708ms)
+✔ WAHA permits a personal reply only for explicitly authorized private chat IDs (1.069641ms)
+✔ 1 · full collective flow persists poll, votes, confirmed offer and accepted terms after reopening (52.486214ms)
+✔ permissions separate groups, private housing and professional organizations (43.023322ms)
+✔ verified identity linking reconciles app and WhatsApp without arbitrary reassignment (41.455702ms)
+✔ poll changes, withdrawals, duplicate and out-of-order events; decrypt failure never withdraws (41.127217ms)
+✔ unorderable votes become uncertain; multi-choice snapshot and deadline are enforced (41.984698ms)
+✔ threshold notification is idempotent even after withdrawal and recrossing (38.638149ms)
+✔ offer requires author confirmation and explicit current terms; material change forces reconfirmation (40.577039ms)
+✔ capacity is bounded and a released place is offered, not silently confirmed (40.765208ms)
+✔ 2 · meeting acceptance protects coordination; cancellation offers seat, expired offer advances queue (39.380426ms)
+✔ 3 · housing availability is stale and revoking consent immediately hides proposals from partner (39.965979ms)
+✔ 4 · volunteer slot is held after proposal, requires both acceptances, cancellation releases it (39.695982ms)
+✔ volunteer limits and pause are enforced without public reputation penalties (38.848916ms)
+✔ 5 · radar expires under a controlled clock, disappears from current results, reconfirms with traceable version (40.066129ms)
+✔ 6 · cohort enrollment, resource and progress persist privately, activity must be enrolled (39.125372ms)
+✔ 7 · challenge freezes denominator, scores deterministically, rejects duplicates and late submissions (47.238381ms)
+✔ 8 · author validates bilingual version and channels; withdrawal invalidates public surfaces and queued sends (40.120191ms)
+✔ story edits invalidate author approval and cannot authorize another publishing channel (39.026073ms)
+✔ payment cannot be marked paid by browser; authentic but mismatched events do not validate another order (42.072281ms)
+✔ privacy export is scoped and erasure removes linked votes, private content and sessions (73.471457ms)
+✔ waitlist replay preserves FIFO position and a closed activity never promotes anyone (41.163833ms)
+✔ erasing an organizer cancels owned registrations and frees volunteer commitments (72.614496ms)
+✔ real concurrent SQLite connections cannot overbook the last place (225.737283ms)
+✔ HTTP session/CSRF/group authorization and complete first-module flow with process restart (281.786477ms)
+✔ production refuses simulated mode and development identity shortcuts (0.786825ms)
+✔ private pairing HTTP capability protects QR, requires consent, and cannot authorize an arbitrary chat (88.854073ms)
+✔ pilot setup is secret-bound, single-use, persistent and creates no authorized destination (71.019765ms)
+✔ Render configuration keeps secrets private and only permits the explicit private address (0.639142ms)
+✔ pilot pairing is platform-admin-only, redacts provider secrets and uses pinned QR/session contracts (44.246384ms)
+✔ HTTP setup needs a key; live WhatsApp management rejects anonymous requests (49.797896ms)
+✔ WAHA documented sha512 HMAC authenticates raw body and rejects forgery/other algorithm (1.595784ms)
+✔ pinned WAHA group vote contract maps stable options, seconds, failures, group and session (46.738207ms)
+✔ bot ignores own and unrelated group messages before any model sees content (43.860053ms)
+✔ WAHA adapter emits exact poll contract; network ambiguity is never success (4.138833ms)
+✔ timeout is durable uncertain and never automatically republished; restart preserves uncertainty (61.046576ms)
+✔ disconnect leaves queued item pending; recovery sends it once as simulated (48.130804ms)
+✔ permissions revoked before execution cancel pending publications, including planned digest (47.816585ms)
+✔ pause cancels scheduled messages and resuming does not replay them (40.968388ms)
+✔ digest is previewable, authorized, deduplicated and source revocation is rechecked at execution (42.907578ms)
+✔ collector prevents private ranges, oversized XML entities and unknown formats; refresh needs review (48.170344ms)
+✔ administrative knowledge cannot be verified from a non-official domain (38.571238ms)
+✔ AI missing key returns explicit unconfigured state; typed tools cannot publish or override context (40.047221ms)
+✔ AI provider failure preserves deterministic features and records failure budget (39.92052ms)
+✔ WhatsApp complete collective: proposal, group poll, professional offer, terms acceptance and withdrawal (136.383812ms)
+✔ WhatsApp meetings: create, matching, waitlist, protected coordination and accepting released seat (103.562865ms)
+✔ WhatsApp housing: private creation, scoped professional consent, proposal, contact, immediate revocation (97.853296ms)
+✔ WhatsApp help: volunteer registration, availability, dual acceptance, completion and feedback (104.0846ms)
+✔ WhatsApp radar: provenance, moderation, expiry, reconfirmation and dispute (79.109448ms)
+✔ WhatsApp newcomer journey: enrollment, private steps, resources, activity, mentor and persistence (85.285349ms)
+✔ WhatsApp challenges: authoring, extra question, teams, secret answers, final results (118.946091ms)
+✔ WhatsApp stories: private draft, edited translation, author approval, moderation, sharing and withdrawal (80.402966ms)
+✔ WhatsApp security: no private data in group, source role unchanged, replay safe, stale acceptance rejected (55.035583ms)
+✔ nested transaction rollback preserves outer inbox transaction and Paris date validation rejects invalid or ambiguous hours (42.486033ms)
+✔ private reply rechecks housing consent and meeting enrollment at send time, not just record version (43.647773ms)
+✔ private community selection cannot grant another group membership or switch mid-confirmation (47.282247ms)
+✔ WhatsApp administration manages members, verified partners, knowledge and programmed digests without web forms (94.065952ms)
+✔ linked owner can explicitly enable the actual WhatsApp group, ordinary members and API echoes cannot (41.005254ms)
+✔ private route cannot be rebound through administration and a pending reply cannot change destination (44.611885ms)
+✔ group publication contains WhatsApp actions and never includes participant-only coordination (46.699619ms)
+✔ signed WAHA HTTP ingress creates only the sender private route and emits the correct private response (126.604736ms)
+ℹ tests 65
+ℹ suites 0
+ℹ pass 65
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 4746.888481

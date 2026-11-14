@@ -1,0 +1,96 @@
+{
+  "checkedAt": "2026-11-13T18:18:56.718504+00:00",
+  "localImplementationCommit": "ef38109",
+  "renderService": "srv-dbr36g0n74is73d71k8g",
+  "renderDeploy": "dep-dbrl5cl9fdbs738j09gg",
+  "renderFinishedAt": "2026-11-13T18:11:58.074999Z",
+  "deployment": "live",
+  "deliveryMechanism": "hash-guarded bundled preload via NODE_OPTIONS",
+  "githubWrite": "403 Resource not accessible by integration",
+  "localTests": {
+    "pass": 77,
+    "fail": 0
+  },
+  "originalPilotSourceWithPreloadTests": {
+    "pass": 77,
+    "fail": 0
+  },
+  "health": {
+    "ok": true,
+    "mode": "waha"
+  },
+  "twilioHealth": {
+    "implemented": true,
+    "ready": true
+  },
+  "privateTwilioStatus": {
+    "ready": true,
+    "configured": true,
+    "enabled": true,
+    "model": "gpt-5.6-terra",
+    "dailyLimit": 50,
+    "jobs": [],
+    "lastMessageAt": null,
+    "lastDelivery": null
+  },
+  "wahaStatus": {
+    "connected": true,
+    "personalTestReady": true,
+    "status": "WORKING",
+    "checkedAt": "2026-11-13T17:34:00Z",
+    "currentStatus": "Not revalidated; HTTP 502 after latest deployment"
+  },
+  "browser": {
+    "page": "https://nanba-ensemble-pilot-ufgg.onrender.com/twilio",
+    "visible": "Un assistant à qui parler, tout simplement.",
+    "privateAccessForm": true
+  },
+  "realTwilioOrOpenAICall": true,
+  "remaining": [
+    "Real incoming WhatsApp message and delivered AI response"
+  ],
+  "activationCheck": {
+    "checkedAt": "2026-11-13T18:10:58Z",
+    "twilioAccountActive": true,
+    "openaiCredentialValid": true,
+    "openaiResponsesHttp": 429,
+    "openaiErrorCode": "credit_balance_exhausted",
+    "openaiErrorType": "insufficient_quota",
+    "assistantEnabled": false,
+    "credentialsSavedInRender": true,
+    "senderSelection": "existing Nanba sandbox; other business sender left unchanged",
+    "inboundWebhookChanged": false,
+    "configurationDeploy": "dep-dbrl5cl9fdbs738j09gg",
+    "configurationDeployStatus": "live",
+    "remaining": [
+      "OpenAI API credit top-up",
+      "Successful AI probe and activation",
+      "Switch Nanba sandbox inbound webhook",
+      "Real incoming WhatsApp test"
+    ],
+    "configurationDeployFinishedAt": "2026-11-13T18:11:58.074999Z",
+    "privateSetupVerified": {
+      "configured": true,
+      "enabled": false,
+      "ready": false
+    },
+    "wahaStatusCheck": "HTTP 502 after redeploy; not revalidated in this activation attempt"
+  },
+  "initialValidationCheckedAt": "2026-11-13T17:34:00Z",
+  "activationSuccess": {
+    "checkedAt": "2026-11-13T18:16:05.221460+00:00",
+    "openaiResponsesProbeSucceeded": true,
+    "assistantEnabled": true,
+    "configurationStorage": "Encrypted SQLite setup overrides environment defaults",
+    "sender": "whatsapp:+14155238886",
+    "senderStatus": "ONLINE",
+    "inboundWebhook": "https://nanba-ensemble-pilot-ufgg.onrender.com/api/webhooks/twilio",
+    "inboundWebhookVerifiedByReadback": true,
+    "otherSenderWebhookSettingsPreserved": true,
+    "otherBusinessSenderUnchanged": true,
+    "deliveryStatusCallback": "Per-message StatusCallback supplied by assistant",
+    "realIncomingWhatsAppVerified": false,
+    "realWhatsAppDeliveryVerified": false,
+    "outboundTestMessageSent": false
+  }
+}

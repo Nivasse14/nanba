@@ -1,0 +1,40 @@
+{
+  "checkedAt": "2026-11-13T18:31:42.006981+00:00",
+  "sender": "whatsapp:+12694043536",
+  "senderStatus": "ONLINE",
+  "activeDisplayName": "IA Photobooth",
+  "previousWebhook": {
+    "callback_method": null,
+    "callback_url": "",
+    "fallback_method": null,
+    "fallback_url": "",
+    "status_callback_method": "POST",
+    "status_callback_url": ""
+  },
+  "verifiedWebhook": {
+    "callback_method": "POST",
+    "callback_url": "https://nanba-ensemble-pilot-ufgg.onrender.com/api/webhooks/twilio",
+    "fallback_method": null,
+    "fallback_url": "",
+    "status_callback_method": "POST",
+    "status_callback_url": ""
+  },
+  "assistant": {
+    "ready": true,
+    "configured": true,
+    "enabled": true,
+    "model": "gpt-5.6-terra",
+    "dailyLimit": 50,
+    "webhookUrl": "https://nanba-ensemble-pilot-ufgg.onrender.com/api/webhooks/twilio",
+    "callbackUrl": "https://nanba-ensemble-pilot-ufgg.onrender.com/api/webhooks/twilio/status",
+    "sender": "whatsapp:+12…536",
+    "jobs": [],
+    "lastMessageAt": null,
+    "lastDelivery": null
+  },
+  "openaiResponsesProbeSucceeded": true,
+  "userAuthorizedReassignment": true,
+  "realIncomingWhatsAppVerified": false,
+  "realWhatsAppDeliveryVerified": false,
+  "outboundTestMessageSent": false
+}

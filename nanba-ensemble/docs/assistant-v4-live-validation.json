@@ -1,0 +1,61 @@
+{
+  "version": "assistant-v4",
+  "sourceCommit": "1bb5494",
+  "renderDeploy": "dep-dbs398u7bikc73efsakg",
+  "liveAt": "2026-11-14T10:16:20.777797Z",
+  "canonicalTests": {
+    "passed": 124,
+    "failed": 0
+  },
+  "exactProductionPreloadTests": {
+    "passed": 124,
+    "failed": 0
+  },
+  "runtimeCodec": "brotli",
+  "runtimeEnvironmentPayloadBytes": 1232336,
+  "health": {
+    "ready": true,
+    "personalizedRoutines": true,
+    "nanbaServices": true,
+    "readAndTyping": true
+  },
+  "liveDiagnostic": {
+    "realMessagesSent": 0,
+    "interceptedMessages": 1,
+    "realModelCreatedTwoSlots": true,
+    "slots": [
+      {
+        "kind": "morning",
+        "at": "08:00",
+        "timezone": "Europe/Paris",
+        "topics": [
+          "news"
+        ]
+      },
+      {
+        "kind": "evening",
+        "at": "20:00",
+        "timezone": "Europe/Paris",
+        "topics": [
+          "cinema"
+        ]
+      }
+    ],
+    "pauseWorked": true,
+    "subscriptionConfirmationIncludesMetaPendingNotice": true,
+    "publicApiItems": {
+      "cinema": 8,
+      "exchange": 2,
+      "employment": 8,
+      "kids": 5,
+      "travel": 1
+    },
+    "travelResultIsComparisonLinkNotFare": true
+  },
+  "limits": {
+    "templates": "12 pending at latest check; outside-conversation messages await Meta approval",
+    "privateNanbaAccountLink": "not implemented; natal horoscope, public voting and member-specific writes remain in authenticated Nanba app",
+    "gold": "not redistributed because existing API marks in-app indicative use",
+    "realPhoneDeliveryTestedInThisRelease": false
+  }
+}

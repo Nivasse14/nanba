@@ -1,0 +1,65 @@
+[
+  {
+    "path": "/health",
+    "status": 200,
+    "expected": 200,
+    "passed": true,
+    "body": {
+      "ok": true,
+      "mode": "waha"
+    }
+  },
+  {
+    "path": "/api/config",
+    "status": 200,
+    "expected": 200,
+    "passed": true,
+    "body": {
+      "mode": "waha",
+      "demo": false,
+      "setup": true,
+      "registration": "Invitation par administrateur",
+      "logo": "wordmark_placeholder"
+    }
+  },
+  {
+    "path": "/api/whatsapp/status",
+    "status": 401,
+    "expected": 401,
+    "passed": true,
+    "body": {
+      "error": "unauthenticated"
+    }
+  },
+  {
+    "path": "/api/whatsapp/qr",
+    "status": 401,
+    "expected": 401,
+    "passed": true,
+    "body": {
+      "error": "unauthenticated"
+    }
+  },
+  {
+    "path": "/",
+    "status": 200,
+    "expected": 200,
+    "passed": true,
+    "csp": true
+  },
+  {
+    "path": "/app.js",
+    "status": 200,
+    "expected": 200,
+    "passed": true
+  },
+  {
+    "path": "/api/setup",
+    "method": "POST",
+    "status": 403,
+    "body": {
+      "error": "invalid_setup_key"
+    },
+    "passed": true
+  }
+]

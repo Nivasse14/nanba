@@ -1,0 +1,112 @@
+[
+  {
+    "time": "2026-11-13T16:36:50.743597+00:00",
+    "deployId": "dep-dbrjos3tqb8s73eoskp0",
+    "status": {
+      "status": "SCAN_QR_CODE",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    },
+    "qrSha256": "5673d7734506eea9af18385c6d16f729dc18149c7f773daf4f6cae91272ec194"
+  },
+  {
+    "time": "2026-11-13T16:37:26.848271+00:00",
+    "deployId": "dep-dbrjos3tqb8s73eoskp0",
+    "status": {
+      "status": "SCAN_QR_CODE",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    },
+    "qrSha256": "5673d7734506eea9af18385c6d16f729dc18149c7f773daf4f6cae91272ec194"
+  },
+  {
+    "time": "2026-11-13T16:38:02.915956+00:00",
+    "deployId": "dep-dbrjos3tqb8s73eoskp0",
+    "status": {
+      "status": "SCAN_QR_CODE",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    },
+    "qrSha256": "8c4843f27c4cf4f0543ee4c81580ca4efb805eaec1a7d03b19671db9e7ef5850"
+  },
+  {
+    "time": "2026-11-13T16:38:37.790046+00:00",
+    "deployId": "dep-dbrjos3tqb8s73eoskp0",
+    "status": {
+      "status": "SCAN_QR_CODE",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    },
+    "qrSha256": "033ee187b710fba350ecf5b693af16d43d9d680fe4a4af8e818f87fc9124f51e"
+  },
+  {
+    "time": "2026-11-13T16:39:13.509616+00:00",
+    "deployId": "dep-dbrjos3tqb8s73eoskp0",
+    "status": {
+      "status": "SCAN_QR_CODE",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    },
+    "qrSha256": "374bbe4936a4cff54b809987f89f89ebb0b9dde14d9514bc1ab143fc93a1a008"
+  },
+  {
+    "time": "2026-11-13T16:39:49.694064+00:00",
+    "deployId": "dep-dbrjos3tqb8s73eoskp0",
+    "status": {
+      "status": "SCAN_QR_CODE",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    },
+    "qrSha256": "374bbe4936a4cff54b809987f89f89ebb0b9dde14d9514bc1ab143fc93a1a008"
+  },
+  {
+    "time": "2026-11-13T16:40:25.398091+00:00",
+    "deployId": "dep-dbrjos3tqb8s73eoskp0",
+    "status": {
+      "status": "SCAN_QR_CODE",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    },
+    "qrSha256": "efb14e2a6bbf4a10eff81fca4c4b3617b62e36ee25cbdbf452ab739754102a95"
+  },
+  {
+    "time": "2026-11-13T16:41:01.719084+00:00",
+    "deployId": "dep-dbrjos3tqb8s73eoskp0",
+    "status": {
+      "status": "SCAN_QR_CODE",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    },
+    "qrSha256": "efb14e2a6bbf4a10eff81fca4c4b3617b62e36ee25cbdbf452ab739754102a95"
+  },
+  {
+    "time": "2026-11-13T16:41:36.858336+00:00",
+    "deployId": "dep-dbrjos3tqb8s73eoskp0",
+    "status": {
+      "status": "SCAN_QR_CODE",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    },
+    "qrSha256": "6c151a0e7d3fd14c1af07d44972e595b18559e4812eeacb3c3ed768924c290a1"
+  },
+  {
+    "time": "2026-11-13T16:42:10.631238+00:00",
+    "deployId": "dep-dbrjos3tqb8s73eoskp0",
+    "status": {
+      "status": "SCAN_QR_CODE",
+      "connected": false,
+      "session": "default",
+      "personalTestReady": false
+    },
+    "qrSha256": "980bb390a2f52d8e8dd29102dd1221379591c55283f367ff7588b66239d5aaad"
+  }
+]
