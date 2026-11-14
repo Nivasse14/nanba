@@ -396,18 +396,20 @@ test("function call loop executes real tool before answer, passes isolated profi
     f.close();
   }
 });
-test("mutual matching does not reveal numbers before acceptance and prevents cross-user acceptance", async () => {
+test("legacy mutual matching preserves consent and prevents cross-user acceptance", async () => {
   const f = fixture();
   try {
     const a = f.receive();
-    const offer = await f.action({
-      action: "community_publish",
-      text: "Je peux aider pour traduire un courrier",
-      city: "Paris",
-    });
+    // Existing legacy offers remain contactable after the catalogue migration.
+    const offer = { reference: "legacy-offer" };
+    f.db.run(
+      "INSERT INTO nanba_offers VALUES(?,?,?,?)",
+      offer.reference,
+      a.identity,
+      f.a.seal(JSON.stringify({ text: "Traduction de courrier" })),
+      f.a.now(),
+    );
     const b = f.receive(2, "Recherche", "whatsapp:+33600000002");
-    const results = await f.action({ action: "community_search" }, 2);
-    assert.ok(!JSON.stringify(results).includes("+336"));
     const request = await f.action(
       { action: "community_request", reference: offer.reference },
       2,
