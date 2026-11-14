@@ -1,0 +1,505 @@
+diff --git a/.env.example b/.env.example
+index 535340b..19a01f9 100644
+--- a/.env.example
++++ b/.env.example
+@@ -211,3 +211,6 @@ VIRUS_SCAN_PROVIDER=mock
+ 
+ # Push notifications
+ EXPO_ACCESS_TOKEN=replace-with-expo-token
++
++# Shared server-to-server HMAC secret (generate outside Git; same value on Cloud Run and Render).
++NANBA_WHATSAPP_CATALOGUE_SECRET=
+diff --git a/apps/api/src/server.js b/apps/api/src/server.js
+index 046eb45..7403a41 100644
+--- a/apps/api/src/server.js
++++ b/apps/api/src/server.js
+@@ -1,3 +1,4 @@
++const { createWhatsAppCatalogue, prepareWhatsAppListing, verifyCatalogueRequest } = require('./whatsapp-catalogue');
+ const crypto = require('crypto');
+ const { EDITORIAL_INSTRUCTIONS, VERSION: NEWS_EDITORIAL_VERSION, groundedEditorial, verifiedEditorial, publicEditorialCard, publicEditorialDigest, publicHomeNewsCards } = require('./news-editorial-contract');
+ const { WHATSAPP_THEMES, whatsappThemeId, whatsappMetadata, groupWhatsappItems } = require('./shared/whatsapp-themes');
+@@ -35974,7 +35975,7 @@ function validateListing(payload) {
+     const hasPhoto = (Array.isArray(payload.attachments) ? payload.attachments : []).some((item) => (
+       String(item?.mimeType || '').toLowerCase().startsWith('image/') || item?.type === 'photo'
+     ));
+-    if (!hasPhoto) return 'Housing photo is required';
++    if (!hasPhoto && payload.source !== 'whatsapp') return 'Housing photo is required';
+   }
+   if (payload.target === 'market') {
+     const marketListingKind = normalizeMarketListingKind(payload.marketListingKind, payload.categoryKey);
+@@ -39040,6 +39041,18 @@ function createServer(options = {}) {
+       fetchImpl: options.fetchImpl || globalThis.fetch, timeoutMs: 4500 }) : null);
+   const memberBlockRepository = createMemberBlockRepository({ store: memberBlockStore, getState: () => state,
+     persist: async () => { saveState(dataFile, state); } });
++  const whatsappCatalogue = createWhatsAppCatalogue({
++    store: options.whatsappCatalogueStore || (firestoreBackendEnabled() ? createVersionedJsonStore({
++      accessTokenProvider: googleAccessToken, projectIdProvider: firebaseProjectId,
++      collection: 'nanbaWhatsAppCatalogue', datastoreKind: 'NanbaWhatsAppCatalogue',
++      documentPrefix: 'whatsapp-catalogue', fetchImpl: options.fetchImpl || globalThis.fetch,
++    }) : null), getState: () => state, persist: async () => { await persistNanbaShareMutation(); },
++  });
++  async function refreshWhatsAppCatalogue(force = false) {
++    if (!options.whatsappCatalogueStore && !process.env.NANBA_WHATSAPP_CATALOGUE_SECRET) return;
++    const items = await whatsappCatalogue.list(force);
++    state.listings = [...state.listings.filter(item => item.source !== 'whatsapp'), ...items.filter(whatsappCatalogue.active)];
++  }
+   function canonicalMemberId(userId) { return stableMemberId(state, userId) || String(userId || ''); }
+   async function requireUnblockedMembers(leftId, rightId) {
+     if (await memberBlockRepository.pairBlocked(canonicalMemberId(leftId), canonicalMemberId(rightId))) {
+@@ -40690,6 +40703,31 @@ function createServer(options = {}) {
+ 
+       await ensureStateLoaded();
+ 
++      if (pathname === '/integrations/whatsapp/catalogue' && req.method === 'POST') {
++        const body = await readBody(req);
++        const actor = verifyCatalogueRequest(req.headers, body, process.env.NANBA_WHATSAPP_CATALOGUE_SECRET);
++        let result;
++        if (body.action === 'publish') {
++          const candidate = prepareWhatsAppListing(body, actor);
++          if (moderateText(candidate.title + '\n' + candidate.description).decision === 'block') {
++            sendJson(res, 422, errorBody('MODERATION_BLOCKED', 'Annonce à corriger avant publication.')); return;
++          }
++          result = await whatsappCatalogue.create(candidate);
++        } else if (body.action === 'remove') {
++          result = await whatsappCatalogue.update(body.reference, actor, { status: 'withdrawn', deletedAt: now() });
++        } else if (body.action === 'mine') {
++          result = { items: (await whatsappCatalogue.list(true)).filter(item => item.ownerId === actor && !item.deletedAt) };
++        } else if (body.action === 'status') {
++          result = (await whatsappCatalogue.list(true)).find(item => item.id === body.reference && item.ownerId === actor);
++          if (!result) { sendJson(res, 404, errorBody('NOT_FOUND', 'Annonce introuvable.')); return; }
++        } else { sendJson(res, 400, errorBody('INVALID_ACTION', 'Action inconnue.')); return; }
++        await refreshWhatsAppCatalogue(true);
++        sendJson(res, 200, result, { 'Cache-Control': 'private, no-store' }); return;
++      }
++      if (/^\/(listings(?:\/|$)|moderation\/listings\/|admin\/moderation-queue)/.test(pathname)) {
++        await refreshWhatsAppCatalogue(req.method !== 'GET');
++      }
++
+       if (req.method === 'POST' && ['/account/delete/request', '/account/delete/confirm'].includes(pathname)) {
+         if (!deletionCsrfValid(req, publicBaseUrl(req))) {
+           sendJson(res, 403, errorBody('DELETION_FORM_EXPIRED', 'Rouvrez la page de suppression pour recommencer.'), { 'Cache-Control': 'no-store' });
+@@ -45003,7 +45041,7 @@ function createServer(options = {}) {
+         const session = requireSession(state, req, res);
+         if (!session) return;
+         const body = await readBody(req);
+-        const validationError = validateListing(body);
++        const validationError = validateListing({ ...body, source: '' });
+         if (validationError) {
+           sendJson(res, 400, errorBody('VALIDATION_ERROR', validationError));
+           return;
+@@ -45054,6 +45092,7 @@ function createServer(options = {}) {
+           return;
+         }
+         if (req.method === 'DELETE') {
++          if (listing.source === 'whatsapp') await whatsappCatalogue.update(listing.id, session.userId, { status: 'withdrawn', deletedAt: now() }, ['moderator', 'admin'].includes(session.role));
+           state.listings = state.listings.filter((item) => item.id !== listing.id);
+           const deletedByModerator = listing.ownerId !== session.userId;
+           recordAudit(state, deletedByModerator ? 'moderation.listing.deleted' : 'listing.deleted', {
+@@ -45143,6 +45182,7 @@ function createServer(options = {}) {
+           sendJson(res, 422, { ...moderation, code: 'MODERATION_BLOCKED' });
+           return;
+         }
++        if (listing.source === 'whatsapp') Object.assign(updatedListing, await whatsappCatalogue.update(listing.id, session.userId, { ...updatedListing, expectedUpdatedAt: listing.updatedAt }, canModerate));
+         Object.assign(listing, updatedListing);
+         recordAudit(state, 'listing.updated', { listingId: listing.id, status: listing.status, userId: session.userId });
+         pushNotification(state, session, 'Listing updated', listing.title, 'myListings');
+@@ -49554,6 +49594,7 @@ function createServer(options = {}) {
+           return;
+         }
+         const moderatedAt = now();
++        if (listing.source === 'whatsapp') await whatsappCatalogue.update(listing.id, session.userId, { status: body.decision === 'approved' ? 'published' : body.decision, publishedAt: body.decision === 'approved' ? moderatedAt : '', moderationReason: body.reason || '', expectedUpdatedAt: listing.updatedAt }, true);
+         listing.status = body.decision === 'approved' ? 'published' : body.decision;
+         listing.publishedAt = body.decision === 'approved' ? moderatedAt : '';
+         listing.moderationReason = body.reason || '';
+diff --git a/apps/api/src/whatsapp-catalogue.js b/apps/api/src/whatsapp-catalogue.js
+new file mode 100644
+index 0000000..b8657b2
+--- /dev/null
++++ b/apps/api/src/whatsapp-catalogue.js
+@@ -0,0 +1,113 @@
++'use strict';
++
++const { createHash, createHmac, timingSafeEqual } = require('node:crypto');
++const hash = value => createHash('sha256').update(value).digest('hex');
++const fail = (message, status = 400) => Object.assign(new Error(message), { status, code: message });
++const clean = (value, max = 180) => String(value || '').trim().slice(0, max);
++const SHARDS = 16;
++
++function verifyCatalogueRequest(headers, body, secret, clock = Date.now()) {
++  if (!secret || secret.length < 32) throw fail('WHATSAPP_CATALOGUE_NOT_CONFIGURED', 503);
++  const timestamp = String(headers['x-nanba-timestamp'] || '');
++  const signature = String(headers['x-nanba-signature'] || '');
++  if (!/^\d{13}$/.test(timestamp) || Math.abs(clock - Number(timestamp)) > 120000 || !/^[a-f0-9]{64}$/.test(signature)) throw fail('WHATSAPP_CATALOGUE_UNAUTHORIZED', 401);
++  const expected = createHmac('sha256', secret).update(timestamp + '\n' + JSON.stringify(body)).digest('hex');
++  if (!timingSafeEqual(Buffer.from(expected), Buffer.from(signature))) throw fail('WHATSAPP_CATALOGUE_UNAUTHORIZED', 401);
++  if (!/^[a-f0-9]{64}$/.test(body.actor || '')) throw fail('WHATSAPP_ACTOR_INVALID');
++  return 'wa_' + body.actor;
++}
++
++function prepareWhatsAppListing(body, ownerId, clock = Date.now()) {
++  const a = body.listing || {};
++  if (body.consent !== true) throw fail('PUBLICATION_CONSENT_REQUIRED');
++  if (!['housing', 'jobs', 'market', 'services'].includes(a.target)) throw fail('LISTING_TARGET_REQUIRED');
++  if (!['offer', 'request'].includes(a.intent)) throw fail('LISTING_INTENT_REQUIRED');
++  if (!clean(a.title) || clean(a.description, 1800).length < 10 || !clean(a.location)) throw fail('LISTING_DESCRIPTION_AND_LOCATION_REQUIRED');
++  if (!/^[a-zA-Z0-9_-]{10,120}$/.test(body.requestId || '')) throw fail('IDEMPOTENCY_KEY_REQUIRED');
++  // Phone numbers, email addresses and precise addresses are not public contact fields.
++  const redact = value => clean(value, 1800).replace(/\+?\d[\d ().-]{7,}\d/g, '[coordonnées privées]').replace(/[\w.+-]+@[\w.-]+\.[a-z]{2,}/gi, '[courriel privé]');
++  const amount = a.price === null || a.price === undefined ? null : Number(a.price);
++  if (amount !== null && (!Number.isFinite(amount) || amount < 0 || amount > 10000000)) throw fail('LISTING_PRICE_INVALID');
++  const date = new Date(clock).toISOString();
++  const propertyTypes = (Array.isArray(a.propertyTypes) ? a.propertyTypes : []).filter(x => ['private-room', 'shared-room', 'studio', 't1', 't2', 't3', 't4', 't5-plus'].includes(x));
++  if (a.target === 'housing' && a.intent === 'offer' && (amount === null || !propertyTypes.length)) throw fail('HOUSING_RENT_AND_TYPE_REQUIRED');
++  const id = 'wa_listing_' + hash(ownerId + ':' + body.requestId).slice(0, 36);
++  return {
++    id, ownerId, ownerName: clean(body.alias || 'Membre Nanba', 60), source: 'whatsapp',
++    target: a.target, intent: a.intent, categoryKey: a.target + '_' + a.intent,
++    title: redact(a.title).slice(0, 180), description: redact(a.description), location: redact(a.location).slice(0, 180),
++    sourceLocale: ['fr', 'en', 'ta'].includes(a.locale) ? a.locale : 'fr',
++    price: amount, dateOrPrice: amount === null ? '' : amount + ' €',
++    region: clean(a.region), department: clean(a.department, 3),
++    jobContract: clean(a.jobContract, 40), jobField: clean(a.jobField, 100),
++    housingDetails: a.target === 'housing' ? { rent: amount, propertyTypes, locations: [{ name: clean(a.location), label: clean(a.location), type: 'city' }], availabilityMode: a.availableFrom ? 'date' : 'now', availabilityDate: clean(a.availableFrom, 10) } : {},
++    marketListingKind: a.target === 'market' ? 'item' : '',
++    attachments: [], contactPublic: '', contactMasked: 'Mise en relation via Nanba', contactEmailPublic: '',
++    website: '', status: 'moderation', createdAt: date, updatedAt: date, publishedAt: '',
++    expiresAt: new Date(clock + 30 * 86400000).toISOString(),
++  };
++}
++
++function createWhatsAppCatalogue({ store, getState, persist, clock = Date.now }) {
++  let cached = null, cachedAt = 0, localQueue = Promise.resolve();
++  const shard = id => parseInt(hash(id).slice(0, 2), 16) % SHARDS;
++  const readPayload = result => {
++    if (!result.found) return { items: {} };
++    if (!result.record?.payload?.items || typeof result.record.payload.items !== 'object' || Array.isArray(result.record.payload.items)) throw fail('CATALOGUE_STORAGE_INVALID', 503);
++    return result.record.payload;
++  };
++  async function list(force = false) {
++    if (!store) return structuredClone(Object.values(getState().whatsappCatalogue || {}));
++    if (!force && cached && clock() - cachedAt < 5000) return structuredClone(cached);
++    const items = [];
++    for (let offset = 0; offset < SHARDS; offset += 4) {
++      const results = await Promise.all(Array.from({ length: 4 }, (_, i) => store.read('catalogue:' + (offset + i))));
++      for (const result of results) items.push(...Object.values(readPayload(result).items));
++    }
++    cached = items; cachedAt = clock();
++    return structuredClone(items);
++  }
++  async function change(id, transform) {
++    if (!store) {
++      const operation = localQueue.then(async () => {
++        const previous = getState().whatsappCatalogue || {};
++        const item = transform(previous[id]);
++        getState().whatsappCatalogue = { ...previous, [id]: item };
++        try { await persist(); } catch (error) { getState().whatsappCatalogue = previous; throw error; }
++        return structuredClone(item);
++      });
++      localQueue = operation.catch(() => {}); return operation;
++    }
++    const key = 'catalogue:' + shard(id);
++    for (let attempt = 0; attempt < 4; attempt++) {
++      const before = await store.read(key);
++      const merge = payload => {
++        const items = { ...(payload?.items || {}) };
++        items[id] = transform(items[id]);
++        // Keep tombstones for 90 days so late retries cannot resurrect a withdrawn listing.
++        for (const [key, item] of Object.entries(items)) if (clock() - Date.parse(item.updatedAt) > 90 * 86400000 && Date.parse(item.expiresAt) < clock()) delete items[key];
++        if (Buffer.byteLength(JSON.stringify(items)) > 750000) throw fail('CATALOGUE_SHARD_FULL', 503);
++        return { items };
++      };
++      const versionAt = new Date(Math.max(clock(), (Date.parse(before.record?.versionAt) || 0) + 1)).toISOString();
++      const result = await store.write(key, merge(readPayload(before)), { versionAt, mergePayload: merge });
++      if (result.written) { cached = null; return result.payload.items[id]; }
++    }
++    throw fail('CATALOGUE_SAVE_CONFLICT', 503);
++  }
++  async function create(item) { return change(item.id, current => current || item); }
++  async function update(id, ownerId, changes, moderator = false) {
++    return change(id, current => {
++      if (!current) throw fail('LISTING_NOT_FOUND', 404);
++      if (!moderator && current.ownerId !== ownerId) throw fail('LISTING_OWNER_REQUIRED', 403);
++      if (current.deletedAt) { if (changes.deletedAt) return current; throw fail('LISTING_NOT_FOUND', 404); }
++      if (changes.expectedUpdatedAt && current.updatedAt !== changes.expectedUpdatedAt) throw fail('LISTING_CHANGED_RELOAD', 409);
++      const { expectedUpdatedAt, ...patch } = changes;
++      return { ...current, ...patch, id: current.id, ownerId: current.ownerId, source: 'whatsapp', updatedAt: new Date(clock()).toISOString() };
++    });
++  }
++  const active = item => !item.deletedAt && Date.parse(item.expiresAt) > clock();
++  return { list, create, update, active };
++}
++
++module.exports = { createWhatsAppCatalogue, prepareWhatsAppListing, verifyCatalogueRequest };
+diff --git a/docs/WHATSAPP-CATALOGUE.md b/docs/WHATSAPP-CATALOGUE.md
+new file mode 100644
+index 0000000..f93b1d5
+--- /dev/null
++++ b/docs/WHATSAPP-CATALOGUE.md
+@@ -0,0 +1,41 @@
++# Catalogue principal et assistant WhatsApp
++
++État au 14 novembre 2026 : développement et tests locaux terminés ; cette évolution n'est pas encore déployée. La console Google Cloud est inaccessible depuis l'environnement de travail. Ne pas annoncer la connexion en production avant les vérifications ci-dessous.
++
++## Parcours
++
++1. L'assistant recueille une offre ou une demande de logement, emploi, objet ou service et fait relire le brouillon.
++2. Après confirmation publique, il appelle `POST /integrations/whatsapp/catalogue` avec une signature serveur HMAC et l'identité pseudonyme du numéro vérifié par Twilio.
++3. L'annonce est enregistrée durablement dans la même base Google Cloud que Nanba, via le magasin versionné existant. Elle rejoint le catalogue `/listings` et la file `/admin/moderation-queue`. Le statut initial reste `moderation`.
++4. Un administrateur valide l'annonce par le circuit habituel. Les annonces `published` sont alors visibles dans l'application et consultables par l'assistant. Les demandes WhatsApp ont une section distincte pour ne pas être présentées comme des offres disponibles.
++5. Les personnes ayant explicitement demandé des alertes peuvent recevoir des correspondances. Le bouton de contact de l'application ouvre une conversation avec l'assistant et la référence publique, sans dévoiler le téléphone de l'annonceur.
++6. Un retrait WhatsApp ou administratif modifie le même enregistrement canonique. Les alertes encore en attente revérifient la disponibilité avant envoi.
++
++## Contrat et stockage
++
++Variable requise sur les DEUX serveurs : `NANBA_WHATSAPP_CATALOGUE_SECRET`, secret aléatoire d'au moins 32 caractères, jamais dans Git ni dans une URL.
++
++En-têtes : `x-nanba-timestamp` (millisecondes), `x-nanba-signature` = HMAC-SHA256 hexadécimal de `timestamp + "\n" + JSON.stringify(body)`. Tolérance de 120 secondes. Identité `actor` : identifiant HMAC interne du contact WhatsApp, jamais son téléphone ni un identifiant de compte applicatif fourni par le modèle.
++
++Actions bornées : `publish`, `mine`, `status`, `remove`. `publish` exige `consent:true`, `requestId` stable et `listing` avec `target`, `intent`, `title`, `description`, `location`. Un logement offert exige le loyer et le type ; les annonces textuelles WhatsApp passent en modération sans photo obligatoire. Les coordonnées ne sont pas publiées.
++
++Le magasin `nanbaWhatsAppCatalogue` / `NanbaWhatsAppCatalogue` utilise 16 partitions fusionnées dans les transactions du magasin versionné existant. Les lectures du catalogue et de la modération réconcilient la projection avec ces enregistrements canoniques. Le cache a une durée de 5 secondes. L'identifiant de publication dépend de l'auteur et de `requestId`, empêchant les doublons sur reprise. Expiration : 30 jours. Les marqueurs de retrait sont conservés 90 jours. Une partition pleine échoue explicitement au lieu de perdre des annonces.
++
++Le numéro WhatsApp crée une identité d'annonceur distincte. Il n'est pas automatiquement rattaché à un ancien compte Nanba : aucune session de membre ou d'administrateur n'est réutilisée. Les annonces WhatsApp se gèrent depuis WhatsApp et depuis la modération. Le bouton de contact utilise le numéro professionnel actuel de l'assistant, `+12694043536`.
++
++## Déploiement restant
++
++Serveur existant : projet Google Cloud `projet-make-422723`, service `nanba-api`, région `europe-west9`. Conserver sa configuration, son compte de service, ses secrets et sa base actuels.
++
++1. Déployer les sources de cette révision sur le service API existant et configurer le secret HMAC par le gestionnaire de secrets / environnement. Aucun nouvel accès administrateur n'est accordé à l'assistant.
++2. Déployer l'application web/mobile avec le composant des demandes et le lien de contact. Le Site reste `appgprj_6a52a21ee0ac81918406889ba826052a`, audience publique inchangée.
++3. Configurer la même valeur HMAC sur Render, service `srv-dbr36g0n74is73d71k8g`, et déployer la révision correspondante de `nanba-ensemble`. Ne pas supprimer le chargement actuel `NODE_OPTIONS` sans avoir remplacé l'image par une image contenant le nouveau code : le service actuel charge un paquet de compatibilité.
++4. Vérifier un dépôt de recette identifié, son état en attente dans l'admin, sa validation et sa visibilité dans `/listings` et l'app, puis le retirer. Tester les notifications uniquement avec les numéros de recette ayant donné leur accord.
++
++Avant activation, un appel de publication sans secret échoue explicitement et ne crée pas d'annonce locale de substitution.
++
++## Validation locale
++
++`NODE_PATH=../nanba-ensemble/node_modules node --test tests/whatsapp-catalogue.test.js`
++
++Tests : signatures et modifications de requête, consentement, dépôt/idempotence, modération sur une autre instance, visibilité publique, isolation des auteurs, retrait et non-résurrection, 40 publications concurrentes, expiration et rollback d'une panne de stockage. Tests de régression catalogue public, blocage de membres, ordre des annonces et formulaire de publication également réussis. Le JSX de l'application a été analysé ; pas de validation visuelle ni de recette production de cette évolution.
+diff --git a/runtime-native/App.js b/runtime-native/App.js
+index 99f7d57..49eba75 100644
+--- a/runtime-native/App.js
++++ b/runtime-native/App.js
+@@ -1,3 +1,4 @@
++const { whatsappCatalogueContact } = require('./whatsappCatalogueContact');
+ import React, { Component, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+ import Constants from 'expo-constants';
+ import * as DocumentPicker from 'expo-document-picker';
+@@ -19903,9 +19904,9 @@ function NanbaRuntimeApp() {
+ 
+   const allJobListings = useMemo(() => {
+     const localJobs = currentPublishedListings
+-      .filter((item) => item.target === 'jobs')
++      .filter((item) => item.target === 'jobs' && item.intent !== 'request')
+       .map((item, index) => mapPublishedListingToJob(item, index));
+-    const remoteJobs = remoteJobListings.map((item, index) => mapPublishedListingToJob(item, index));
++    const remoteJobs = remoteJobListings.filter(item => item.intent !== 'request').map((item, index) => mapPublishedListingToJob(item, index));
+     const byId = new Map();
+     [...remoteJobs, ...localJobs, ...localizedJobListings.map(enrichJobListing)].forEach((item) => {
+       const key = item?.remoteId || item?.id;
+@@ -19915,9 +19916,9 @@ function NanbaRuntimeApp() {
+   }, [currentPublishedListings, localizedJobListings, remoteJobListings]);
+   const allMarketListings = useMemo(() => {
+     const localMarket = currentPublishedListings
+-      .filter((item) => item.target === 'market')
++      .filter((item) => item.target === 'market' && item.intent !== 'request')
+       .map((item, index) => mapPublishedListingToMarket(item, index));
+-    const remoteMarket = remoteMarketListings.map((item, index) => mapPublishedListingToMarket(item, index));
++    const remoteMarket = remoteMarketListings.filter(item => item.intent !== 'request').map((item, index) => mapPublishedListingToMarket(item, index));
+     const byId = new Map();
+     [...remoteMarket, ...localMarket, ...localizedMarketListings.map(enrichMarketListing)].forEach((item) => {
+       const key = item?.remoteId || item?.id;
+@@ -21464,6 +21465,8 @@ function NanbaRuntimeApp() {
+   };
+ 
+   const openListingConversation = (item, target = 'market') => {
++    const whatsappContact = whatsappCatalogueContact(item);
++    if (whatsappContact) { openExternalUrl(whatsappContact); return true; }
+     if (!requireAccount(t.contactLoginRequired)) return false;
+     const objectId = String(item?.remoteId || item?.id || item?.title || `${target}-${Date.now()}`);
+     const conversationId = `conv-${target}-${objectId}`;
+@@ -23148,7 +23151,7 @@ function NanbaRuntimeApp() {
+           {renderMainTabContent(screen)}
+           {['housing', 'ask', 'myListings'].includes(screen) ? <CommunityHelpEntry locale={locale} onPress={() => openScreen('entraide', { screen: 'entraide', key: 'context-help', openForm: screen !== 'myListings', scope: screen === 'ask' ? 'administrative' : 'housing', city: accountProfile?.currentCity || '' })} /> : null}
+           {screen === 'entraide' && <CommunityHelpScreen key={`help:${homeBriefingActorKey(userSession)}:${homeContentTarget?.navigationKey || ''}`} apiUrl={normalizedNanbaApiUrl} locale={locale} session={userSession} profile={accountProfile} initialContentTarget={homeContentTarget?.screen === 'entraide' ? homeContentTarget : null} onEnableNotifications={Platform.OS === 'web' ? undefined : enableContextualPush} refreshToken={contentRefreshToken} onSignIn={() => { setPendingAuthTarget('entraide'); setScreen('account'); }} onProfile={() => openScreen('account')} onMessage={openDirectConversation} />}
+-          {screen === 'housing' && <HousingScreen onOpenHelp={(target = {}) => openScreen('entraide', { screen: 'entraide', scope: 'housing', city: accountProfile?.currentCity || '', openForm: true, ...target })} initialContentTarget={homeContentTarget?.screen === 'housing' ? homeContentTarget : null} t={t} locale={locale} request={request} setRequest={setRequest} listings={filteredListings} stockListings={allHousingListings} onAuth={authenticateEmailPasswordAccount} onOpenProfile={(profile) => openProfile(profile, 'housing')} onOpenPublishTarget={openPublishTarget} onStartConversation={openListingConversation} onStartDirectConversation={openDirectConversation} onSubmitRequest={submitHousingRequest} onStartNewRequest={() => setSubmittedHousingRequest(null)} onToggleSavedItem={toggleSavedItem} requireAccount={requireAccount} savedHousingIds={savedItems.housing} session={userSession} />}
++          {screen === 'housing' && <HousingScreen publicRequests={remoteHousingApiListings.filter(item => item.intent === 'request' && item.source === 'whatsapp')} onOpenHelp={(target = {}) => openScreen('entraide', { screen: 'entraide', scope: 'housing', city: accountProfile?.currentCity || '', openForm: true, ...target })} initialContentTarget={homeContentTarget?.screen === 'housing' ? homeContentTarget : null} t={t} locale={locale} request={request} setRequest={setRequest} listings={filteredListings} stockListings={allHousingListings} onAuth={authenticateEmailPasswordAccount} onOpenProfile={(profile) => openProfile(profile, 'housing')} onOpenPublishTarget={openPublishTarget} onStartConversation={openListingConversation} onStartDirectConversation={openDirectConversation} onSubmitRequest={submitHousingRequest} onStartNewRequest={() => setSubmittedHousingRequest(null)} onToggleSavedItem={toggleSavedItem} requireAccount={requireAccount} savedHousingIds={savedItems.housing} session={userSession} />}
+           {screen === 'events' && <EventsScreen apiUrl={normalizedNanbaApiUrl} communityEventItems={remoteEventListings} initialContentTarget={homeContentTarget?.screen === 'events' ? homeContentTarget : null} locale={locale} onOpenExternalUrl={openExternalUrl} onOpenPublishTarget={openPublishTarget} onStartConversation={openListingConversation} onToggleSavedItem={toggleSavedItem} requireAccount={requireAccount} savedEventIds={savedItems.events} session={userSession} t={t} />}
+           {screen === 'greetings' && <GreetingsScreen initialContentTarget={homeContentTarget?.screen === 'greetings' ? homeContentTarget : null} cardsSmilesFeedHasMore={cardsSmilesHasMore} cardsSmilesFeedItems={cardsSmilesFeedItems} cardsSmilesFeedLoading={cardsSmilesLoading} cardsSmilesFollowingCount={cardsSmilesFollowingCount} cardsSmilesMode={cardsSmilesMode} dailyGreetingCards={dailyGreetingCards} funnyCommunityPosts={funnyCommunityPosts} greetingCommunityPosts={greetingCommunityPosts} greetingStudioCards={greetingStudioCards} locale={locale} onAddComment={addGreetingCommunityComment} onAddFunnyComment={addFunnyCommunityComment} onChangeCardsSmilesMode={setCardsSmilesMode} onCloseInitialContent={(returnScreen = 'home') => openScreen(returnScreen)} onCreateFunnyPost={createFunnyCommunityPost} onCreatePost={createGreetingCommunityPost} onFollowCreator={toggleCardsSmilesCreatorFollow} onLoadMoreCardsSmilesFeed={loadMoreCardsSmilesFeed} onNotInterested={markCardsSmilesNotInterested} onOpenExternalUrl={openExternalUrl} onOpenProfile={(profile) => openProfile(profile, 'greetings')} onRecordEvent={recordCardsSmilesEvent} onRefreshPostSocial={refreshCardsSmilesPostSocial} onReportPost={reportCardsSmilesPost} onScrollToNode={scrollToContentNode} onToggleLike={toggleCardsSmilesPostLike} onToggleSave={toggleCardsSmilesPostSave} requireAccount={requireAccount} scrollPosition={contentScrollPosition} session={userSession} t={t} />}
+           {screen === 'funnyStories' && <FunnyStoriesScreen cardsSmilesFeedHasMore={cardsSmilesHasMore} cardsSmilesFeedItems={cardsSmilesFeedItems} cardsSmilesFeedLoading={cardsSmilesLoading} cardsSmilesFollowingCount={cardsSmilesFollowingCount} cardsSmilesMode={cardsSmilesMode} funnyCommunityPosts={funnyCommunityPosts} locale={locale} onAddComment={addFunnyCommunityComment} onChangeCardsSmilesMode={setCardsSmilesMode} onCreatePost={createFunnyCommunityPost} onFollowCreator={toggleCardsSmilesCreatorFollow} onLoadMoreCardsSmilesFeed={loadMoreCardsSmilesFeed} onNotInterested={markCardsSmilesNotInterested} onOpenExternalUrl={openExternalUrl} onOpenProfile={(profile) => openProfile(profile, 'funnyStories')} onRecordEvent={recordCardsSmilesEvent} onRefreshPostSocial={refreshCardsSmilesPostSocial} onReportPost={reportCardsSmilesPost} onToggleLike={toggleCardsSmilesPostLike} onToggleSave={toggleCardsSmilesPostSave} requireAccount={requireAccount} scrollPosition={contentScrollPosition} session={userSession} t={t} />}
+@@ -23164,8 +23167,8 @@ function NanbaRuntimeApp() {
+           {screen === 'dailyBriefing' && <DailyBriefingScreen briefing={homeDailyBriefing} initialItem={homeContentTarget?.screen === 'dailyBriefing' ? homeContentTarget.sourceItem : null} initialKey={homeContentTarget?.screen === 'dailyBriefing' ? homeContentTarget.contentId : ''} locale={locale} onBack={() => openScreen('home')} onOpenArticle={(article) => openExternalUrl(article.url, article.title, { externalBrowser: true, skipTranslation: true, returnScreen: 'dailyBriefing' })} />}
+           {screen === 'services' && <ServicesScreen initialContentTarget={homeContentTarget?.screen === 'services' ? homeContentTarget : null} locale={locale} onOpenExternalUrl={openExternalUrl} onOpenProfile={(profile) => openProfile(profile, 'services')} onOpenPublishTarget={openPublishTarget} onStartConversation={openListingConversation} onToggleSavedItem={toggleSavedItem} providers={allServiceProviders} requireAccount={requireAccount} savedServiceIds={savedItems.services} session={userSession} t={t} />}
+           {screen === 'business' && <BusinessScreen apiUrl={normalizedNanbaApiUrl} initialContentTarget={homeContentTarget?.screen === 'business' ? homeContentTarget : null} listings={allMarketListings} locale={locale} onReturnToMap={mapReturnContext ? returnToMap : null} onOpenExternalUrl={openExternalUrl} onOpenProfile={(profile) => openProfile(profile, 'business')} onOpenPublishTarget={openPublishTarget} onStartConversation={openListingConversation} onToggleSavedItem={toggleSavedItem} refreshToken={contentRefreshToken} requireAccount={requireAccount} savedListingIds={savedItems.market} session={userSession} t={t} />}
+-          {screen === 'market' && <MarketScreen listings={filteredMarketListings} locale={locale} marketSearch={marketSearch} onOpenExternalUrl={openExternalUrl} onOpenProfile={(profile) => openProfile(profile, 'market')} onOpenPublishTarget={openPublishTarget} onStartConversation={openListingConversation} onToggleSavedItem={toggleSavedItem} requireAccount={requireAccount} savedListingIds={savedItems.market} session={userSession} setMarketSearch={setMarketSearch} t={t} />}
+-          {screen === 'jobs' && <JobsScreen apiUrl={normalizedNanbaApiUrl} initialContentTarget={homeContentTarget?.screen === 'jobs' ? homeContentTarget : null} jobs={filteredJobListings} stockJobs={allJobListings} jobSearch={jobSearch} locale={locale} onOpenExternalUrl={openExternalUrl} onOpenProfile={(profile) => openProfile(profile, 'jobs')} onOpenPublishTarget={openPublishTarget} onStartConversation={openListingConversation} onToggleSavedItem={toggleSavedItem} requireAccount={requireAccount} savedJobIds={savedItems.jobs} session={userSession} setJobSearch={setJobSearch} t={t} />}
++          {screen === 'market' && <MarketScreen publicRequests={remoteMarketListings.filter(item => item.intent === 'request' && item.source === 'whatsapp')} listings={filteredMarketListings} locale={locale} marketSearch={marketSearch} onOpenExternalUrl={openExternalUrl} onOpenProfile={(profile) => openProfile(profile, 'market')} onOpenPublishTarget={openPublishTarget} onStartConversation={openListingConversation} onToggleSavedItem={toggleSavedItem} requireAccount={requireAccount} savedListingIds={savedItems.market} session={userSession} setMarketSearch={setMarketSearch} t={t} />}
++          {screen === 'jobs' && <JobsScreen publicRequests={remoteJobListings.filter(item => item.intent === 'request' && item.source === 'whatsapp')} apiUrl={normalizedNanbaApiUrl} initialContentTarget={homeContentTarget?.screen === 'jobs' ? homeContentTarget : null} jobs={filteredJobListings} stockJobs={allJobListings} jobSearch={jobSearch} locale={locale} onOpenExternalUrl={openExternalUrl} onOpenProfile={(profile) => openProfile(profile, 'jobs')} onOpenPublishTarget={openPublishTarget} onStartConversation={openListingConversation} onToggleSavedItem={toggleSavedItem} requireAccount={requireAccount} savedJobIds={savedItems.jobs} session={userSession} setJobSearch={setJobSearch} t={t} />}
+           {screen === 'religion' && <ReligionScreen accountProfile={accountProfile} initialContentTarget={homeContentTarget?.screen === 'religion' ? homeContentTarget : null} locale={locale} onOpenAccount={() => openScreen('account')} onOpenExternalUrl={openExternalUrl} onScrollToNode={scrollToContentNode} session={userSession} t={t} />}
+           {screen === 'debate' && <WeeklyDebateCard availability={weeklyDebateAvailability} debate={weeklyDebate} focusCompose={homeContentTarget?.screen === 'debate' && homeContentTarget.focusCompose} history={debateHistory} locale={locale} onChooseCamp={chooseWeeklyDebateCamp} onChoosePopularCamp={choosePopularDebateCamp} onPostReaction={postWeeklyDebateReaction} onPostPopularReaction={postPopularDebateReaction} onReactToReaction={reactToWeeklyDebateReaction} onReply={replyToDebateComment} onLoadMessages={refreshDebateMessages} onScrollToNode={scrollToContentNode} session={userSession} />}
+           {screen === 'webReader' && <WebReaderScreen locale={locale} onBack={() => setScreen(webReaderRequest?.returnScreen || 'home')} request={webReaderRequest} t={t} />}
+@@ -30214,7 +30217,20 @@ function HousingPreparationGuide({ locale, onSelectProfile, profile }) {
+   );
+ }
+ 
+-function HousingScreen({ onOpenHelp, initialContentTarget, listings, locale, onAuth, onOpenProfile, onOpenPublishTarget, onStartConversation, onStartDirectConversation, onStartNewRequest, onSubmitRequest, onToggleSavedItem, request, requireAccount, savedHousingIds, setRequest, session, stockListings, t }) {
++function CatalogueRequests({ items = [], locale, onContact }) {
++  if (!items.length) return null;
++  const copy = locale === 'en' ? {title:'Community requests',contact:'Offer your help'} : locale === 'ta' ? {title:'சமூகத்தின் தேவைகள்',contact:'தொடர்பு கொள்ளுங்கள்'} : {title:'Ils recherchent dans la communauté',contact:'Proposer une solution'};
++  return <Section title={copy.title}>
++    {items.slice(0, 20).map(item => <View key={item.id} style={styles.card}>
++      <Text style={styles.sectionTitle}>{item.title}</Text>
++      <Text style={styles.sectionText}>{item.location}{item.price == null ? '' : ` · ${item.price} €`}</Text>
++      <Text style={styles.sectionText}>{item.description}</Text>
++      <SmallButton label={copy.contact} onPress={() => onContact?.(item, item.target)} />
++    </View>)}
++  </Section>;
++}
++
++function HousingScreen({ publicRequests = [], onOpenHelp, initialContentTarget, listings, locale, onAuth, onOpenProfile, onOpenPublishTarget, onStartConversation, onStartDirectConversation, onStartNewRequest, onSubmitRequest, onToggleSavedItem, request, requireAccount, savedHousingIds, setRequest, session, stockListings, t }) {
+   const [journeyMode, setJourneyMode] = useState('search');
+   const [view, setView] = useState('map');
+   const [submitStatus, setSubmitStatus] = useState('');
+@@ -30434,6 +30450,7 @@ function HousingScreen({ onOpenHelp, initialContentTarget, listings, locale, onA
+ 
+   return (
+     <>
++      <CatalogueRequests items={publicRequests} locale={locale} onContact={onStartConversation} />
+       <Section title={t.housingTitle} headerRight={favoritesHeader}>
+         {!onOpenHelp && helperAuthorization === 'authorized' ? (
+           <CommunityHelperPanel
+@@ -36759,7 +36776,7 @@ function BusinessScreen({ apiUrl, initialContentTarget, listings, locale, onRetu
+   );
+ }
+ 
+-function MarketScreen({ listings, locale, marketSearch, onOpenExternalUrl, onOpenProfile, onOpenPublishTarget, onStartConversation, onToggleSavedItem, requireAccount, savedListingIds, session, setMarketSearch, t }) {
++function MarketScreen({ publicRequests = [], listings, locale, marketSearch, onOpenExternalUrl, onOpenProfile, onOpenPublishTarget, onStartConversation, onToggleSavedItem, requireAccount, savedListingIds, session, setMarketSearch, t }) {
+   const [favoritesVisible, setFavoritesVisible] = useState(false);
+   const [marketStatus, setMarketStatus] = useState('');
+   const [selectedMarketId, setSelectedMarketId] = useState(null);
+@@ -36841,6 +36858,7 @@ function MarketScreen({ listings, locale, marketSearch, onOpenExternalUrl, onOpe
+           returnScreen="market"
+         />
+       ) : null}
++      <CatalogueRequests items={publicRequests} locale={locale} onContact={onStartConversation} />
+       <Section title={marketBusinessCopy(locale).objects} headerRight={favoritesHeader}>
+         {favoritesVisible ? (
+           <>
+@@ -37020,7 +37038,7 @@ const employmentWorkspaceCopy = Object.freeze({
+   te: { guide: 'ఉద్యోగం మరియు శిక్షణ సమాచారం', offers: 'ఉద్యోగ అవకాశాలు', oneResult: 'సరిపోయే ఉద్యోగం', results: 'సరిపోయే ఉద్యోగాలు' },
+ });
+ 
+-function JobsScreen({ apiUrl, initialContentTarget, jobs, stockJobs = [], jobSearch, locale, onOpenExternalUrl, onOpenProfile, onOpenPublishTarget, onStartConversation, onToggleSavedItem, requireAccount, savedJobIds, session, setJobSearch, t }) {
++function JobsScreen({ publicRequests = [], apiUrl, initialContentTarget, jobs, stockJobs = [], jobSearch, locale, onOpenExternalUrl, onOpenProfile, onOpenPublishTarget, onStartConversation, onToggleSavedItem, requireAccount, savedJobIds, session, setJobSearch, t }) {
+   const [jobsStatus, setJobsStatus] = useState('');
+   const [favoritesVisible, setFavoritesVisible] = useState(false);
+   const [employmentView, setEmploymentView] = useState('offers');
+@@ -37089,6 +37107,7 @@ function JobsScreen({ apiUrl, initialContentTarget, jobs, stockJobs = [], jobSea
+ 
+   return (
+     <>
++      <CatalogueRequests items={publicRequests} locale={locale} onContact={onStartConversation} />
+       <Section title={t.jobsTitle} headerRight={favoritesHeader}>
+         {favoritesVisible ? (
+           <>
+diff --git a/runtime-native/whatsappCatalogueContact.js b/runtime-native/whatsappCatalogueContact.js
+new file mode 100644
+index 0000000..018ae33
+--- /dev/null
++++ b/runtime-native/whatsappCatalogueContact.js
+@@ -0,0 +1,7 @@
++// The public assistant receives the reference; the advertiser's phone remains private.
++function whatsappCatalogueContact(item = {}) {
++  const reference = String(item.remoteId || item.id || '');
++  if (!/^wa_listing_[a-f0-9]{36}$/.test(reference)) return '';
++  return 'https://wa.me/12694043536?text=' + encodeURIComponent('Je souhaite être mis en relation pour l’annonce Nanba ' + reference);
++}
++module.exports = { whatsappCatalogueContact };
+diff --git a/tests/whatsapp-catalogue.test.js b/tests/whatsapp-catalogue.test.js
+new file mode 100644
+index 0000000..618a54c
+--- /dev/null
++++ b/tests/whatsapp-catalogue.test.js
+@@ -0,0 +1,81 @@
++const assert = require('node:assert/strict');
++const { test } = require('node:test');
++const { createHmac } = require('node:crypto');
++const { mkdtempSync, writeFileSync, rmSync } = require('node:fs');
++const { tmpdir } = require('node:os');
++const path = require('node:path');
++const { Readable, Writable } = require('node:stream');
++Object.assign(process.env, { NANBA_DATA_BACKEND: 'json', NANBA_DISABLE_OPENAI: 'true', NANBA_DISABLE_RATE_LIMIT: 'true', NANBA_NEWS_DISABLE_REMOTE: 'true', PUSH_AUTO_DISPATCH: 'false', NANBA_CINEMA_TV_BACKGROUND_REFRESH: 'false', NANBA_WHATSAPP_CATALOGUE_SECRET: 'catalogue-test-secret-'.repeat(3) });
++const { createServer } = require('../apps/api/src/server');
++const { createMemoryVersionedJsonStore } = require('../apps/api/src/versioned-json-store');
++const { createWhatsAppCatalogue, prepareWhatsAppListing, verifyCatalogueRequest } = require('../apps/api/src/whatsapp-catalogue');
++
++function request(server, url, { body, token, method, signed = false } = {}) {
++  return new Promise((resolve, reject) => {
++    const raw = body ? JSON.stringify(body) : '';
++    const timestamp = String(Date.now());
++    const req = new Readable({ read() { this.push(raw || null); if (raw) this.push(null); } });
++    req.method = method || (body ? 'POST' : 'GET'); req.url = url;
++    req.headers = { 'content-type': 'application/json', ...(token ? { authorization: 'Bearer ' + token } : {}), ...(signed ? { 'x-nanba-timestamp': timestamp, 'x-nanba-signature': createHmac('sha256', process.env.NANBA_WHATSAPP_CATALOGUE_SECRET).update(timestamp + '\n' + raw).digest('hex') } : {}) };
++    const res = new Writable({ write(chunk, encoding, cb) { cb(); } });
++    let status = 200;
++    res.writeHead = s => { status = s; };
++    res.end = raw => resolve({ status, body: raw ? JSON.parse(raw.toString()) : null });
++    Promise.resolve(server.listeners('request')[0](req, res)).catch(reject);
++  });
++}
++const payload = (n = 1, actor = 'a'.repeat(64)) => ({ action: 'publish', actor, consent: true, requestId: 'test-request-' + n, alias: 'Membre test', listing: { target: 'housing', intent: 'offer', title: 'Chambre disponible à Sevran', description: 'Chambre meublée disponible dès maintenant.', location: 'Sevran', price: 500, propertyTypes: ['private-room'] } });
++
++test('signed WhatsApp submission -> principal moderation -> public catalogue on another instance -> withdrawal', async () => {
++  const dir = mkdtempSync(path.join(tmpdir(), 'nanba-catalogue-'));
++  const store = createMemoryVersionedJsonStore();
++  const servers = ['a', 'b'].map(name => {
++    const dataFile = path.join(dir, name + '.json');
++    writeFileSync(dataFile, JSON.stringify({ users: [{ id: 'moderator', userId: 'moderator', role: 'admin' }], sessions: [{ id: 'moderator-session', accessToken: 'moderator-token', userId: 'moderator', role: 'admin', displayName: 'Admin' }] }));
++    return createServer({ dataFile, whatsappCatalogueStore: store });
++  });
++  try {
++    const endpoint = '/integrations/whatsapp/catalogue';
++    assert.equal((await request(servers[0], endpoint, { body: payload() })).status, 401);
++    assert.equal((await request(servers[0], endpoint, { body: { ...payload(), consent: false }, signed: true })).status, 400);
++    const created = await request(servers[0], endpoint, { body: payload(), signed: true });
++    assert.equal(created.status, 200); assert.equal(created.body.status, 'moderation');
++    const id = created.body.id;
++    assert.equal((await request(servers[0], endpoint, { body: payload(), signed: true })).body.id, id);
++    let list = await request(servers[1], '/listings?target=housing');
++    assert(!list.body.some(x => x.id === id), 'pending never publicly visible');
++    const queue = await request(servers[1], '/admin/moderation-queue', { token: 'moderator-token' });
++    assert.equal(queue.status, 200); assert(queue.body.listings.some(x => x.id === id));
++    const approved = await request(servers[1], '/moderation/listings/' + id, { token: 'moderator-token', body: { decision: 'approved' } });
++    assert.equal(approved.status, 200); assert.equal(approved.body.status, 'published');
++    // Force a canonical refresh on the first server through the private owner read.
++    await request(servers[0], endpoint, { body: { actor: payload().actor, action: 'mine' }, signed: true });
++    list = await request(servers[0], '/listings?target=housing');
++    assert(list.body.some(x => x.id === id && x.price === 500));
++    assert.equal((await request(servers[0], endpoint, { body: { actor: 'b'.repeat(64), action: 'remove', reference: id }, signed: true })).status, 403);
++    const removed = await request(servers[0], endpoint, { body: { actor: payload().actor, action: 'remove', reference: id }, signed: true });
++    assert.equal(removed.body.status, 'withdrawn');
++    assert.equal((await request(servers[0], endpoint, { body: { actor: payload().actor, action: 'remove', reference: id }, signed: true })).status, 200);
++    assert(!(await request(servers[0], '/listings?target=housing')).body.some(x => x.id === id));
++    assert.equal((await request(servers[0], endpoint, { body: payload(), signed: true })).body.status, 'withdrawn', 'retries cannot resurrect withdrawn publication');
++  } finally { for (const server of servers) server.emit('close'); rmSync(dir, {recursive: true, force: true}); }
++});
++
++test('durable concurrent publications, owner scope, expiry, tamper rejection and storage failure', async () => {
++  const store = createMemoryVersionedJsonStore();
++  const a = createWhatsAppCatalogue({ store, getState: () => ({}), persist: async () => {} });
++  const b = createWhatsAppCatalogue({ store, getState: () => ({}), persist: async () => {} });
++  const items = Array.from({length: 40}, (_, i) => prepareWhatsAppListing(payload(i), 'wa_' + 'a'.repeat(64)));
++  await Promise.all(items.map((item, i) => (i % 2 ? a : b).create(item)));
++  assert.equal((await a.list(true)).length, 40);
++  await assert.rejects(a.update(items[0].id, 'another-owner', {status:'published'}), { status: 403 });
++  assert(!a.active({...items[0], expiresAt: '2000-01-01'}));
++  const clock = Date.now(), body = payload();
++  const headers = {'x-nanba-timestamp':String(clock), 'x-nanba-signature':createHmac('sha256',process.env.NANBA_WHATSAPP_CATALOGUE_SECRET).update(clock+'\n'+JSON.stringify(body)).digest('hex')};
++  assert.equal(verifyCatalogueRequest(headers,body,process.env.NANBA_WHATSAPP_CATALOGUE_SECRET,clock),'wa_'+body.actor);
++  assert.throws(()=>verifyCatalogueRequest(headers,{...body,actor:'b'.repeat(64)},process.env.NANBA_WHATSAPP_CATALOGUE_SECRET,clock),{status:401});
++  assert.throws(()=>verifyCatalogueRequest(headers,body,process.env.NANBA_WHATSAPP_CATALOGUE_SECRET,clock+121000),{status:401});
++  const localState = {};
++  const failing = createWhatsAppCatalogue({getState:()=>localState,persist:async()=>{throw Error('disk unavailable');}});
++  await assert.rejects(failing.create(items[0])); assert.deepEqual(await failing.list(),[]);
++});
