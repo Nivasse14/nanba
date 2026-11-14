@@ -1,0 +1,13 @@
+services:
+  waha:
+    image: devlikeapro/waha:latest-2026.10.1
+    ports: ["127.0.0.1:3001:3000"]
+    environment:
+      WHATSAPP_DEFAULT_ENGINE: WEBJS
+      WAHA_API_KEY: ${WAHA_API_KEY:?Set a private WAHA_API_KEY before enabling the pilot profile}
+      WAHA_DASHBOARD_ENABLED: "false"
+      WHATSAPP_SWAGGER_ENABLED: "false"
+    volumes: ["waha-sessions:/app/.sessions"]
+    restart: unless-stopped
+volumes:
+  waha-sessions:

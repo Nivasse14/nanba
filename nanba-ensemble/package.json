@@ -1,0 +1,38 @@
+{
+  "name": "nanba-ensemble",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24.22.1 <25"
+  },
+  "scripts": {
+    "dev": "node --env-file-if-exists=.env src/server.ts",
+    "start": "node --env-file-if-exists=.env src/server.ts",
+    "build": "tsc --noEmit && node scripts/build.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test --test-concurrency=1 tests/*.test.ts",
+    "seed": "node --env-file-if-exists=.env scripts/seed.ts",
+    "check": "npm run build && npm test",
+    "format": "prettier --write src scripts tests public package.json tsconfig.json compose*.yaml",
+    "format:check": "prettier --check src scripts tests public package.json tsconfig.json compose*.yaml",
+    "provision": "node --env-file-if-exists=.env scripts/provision.ts",
+    "backup": "node --env-file-if-exists=.env scripts/backup.ts"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1",
+    "@types/ws": "8.18.2",
+    "esbuild": "0.28.2",
+    "prettier": "3.6.2",
+    "typescript": "5.9.3"
+  },
+  "dependencies": {
+    "@breezystack/lamejs": "1.2.7",
+    "@pdf-lib/fontkit": "1.1.1",
+    "astronomy-engine": "2.1.19",
+    "pdf-lib": "1.17.1",
+    "regenerator-runtime": "0.14.1",
+    "twilio": "6.3.0",
+    "ws": "8.23.0"
+  }
+}

@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    ports: ["127.0.0.1:3000:3000"]
+    environment:
+      NODE_ENV: development
+      WHATSAPP_MODE: simulated
+      DATABASE_PATH: /app/data/development.db
+      APP_ORIGIN: http://localhost:3000
+    volumes: ["nanba-data:/app/data"]
+    restart: unless-stopped
+volumes:
+  nanba-data:
