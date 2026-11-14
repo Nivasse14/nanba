@@ -1,19 +1,25 @@
-# Nanba Ensemble — WhatsApp complet v2
+# Nanba WhatsApp — sources v4.1
 
-**En ligne : `whatsapp-complete-v2`.**
+Sources complètes de la version actuellement en ligne : [nanba-ensemble-source.tar.gz](nanba-ensemble-source.tar.gz). Le [manifeste](SOURCE-MANIFEST.json) répertorie tous les fichiers et leurs empreintes SHA-256.
 
-Les huit parcours métier, leurs confirmations et leur administration sont accessibles dans WhatsApp. Les démarches personnelles utilisent une conversation privée reliée à une communauté autorisée.
+Commit source local : `1bb588c70dd58c9272ade1733221976b36676903`. Archive SHA-256 : `17d405de3e6931bfc5293cf80023b5f11a48e88d4c94eb71dd6d25f6bf202b7a`.
 
-- 65 tests automatisés réussis ; compilation, TypeScript, formatage et syntaxe navigateur validés.
-- Déploiement Render `dep-dbr4jo95efls73dmtteg` confirmé live, 12 novembre 2026 à 23:22 UTC.
-- Commit applicatif publié : `4d2510a66195183e5e17becb9dbf8a34023f1ace`.
-- Service existant et volumes conservés ; aucun nouvel hébergement ni changement de budget.
-- Contrôles HTTP : santé 200, version v2, mode WAHA réel sans démonstration, routes privées protégées.
+## Fonctionnalités
 
-**À faire sur le téléphone :** ouvrir le lien privé déjà remis, scanner le QR, activer le test personnel, puis écrire **Nanba aide** dans la discussion « Vous ». Le statut observé est `SCAN_QR_CODE` : aucun compte WhatsApp encore associé. Aucun message tiers envoyé pendant les validations.
+- Twilio + OpenAI : dialogue, images, vocaux entrants et réponses audio au choix.
+- Mémoire par numéro, PDF/courriers, relais vers les administrateurs Nanba.
+- Rappels et sélections personnalisées matin/soir avec consentement, pause et limites de fréquence.
+- APIs publiques Nanba : actualités, cinéma, annonces, voyages en cache, devises et autres services.
+- Horoscope simplifié : date, ville/pays et heure de naissance si connue ; calcul Lahiri, sans demander le Rasi ou Nakshatra.
 
-Choisir ensuite `Nanba 1` à `Nanba 8`. Guide complet : [WHATSAPP-COMMANDS.md](WHATSAPP-COMMANDS.md). Preuves : [whatsapp-v2-live-validation.json](whatsapp-v2-live-validation.json).
+132 tests réussis sur les sources et sur le chargement de production. Diagnostic IA réel vérifié sans envoi à des membres. Version Render `assistant-v4.1`, déploiement `dep-dbs3jo3bc2fs73afj5t0`, confirmé actif le 14 novembre 2026.
 
-Les essais sur de vrais téléphones restent à effectuer. IA libre, traduction/transcription automatique, paiement et catalogue Nanba externe non connectés.
+## Utiliser le code
 
-Source locale : `f382dd992c52356a6eb283e66aca890d8e16d6b5`. Archive sans données, clés ou sessions ; SHA-256 `20bd867bd2653d4ad3dd1253c8c100443dbe0536da7a5c34f5aab1ccf6fc5219`.
+Extraire l’archive dans un dossier vide. Avec Node 24.22.1 ou une version corrigée ultérieure de la branche 24 : `npm ci`, `npm run check`, puis suivre le README et `.env.example`. Les sources se trouvent dans `src/`, les tests dans `tests/`, la documentation dans `docs/`.
+
+## Déploiement
+
+Le service Render existant continue à fonctionner. Les déploiements automatiques sont désactivés. Le chargement de compatibilité actuel est conservé ; cette publication GitHub ne change ni les secrets, ni les données, ni la configuration du service. L’archive est utilisable avec `Dockerfile.ensemble`.
+
+L’archive ne contient ni clés API, ni base de données, ni session, ni `node_modules`. Les modèles WhatsApp restent soumis aux statuts d’approbation Meta décrits dans la documentation.

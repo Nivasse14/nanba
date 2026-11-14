@@ -1,0 +1,622 @@
+{
+  "sourceCommit": "1bb588c70dd58c9272ade1733221976b36676903",
+  "version": "assistant-v4.1",
+  "archiveSha256": "17d405de3e6931bfc5293cf80023b5f11a48e88d4c94eb71dd6d25f6bf202b7a",
+  "files": [
+    {
+      "path": ".dockerignore",
+      "size": 55,
+      "sha256": "aada9e4c7e5a14c7e292dd04ce579ad9b8f89e5505c206b2bd2ef2e4ee4ec51e"
+    },
+    {
+      "path": ".env.example",
+      "size": 1069,
+      "sha256": "d4169fe4b18ded5035d8758b7caa204b9881c7926f9b01dce0e65bd051fe9cbd"
+    },
+    {
+      "path": ".gitignore",
+      "size": 180,
+      "sha256": "58cd3b22df9d0fd638748f4e07a2c9b7760f3fc89f300941b5a3642a739d6ca0"
+    },
+    {
+      "path": "Dockerfile",
+      "size": 436,
+      "sha256": "0d382a0a27c1da965b91c64b390795afe5bc40b70e116cf23e3f6646ff70ee71"
+    },
+    {
+      "path": "README.md",
+      "size": 8495,
+      "sha256": "a9e52e1972855ecb26e18c3adebaee2b82679e20e15caafb58152e77d141b66b"
+    },
+    {
+      "path": "assets/fonts/NotoSans-Regular.ttf",
+      "size": 621572,
+      "sha256": "478c558ea716033cd60c03438f628dfa75694dcf6b5f6d505a2f05fd2b4f3823"
+    },
+    {
+      "path": "assets/fonts/NotoSansTamil-Regular.ttf",
+      "size": 73992,
+      "sha256": "3c0a186feb3c63c7f6d63e1511dcdc144e745ae09b98e217c83f3e317974f6f9"
+    },
+    {
+      "path": "assets/fonts/OFL.txt",
+      "size": 4395,
+      "sha256": "e2e177a32561584d4fc13aaa3cd8e53758a12910f013fe9ca125419111722029"
+    },
+    {
+      "path": "compose.waha.yaml",
+      "size": 428,
+      "sha256": "315ddc474341ea02eafe9cb839073174c027a97bff9db271fee9fae35266a9a6"
+    },
+    {
+      "path": "compose.yaml",
+      "size": 316,
+      "sha256": "0f4ae03efdb119ac6721fe7684e9733c8c52134f5f86b37717e9681fd4bb0fd1"
+    },
+    {
+      "path": "docs/AGENT_PROMPT.txt",
+      "size": 1527,
+      "sha256": "b1bc30da208d555bdd4164b0a6d806d4d96ac0a315a8b388ad408eb67286b547"
+    },
+    {
+      "path": "docs/ARCHITECTURE.md",
+      "size": 11700,
+      "sha256": "6ed52204775a807a04218db99e4716c49ae5564f8a4721761195f032a438ef64"
+    },
+    {
+      "path": "docs/DEMO.md",
+      "size": 3851,
+      "sha256": "30541781fcd7442301e0ab86aa45e51580a96508078bf27455aec6d06b5f149b"
+    },
+    {
+      "path": "docs/DEPLOYMENT.md",
+      "size": 11114,
+      "sha256": "66bb7012bad18aa66d5ee37d70ef8f79bad503d22d1e9dd130243e576e6e07b6"
+    },
+    {
+      "path": "docs/OPERATIONS.md",
+      "size": 8908,
+      "sha256": "b44c06e41182a2929b815fc974e749c1acc8401f14ce14045432d0e54dec4b57"
+    },
+    {
+      "path": "docs/PROGRESS.md",
+      "size": 14106,
+      "sha256": "d5daea10508b7529fb85d84d83b46c663f61a9980156c576edbdb237901b47bc"
+    },
+    {
+      "path": "docs/QR-REPAIR.md",
+      "size": 8479,
+      "sha256": "f5e426c47165196fe09f3ee450ccca84ed7e7d060ddea7c9dccbbf7aaa8ea288"
+    },
+    {
+      "path": "docs/SPECIFICATION.txt",
+      "size": 37401,
+      "sha256": "c6e8f68589cbc75e25171efd3c7dd12479b0d5efd7963fafc16966b81395a30b"
+    },
+    {
+      "path": "docs/TWILIO-AI.md",
+      "size": 7640,
+      "sha256": "8c8164c470f44306ac13272db7604e2c23e35e892c2d499b9468e39f01003a6c"
+    },
+    {
+      "path": "docs/WHATSAPP-COMMANDS.md",
+      "size": 8461,
+      "sha256": "3492ce24e84fe486118856d1cc2372b935be63c42e9d6f19454779a5a332a86f"
+    },
+    {
+      "path": "docs/WHATSAPP-COMPANION.md",
+      "size": 22551,
+      "sha256": "6febb4e81847c9d0216c2323863b7199684e3099e1e831eb905fc00813f171a1"
+    },
+    {
+      "path": "docs/WHATSAPP-LOGIN-REPAIR.md",
+      "size": 5994,
+      "sha256": "dbcd47ca8e2256cb96f59b442d25e33f212a6c1f88dbb45c0e9b8f93be1c06c3"
+    },
+    {
+      "path": "docs/WHATSAPP-SELF-CHAT-REPAIR.md",
+      "size": 3850,
+      "sha256": "f604477b15a35fda5d86e9c7789c91ca001bc3e56bebea5f9efa7fef04a71d11"
+    },
+    {
+      "path": "docs/WHATSAPP.md",
+      "size": 7669,
+      "sha256": "4248a9eecbae6189d834570b950008d36b087f6a4a48a01c90e56f89ddee90a4"
+    },
+    {
+      "path": "docs/assistant-v3-live-validation.json",
+      "size": 2300,
+      "sha256": "11b1fa07eca97c5062ffa2ba494ff5c8f6af780f1d6d74aaa64b23bad6cbb4db"
+    },
+    {
+      "path": "docs/assistant-v4-live-validation.json",
+      "size": 1587,
+      "sha256": "bb19a54bc0e500bc47c1ec339ed0a6baf30f847529ccca5570567e8595d711f5"
+    },
+    {
+      "path": "docs/companion-images.json",
+      "size": 4508,
+      "sha256": "697ae7181e03e4ca73543b26746060c5980c2952ef8c11bc95186bd5b2d32c53"
+    },
+    {
+      "path": "docs/companion-live-validation.json",
+      "size": 1870,
+      "sha256": "61d6b59bfc92569506116e3c086c3bc3909e9c1a0a5a3f55300df53a3c60b572"
+    },
+    {
+      "path": "docs/conversation-validation.txt",
+      "size": 5825,
+      "sha256": "ccc9d276693ec554f39f1723a2d5a6547ba47bfee2b17ca0cb8c9b3433c7ac54"
+    },
+    {
+      "path": "docs/horoscope-v4.1-live-validation.json",
+      "size": 744,
+      "sha256": "0c8057a0a6b11ab2d80ca14f7b92b854e22ca4207ce7d136e0d2f4e3e55e9c45"
+    },
+    {
+      "path": "docs/live-validation.json",
+      "size": 1082,
+      "sha256": "d9df3ff84aee733ac2edfd46146adea8943d35a31056c6955fca1dba41999ca0"
+    },
+    {
+      "path": "docs/qr-native-login-observations.json",
+      "size": 3263,
+      "sha256": "40ae399c2e9ff8931d36fab55f07ed3579115f69b8ad7be3504f0766f5537780"
+    },
+    {
+      "path": "docs/qr-recovery-observations.json",
+      "size": 1079,
+      "sha256": "ad000adcb572382855fccb3d61e101db1a8e9226a544eb11c72bac0b526e42c2"
+    },
+    {
+      "path": "docs/qr-repair-local-validation.json",
+      "size": 427,
+      "sha256": "cd7c2fe7ba074c7c456c65bb5c6d86a10c25cb773db18fb4c4f1706e44a747f0"
+    },
+    {
+      "path": "docs/qr-repair-observations.json",
+      "size": 1907,
+      "sha256": "ece614acefb906bcd69866ac407795ccedb19a9e96456a3b89217de1b5ec1a9a"
+    },
+    {
+      "path": "docs/twilio-business-activation.json",
+      "size": 1254,
+      "sha256": "76165bc7331d976b8ab4a354f658966e1194e7d1ad4568df841a60c16aa8c2e8"
+    },
+    {
+      "path": "docs/twilio-delivery-repair.json",
+      "size": 2494,
+      "sha256": "95759e5143c93533c668da5a6c418d6ffb81fc3cbd33bb67b02d9487e73cdff5"
+    },
+    {
+      "path": "docs/twilio-live-validation.json",
+      "size": 3195,
+      "sha256": "b81265350e75b2b65867fe3ad16c3b95fd69c337b6618073b27979d14baafe5f"
+    },
+    {
+      "path": "docs/twilio-media-validation.json",
+      "size": 2148,
+      "sha256": "a31b7779e308c4a1f5f6e71beade905799edebc9aaa555a6dce1580d4b429d2f"
+    },
+    {
+      "path": "docs/validation-output.txt",
+      "size": 5055,
+      "sha256": "4f5bb7a8203e07cbff851aa51631f9ca4bc357ce4f79683a0f86a70d22baae30"
+    },
+    {
+      "path": "docs/whatsapp-complete-validation.txt",
+      "size": 7829,
+      "sha256": "403ee8e3845e137b77de399535a69adedcc2041a852936d39eedff1a4e88ea6d"
+    },
+    {
+      "path": "docs/whatsapp-connected-validation.json",
+      "size": 404,
+      "sha256": "db426532c215f89aa57a5fff3c68ea61fdfd3893c76b0d1f95bc34ee4dcd235a"
+    },
+    {
+      "path": "docs/whatsapp-live-validation.json",
+      "size": 1144,
+      "sha256": "ab8594156102948bba2edd7490a7ce0bd3f4b8515c1e288fb958aa3f11f26498"
+    },
+    {
+      "path": "docs/whatsapp-v2-live-validation.json",
+      "size": 1397,
+      "sha256": "2446c84253d638fb081ca05c53e9d520a0d4bca92971670222ddddeaaefdae72"
+    },
+    {
+      "path": "migrations/001_initial.sql",
+      "size": 6779,
+      "sha256": "29b3c51423d9857605d87e45ea6af71788842fbc2f276c0e6322116538054123"
+    },
+    {
+      "path": "migrations/002_whatsapp_assistant.sql",
+      "size": 283,
+      "sha256": "f5abebd38b6cedd7b3945206a219336809bed8186199b91cb8da1916ac127ed5"
+    },
+    {
+      "path": "package-lock.json",
+      "size": 42732,
+      "sha256": "99933ccb88271937f3cbbe8083a1f9d766d26bb01e6f6fcd158c9644f67b846c"
+    },
+    {
+      "path": "package.json",
+      "size": 1271,
+      "sha256": "37ad0fe449cc318342944b8f5b6789d33b3a4e68847439c6835bf7fb215b50fd"
+    },
+    {
+      "path": "public/app.js",
+      "size": 104104,
+      "sha256": "8d6ba0a91f2003d9693141d313439bc0704ebe6197c3ecc29331bfdd3f4c194d"
+    },
+    {
+      "path": "public/index.html",
+      "size": 692,
+      "sha256": "77dad1ae5d76c32843405a30433f7f6b92d4842ebc0f446f6801533c2962aed1"
+    },
+    {
+      "path": "public/styles.css",
+      "size": 21313,
+      "sha256": "525b60788819137c4064cd82eefd629d6a42ca34d09df344fee82fad3b3699b8"
+    },
+    {
+      "path": "render.yaml",
+      "size": 2071,
+      "sha256": "33f4d68e796c4c9025fc041ad67dfb15a6a707868a128ead5c0d2e97898fc603"
+    },
+    {
+      "path": "scripts/backup.ts",
+      "size": 674,
+      "sha256": "c0f6679d724fa7d95e8c9594f4b371573b7f6e01f8b0c09a9bbb2e6335821c02"
+    },
+    {
+      "path": "scripts/build-self-lid-preload.mjs",
+      "size": 2196,
+      "sha256": "ed53348eeb8a1d72487f69ed7f67f90fdaf71de88af85fb2ea1953296d61db59"
+    },
+    {
+      "path": "scripts/build-twilio-preload.mjs",
+      "size": 4530,
+      "sha256": "f0bd6d736c924af85e31184eedc188ec57611612bc15cd86eab26222561a4d92"
+    },
+    {
+      "path": "scripts/build.ts",
+      "size": 260,
+      "sha256": "9c79b80c30cf71211366bf6e2e3054c09f466fd4786abb4dc879be6a548d956c"
+    },
+    {
+      "path": "scripts/companion-admin-check.py",
+      "size": 4586,
+      "sha256": "a1e047b484068681ed5e5b7da8d0eac1d550c84a233cdf95bc9d5408231d3578"
+    },
+    {
+      "path": "scripts/pilot-message-diagnostic.mjs",
+      "size": 5181,
+      "sha256": "ddccdf010c005b7a69a5d5a468df86b755791976d5e823cbf73a08777761a549"
+    },
+    {
+      "path": "scripts/pilot-recover-help.mjs",
+      "size": 3416,
+      "sha256": "d208e8a13f2f618ed4f79e9567351b266a1089a3dff93e78e39369ab87fe498c"
+    },
+    {
+      "path": "scripts/pilot-runtime-bootstrap.mjs",
+      "size": 1722,
+      "sha256": "e424562264d5dd71991bdbf81cb48815290f00e9862714b3e345a029daae9ec6"
+    },
+    {
+      "path": "scripts/pilot-self-lid-preload.mjs",
+      "size": 4075,
+      "sha256": "0076208758238757f8c54e0d93416949763671ba2783bef16fc491576220880d"
+    },
+    {
+      "path": "scripts/pilot-twilio-preload.mjs",
+      "size": 1258433,
+      "sha256": "79f56390331c8892f0077925174eb934f4215f789331ebd49227cf773e626f9f"
+    },
+    {
+      "path": "scripts/pilot-verify-help.mjs",
+      "size": 2987,
+      "sha256": "eb072828611bcf8b09430fc856c5ddb3580074308c6dbfbd55097a261cd1dc66"
+    },
+    {
+      "path": "scripts/provision.ts",
+      "size": 2237,
+      "sha256": "74a7cecb1b80e98e770e2c6cd36be0943c59662b6cae0c91fb6bfce969af0f9b"
+    },
+    {
+      "path": "scripts/seed.ts",
+      "size": 451,
+      "sha256": "c40ea582c6157d84c496df7bfdc9ffdf5838f2d4261c3894f937150bd5cff511"
+    },
+    {
+      "path": "scripts/start-container.sh",
+      "size": 194,
+      "sha256": "2d795b2811c03a479aefbbe386ee4897136d5cabeea125dd5c249000e2cfc6b1"
+    },
+    {
+      "path": "scripts/verify-waha-login-compat.mjs",
+      "size": 2762,
+      "sha256": "37574b301fa5cb10a143f9bc6646d4dee095b38a48625825714ddfcec6d0e594"
+    },
+    {
+      "path": "scripts/verify-waha-qr-patch.mjs",
+      "size": 2957,
+      "sha256": "eb6357f0297fec7d3a351338ee3bbc4e5d2b065a0057525f059d28a85d182c32"
+    },
+    {
+      "path": "scripts/waha-auth-diagnostic.mjs",
+      "size": 1970,
+      "sha256": "9f4ab98b748c3ae4650318e17fdab61ea2ce44a6d44d6822f2e042faf05f85c5"
+    },
+    {
+      "path": "scripts/waha-login-compat.mjs",
+      "size": 6726,
+      "sha256": "d3adb46c0a9357b80472fed2fc20066b9a38deb10e969009454e5aeb8e7fdc78"
+    },
+    {
+      "path": "scripts/waha-login-node-options.mjs",
+      "size": 302,
+      "sha256": "7eaa1ec3a96dbfa94ac8b61cf1c05ce21f451d64e3a455f0967451a901fc187b"
+    },
+    {
+      "path": "scripts/waha-module-diagnostic.mjs",
+      "size": 2492,
+      "sha256": "a853ecd8da0c884a2c2d9de99a071f91bc1ff01fc7c6415facebedcf63e530bc"
+    },
+    {
+      "path": "scripts/waha-profile-recovery.mjs",
+      "size": 1501,
+      "sha256": "f8b9d88d24277a3d898482fd85678647e90d209cdf77d2df828de824e56ff4e6"
+    },
+    {
+      "path": "scripts/waha-qr-node-options.mjs",
+      "size": 1266,
+      "sha256": "5e7ce8d0e5ff38740b077b7e025a6a6d360b0b7d8a59a69b95887e7f0a8a2067"
+    },
+    {
+      "path": "scripts/waha-qr-patch.mjs",
+      "size": 1700,
+      "sha256": "6700ca42577cd8790287f0540725f4f2ba6b7dbd78aa78e819920c4dc08219e7"
+    },
+    {
+      "path": "src/admin.ts",
+      "size": 15820,
+      "sha256": "0cc12fb282afd2fe5dc2808b84786b8a698fbf9eca245cb03731278b0a15dce8"
+    },
+    {
+      "path": "src/agent.ts",
+      "size": 5602,
+      "sha256": "08eeb642cbcea6d1d81af2f6a91ebc05f5fe5a42db4aefa089118fc8ffc07002"
+    },
+    {
+      "path": "src/auth.ts",
+      "size": 2312,
+      "sha256": "f1736c9a8cc6bafb88b4a03b1a39c570f709ffd5fec3c19a93ade66814c3785f"
+    },
+    {
+      "path": "src/collective.ts",
+      "size": 11065,
+      "sha256": "5ff422f828de71acf42332266f0dfb4d5038aa5b2211ec6591f34b361b202650"
+    },
+    {
+      "path": "src/conversation-flows.ts",
+      "size": 36896,
+      "sha256": "393ba06d6616f613ed048e7cf64813d4bc05b562d90bc836cff8fd2af850b208"
+    },
+    {
+      "path": "src/conversation-format.ts",
+      "size": 4750,
+      "sha256": "316e3947086beec0b7204525fbee29ca110b8b0675648715fa30a796a036c168"
+    },
+    {
+      "path": "src/conversation-forms.ts",
+      "size": 18063,
+      "sha256": "e810413c5c6eef6260c184dbca4bdf8ea7ac83283bed309e5d3252853e645653"
+    },
+    {
+      "path": "src/conversation-view.ts",
+      "size": 10703,
+      "sha256": "5d601c489f3178d34db16cdfd758da26b46f72fea4fa0c4af474fa6df36dea3f"
+    },
+    {
+      "path": "src/conversation.ts",
+      "size": 20394,
+      "sha256": "93f384542cd4d1d34c79f96fb5907eee69d4e619a9f6845d6ff04435bcf9487c"
+    },
+    {
+      "path": "src/core.ts",
+      "size": 13357,
+      "sha256": "a4d9a23eab45c85f97d21a260131b2a1ead69ef0bc5d2a9c75c6fe04120646d1"
+    },
+    {
+      "path": "src/db.ts",
+      "size": 2297,
+      "sha256": "008a9a7bb8f96efe048d50068b9f36223d0f1086d950e883b7c6c55868d1791f"
+    },
+    {
+      "path": "src/integrations.ts",
+      "size": 8707,
+      "sha256": "ef042ebb34a6a02513d0dee74027d6668d4865d14c8a0365de93de066212432a"
+    },
+    {
+      "path": "src/knowledge.ts",
+      "size": 8007,
+      "sha256": "dcbc4f0c5bd9e628956c297f6429e5a4702341861dcd40d494abee36fcc5ebd4"
+    },
+    {
+      "path": "src/modules.ts",
+      "size": 38498,
+      "sha256": "ab12fae059c52373c7669b2922a05d24ee2e969b388607152745b07dc4446cd9"
+    },
+    {
+      "path": "src/nanba-astrology.ts",
+      "size": 17856,
+      "sha256": "e0a25de7b3e27f47367a8af9248635393d82ccbe24b10bb1d04203d03de7dee5"
+    },
+    {
+      "path": "src/nanba-companion.ts",
+      "size": 60633,
+      "sha256": "a2a87080b4d23a8874aece132c1b3942713287fce1d28ab4181b02f67e785fe2"
+    },
+    {
+      "path": "src/nanba-files.ts",
+      "size": 19807,
+      "sha256": "b83df7686e266689453ef490401082818d94bab6545f9f006621adad05d88e14"
+    },
+    {
+      "path": "src/nanba-fonts.ts",
+      "size": 267,
+      "sha256": "e3a009838d50ca8c736507e0b2f3658d25fb81ce5b60e76f839edecf9695a31f"
+    },
+    {
+      "path": "src/nanba-routines.ts",
+      "size": 22423,
+      "sha256": "e0b1d8482f08e5bd43f7a5b2c50012d7361d9be477297a79fefd9d452e3ea5b2"
+    },
+    {
+      "path": "src/nanba-services.ts",
+      "size": 16049,
+      "sha256": "3be571d747039d41c049ff9ff3a8268b5fa5d4c285753e0a108fbdb5a55b05cb"
+    },
+    {
+      "path": "src/nanba-support.ts",
+      "size": 16753,
+      "sha256": "05b83b4a45d6b9b05d5c993a528446e73027a1c6a52c37897270ddddb147b976"
+    },
+    {
+      "path": "src/pilot.ts",
+      "size": 10830,
+      "sha256": "13d7ea3ba4277e64bf4f3a7aae9769021dd3c3971a7385ad1b60db3b54fe6203"
+    },
+    {
+      "path": "src/private-chat.ts",
+      "size": 4361,
+      "sha256": "07d86b5f5e2f7812985cea8299e9b6bbb0b9924ea708aa335e1e159f88104936"
+    },
+    {
+      "path": "src/runtime.ts",
+      "size": 977,
+      "sha256": "3bd76de96619ab8c36c6f82c27138b07bee866e8817a6d1d87c24f65a0731b23"
+    },
+    {
+      "path": "src/seed.ts",
+      "size": 7019,
+      "sha256": "409754d5019de955f3163fe44ee3f03d8607fe3ef7751868b91fdfc7810fed20"
+    },
+    {
+      "path": "src/server.ts",
+      "size": 30488,
+      "sha256": "72aa58eb2492468fc21c1bb99b756ee560c738becbda1cacfe0a43f09c2d56f4"
+    },
+    {
+      "path": "src/twilio-assistant.ts",
+      "size": 52881,
+      "sha256": "95c505ee03e505cd151eb1bbbb5275d8a18a0cb1c6c8bc8ff2e66ab047061a2e"
+    },
+    {
+      "path": "src/twilio-media.ts",
+      "size": 8180,
+      "sha256": "83ed764a98b552b5c463216f41819569107d3a405ab2eccbae8730154205f578"
+    },
+    {
+      "path": "src/twilio-presence.ts",
+      "size": 4217,
+      "sha256": "8b97819e41580ce61c2e4fcf1ddd61447ca651b4f8b1ce6fceb23b1de04f5d2a"
+    },
+    {
+      "path": "src/twilio-web.ts",
+      "size": 11249,
+      "sha256": "fb0f698d6b611d62a4337e6952a41ee3e0ddbb4cbc7ae5d2062ecf91c523ae61"
+    },
+    {
+      "path": "src/validation.ts",
+      "size": 1900,
+      "sha256": "a24216310645ac461e1f3563485e0b195d61d6c8c87c9ed29002fe69b7fa58dd"
+    },
+    {
+      "path": "src/whatsapp.ts",
+      "size": 12232,
+      "sha256": "41e31b015ae0643104ebad02e9287f590aa55a51641cb3c58c2dee162c34f5c7"
+    },
+    {
+      "path": "src/worker.ts",
+      "size": 17913,
+      "sha256": "92b9a3f2c9d094245b30c197fc26870ee9801c0006dc6bf85aa868fd1d227c3f"
+    },
+    {
+      "path": "tests/assistant-deliverables.test.ts",
+      "size": 12785,
+      "sha256": "802b261237776811bd2c7742342a11c9dfa239f51a3ce76549dee5da9d1ebffe"
+    },
+    {
+      "path": "tests/astrology.test.ts",
+      "size": 9964,
+      "sha256": "b1a773085bfc60d557c06f6e19adb96b05d571a911d2916ddbbbeea17e5eca90"
+    },
+    {
+      "path": "tests/companion.test.ts",
+      "size": 14540,
+      "sha256": "ae05bf3cf24556fde2dd61a860d46312a3fb1c72a550fa0f55b6ba4375ce56a4"
+    },
+    {
+      "path": "tests/conversation.test.ts",
+      "size": 12914,
+      "sha256": "edc6336a7b3fba3db5f5ecb796d143cc3c5597b0f47ea3e99b4ff917bbd46a17"
+    },
+    {
+      "path": "tests/domain.test.ts",
+      "size": 22238,
+      "sha256": "2f299ea6cee833a37af94d4911ee266cfd8bd48c5f9078e0d154c9605b86c8e1"
+    },
+    {
+      "path": "tests/helpers.ts",
+      "size": 2975,
+      "sha256": "be8caa817ce1498ab16deed7e7f610e15f07f19993e8be57155dc1229cff96e3"
+    },
+    {
+      "path": "tests/http.test.ts",
+      "size": 7598,
+      "sha256": "4998cbb710c17e49d840a1b6679e96c0c00b53af7acdaf0f36118df4b219cf9a"
+    },
+    {
+      "path": "tests/pilot.test.ts",
+      "size": 9561,
+      "sha256": "eb35edab59b252fb3b1160af45822dd92f87c57676bfc8398192ecd5cf64537a"
+    },
+    {
+      "path": "tests/reservation-worker.ts",
+      "size": 633,
+      "sha256": "18ae57cc524f35f3d61beac48861e7332335145088fa5f8f0ce4808660821e43"
+    },
+    {
+      "path": "tests/routines.test.ts",
+      "size": 16210,
+      "sha256": "d067884dc0592a9d43a7e06067be32b5adf16410863587a25eee98b3d12ea96f"
+    },
+    {
+      "path": "tests/transport.test.ts",
+      "size": 15291,
+      "sha256": "6d9dd2211de97fab9aee78e2931e322fec8b25dd826a5d3b7346f507d52dd4a8"
+    },
+    {
+      "path": "tests/twilio-presence.test.ts",
+      "size": 4352,
+      "sha256": "9f82017e8e1c29dcb49b636b7858bf2b31cdf0b9b3aea9c6c37d471eb6b1418c"
+    },
+    {
+      "path": "tests/twilio.test.ts",
+      "size": 28601,
+      "sha256": "978131922ff7d6fa3e5f28a49d6313e157641122dbeba12a3f931117c467fabb"
+    },
+    {
+      "path": "tests/whatsapp-full.test.ts",
+      "size": 27873,
+      "sha256": "afccb75fb27942ca2bf052c998c72563a164abac5e1cc0728657c7d7dd0f6d9d"
+    },
+    {
+      "path": "tsconfig.json",
+      "size": 357,
+      "sha256": "6b3552ef3e05c0b09c7c990392173d68b2f0453a1e6b18f0ef343a409d6b0b76"
+    }
+  ]
+}
