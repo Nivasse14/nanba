@@ -1,8 +1,12 @@
-# Nanba WhatsApp — sources v4.1
+# Nanba WhatsApp — sources et catalogue principal
 
 Le code est consultable directement dans **[nanba-ensemble/](nanba-ensemble/)** : [serveur HTTP](nanba-ensemble/src/server.ts), [assistant WhatsApp](nanba-ensemble/src/twilio-assistant.ts), [horoscope](nanba-ensemble/src/nanba-astrology.ts), [tests](nanba-ensemble/tests/) et [documentation](nanba-ensemble/docs/).
 
-Archive complète de la même version : [nanba-ensemble-source.tar.gz](nanba-ensemble-source.tar.gz). Le [manifeste](SOURCE-MANIFEST.json) répertorie tous les fichiers et leurs empreintes SHA-256.
+**Évolution catalogue principal prête, non déployée** : les sources individuelles comprennent maintenant la publication WhatsApp dans le catalogue Nanba, la recherche naturelle et les alertes consenties. [État et guide d’activation](nanba-ensemble/docs/CATALOGUE-PRINCIPAL.md). Les 138 tests de l’assistant passent. Le déploiement de l’API sur Google Cloud reste bloqué par l’accès à la console ; la production reste en v4.1.
+
+Commit assistant : `42b1f60a9a21641860cd64324b943e49dc56c367`. Correctif de l’application principale inclus dans [integrations/](nanba-ensemble/integrations/).
+
+Archive conservée de la version stable v4.1 (sans cette évolution) : [nanba-ensemble-source.tar.gz](nanba-ensemble-source.tar.gz). Le [manifeste](SOURCE-MANIFEST.json) répertorie tous les fichiers et leurs empreintes SHA-256.
 
 Commit source local : `1bb588c70dd58c9272ade1733221976b36676903`. Archive SHA-256 : `17d405de3e6931bfc5293cf80023b5f11a48e88d4c94eb71dd6d25f6bf202b7a`.
 
@@ -25,3 +29,4 @@ Cloner la branche `nanba-ensemble-pilot` puis ouvrir le dossier `nanba-ensemble/
 Le service Render existant continue à fonctionner. Les déploiements automatiques sont désactivés. Le chargement de compatibilité actuel est conservé ; cette publication GitHub ne change ni les secrets, ni les données, ni la configuration du service. L’archive est utilisable avec `Dockerfile.ensemble`.
 
 L’archive ne contient ni clés API, ni base de données, ni session, ni `node_modules`. Les modèles WhatsApp restent soumis aux statuts d’approbation Meta décrits dans la documentation.
+
