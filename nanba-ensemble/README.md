@@ -3,6 +3,8 @@
 Assistant WhatsApp Nanba pour la diaspora indienne en France, et application communautaire avec huit parcours métier. Backend TypeScript, base SQLite persistante et tests automatisés.
 
 **Version en production : assistant-v4.1, vérifiée le 14 novembre 2026.** Twilio reçoit les messages WhatsApp ; OpenAI assure le dialogue, l’analyse d’images, la transcription et les réponses vocales à la demande. L’assistant propose aussi des PDF et courriers, une mémoire par numéro, des rappels, des sélections personnalisées matin/soir et un relais vers les administrateurs. Les services publics déjà développés dans Nanba sont raccordés. L’horoscope demande la date, le lieu et l’heure de naissance si connue ; le calcul Lahiri respecte les incertitudes.
+**Évolution catalogue principal préparée (non déployée)** : publication WhatsApp dans le catalogue applicatif, recherche naturelle et alertes de correspondance consenties. Compilation et 138 tests réussis. Voir [état et recette](docs/CATALOGUE-PRINCIPAL.md). Le déploiement Google Cloud reste bloqué par l’accès à la console.
+
 
 - [Guide des fonctionnalités et limites](docs/WHATSAPP-COMPANION.md).
 - [Validation de la version 4](docs/assistant-v4-live-validation.json) et [du parcours horoscope](docs/horoscope-v4.1-live-validation.json).
