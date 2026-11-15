@@ -1,6 +1,6 @@
 # État de la version onboarding v4.3
 
-Version préparée : assistant-v4.3-onboarding. Archive vérifiée, compilation et 158 tests réussis. La validation active sera ajoutée après le déploiement Render.
+Version préparée : assistant-v4.3-onboarding. Archive vérifiée, compilation et 159 tests réussis. La validation active sera ajoutée après le déploiement Render.
 
 Le service existant reste sur la version précédente tant que le nouveau déploiement n’est pas confirmé live. Le déploiement automatique est désactivé. Aucun message de test n’a été envoyé aux membres.
 

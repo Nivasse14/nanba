@@ -1,7 +1,7 @@
 {
-  "sourceCommit": "7a90aa348dc92c9c32d46dc212a2120ed515f814",
+  "sourceCommit": "184a781569b2864daca5251aea6d39009a73c034",
   "release": "assistant-v4.3-onboarding",
-  "archiveSha256": "ad7bae6dd8bbfa2251c9ccedc60e5f0360aa43c3fec3137507a0404f707cbb13",
+  "archiveSha256": "b12534e69bf1810bf5cf40afe917f0e004e27d1be8b8dfabf4549e10c1f7cb3a",
   "files": [
     {
       "path": ".dockerignore",
@@ -21,7 +21,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "3f189e65b2db6a5aee6998ed39213b2e4f5c54871064c0baf63c68a7f81885f4"
+      "sha256": "c33505e63dc3706aea2da3da69c4a91c8c63a427be87d258f69e7821d01bd89d"
     },
     {
       "path": "assets/fonts/NotoSans-Regular.ttf",
@@ -81,7 +81,7 @@
     },
     {
       "path": "docs/ONBOARDING.md",
-      "sha256": "6197c5d97e18e84bc6f4851dcfb0522f76b54dbc4754a966e55974a3f3cff102"
+      "sha256": "4317eb65f094ce5a6c98c9886a4a6da56511818d81443caf8d5c87cba58b1071"
     },
     {
       "path": "docs/OPERATIONS.md",
@@ -153,15 +153,15 @@
     },
     {
       "path": "docs/onboarding/en.json",
-      "sha256": "aad98be4b7018f06c7452a4794a65edb6572f0a157ae8bf02c41021913a4c112"
+      "sha256": "2dbd1fdc5ae43d1d3c867992623925b7f0061aa40faf3d8df6ff88b618eac2b4"
     },
     {
       "path": "docs/onboarding/fr.json",
-      "sha256": "9b8c52f7e2c8e12252b200bb6e62b3f03d1742de5a76e23ed14552d213c291fe"
+      "sha256": "a1a69510a0d34103efa6cc31e7b4a6ffea98f9fd189033699b60544aca4bdb54"
     },
     {
       "path": "docs/onboarding/ta.json",
-      "sha256": "1814cd59fb6403a12e4a215b8e41c26b490288f12a901a5bb8dca10149f379c4"
+      "sha256": "0747ab39d4a693e3251091e12e4ab692800bf32fc2ecddb563c76eb05b102874"
     },
     {
       "path": "docs/qr-native-login-observations.json",
@@ -433,7 +433,7 @@
     },
     {
       "path": "src/nanba-onboarding.ts",
-      "sha256": "0f59a8e3fb46936dc7f3cfaa1b4066e2bfa4b644320a613fa11b45ac835b9d8e"
+      "sha256": "5951acdc338a8377f2630e223c20d96c23e707e4a4eb0f838eaac76388f0647a"
     },
     {
       "path": "src/nanba-routines.ts",
@@ -465,7 +465,7 @@
     },
     {
       "path": "src/server.ts",
-      "sha256": "f8484aed309bbfdcbd516f54bda3ab2f1e3fe2105e386c16c5526c3480e9ffe5"
+      "sha256": "38c35a7e4cd46aeeaa9de349860daf1cdfd62370ed32412a1d49fa6e3287dc8c"
     },
     {
       "path": "src/twilio-assistant.ts",
@@ -533,7 +533,7 @@
     },
     {
       "path": "tests/onboarding.test.ts",
-      "sha256": "5ddb5a92144e67a9faade0045b06105442a05a08cbddc53217d989ebc187ac21"
+      "sha256": "9814f319d5ce74c1a679719d65ddbec55c7d1048bc11dde462d050e5be1c5dc3"
     },
     {
       "path": "tests/pilot.test.ts",
