@@ -278,7 +278,7 @@ export function createApplication(
         send(200, {
           implemented: true,
           ready: twilio.ready(),
-          version: "assistant-v4.1",
+          version: "assistant-v4.2-diaspora",
           capabilities: {
             text: true,
             images: true,
@@ -288,6 +288,12 @@ export function createApplication(
             voiceChoice: true,
             documents: true,
             humanSupport: true,
+            privateJourneys: true,
+            frenchPractice: true,
+            guidedLetters: true,
+            officialResources: true,
+            mainCataloguePublishingConfigured:
+              (process.env.NANBA_WHATSAPP_CATALOGUE_SECRET || "").length >= 32,
             memory: true,
             scheduling: true,
             personalizedRoutines: true,

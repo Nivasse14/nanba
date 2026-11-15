@@ -519,9 +519,11 @@ export class Routines {
     const pause =
       /^(?:PAUSE|SILENCE)(?:\s+(\d{1,3})(?:\s+(?:JOURS?|DAYS?))?)?$/.exec(text);
     if (["MENU", "NANBA AIDE", "AIDE", "HELP"].includes(text))
-      return en
-        ? "Nanba: news, housing, jobs, streaming in France, exchange rates, travel links, cooking and games. Send a photo or voice note; ask for an audio reply, letter or PDF. For personal updates, choose your interests and morning/evening times. Example: every morning at 08:00, India news. MY SCHEDULE · PAUSE · LESS · STOP. Ask for the Nanba team to speak to a person."
-        : "Nanba : actualités, logement, emploi, films en France, taux de change, voyages, cuisine et jeux. Envoie une photo ou un vocal ; demande une réponse audio, une lettre ou un PDF. Pour tes rendez-vous, choisis tes centres d’intérêt et tes horaires matin/soir. Exemple : chaque matin à 8 h, les nouvelles de l’Inde. MON PROGRAMME · PAUSE · MOINS · STOP. Demande l’équipe Nanba pour parler à un humain.";
+      return this.c.profile(identity).language === "ta"
+        ? "நண்பா: பிரான்சில் குடியேறுதல், வீடு அல்லது வேலை தேடுதல், குடும்ப உதவி — உங்கள் முன்னேற்றத்தைத் தொடர்ந்து பார்க்கலாம். பிரெஞ்சில் உரையாடிப் பயிற்சி செய்யலாம்; தமிழில் விளக்கம் கேட்கலாம். கடிதத்தின் படத்தை அனுப்புங்கள்; புரிந்துகொள்ளவும் பதில் எழுதவும் உதவுகிறேன். குரல் பதில், PDF, செய்திகள், திரைப்படங்கள், சமையல், விளையாட்டுகளும் உள்ளன. நினைவூட்டல் அல்லது அறிவிப்புகள் உங்கள் விருப்பத்துடன் மட்டுமே. மனித உதவிக்கு Nanba குழுவைக் கேளுங்கள். PAUSE · STOP · OUBLIE."
+        : en
+          ? "Nanba: ask for a private plan for settling in France, housing, work or family life. Practise French for a landlord, interview or school meeting, with explanations in your language. Send a letter photo for a plain-language explanation and help drafting a reply. Voice replies, PDFs, news, films, cooking and games are also available. Reminders and alerts require your choice. MY SCHEDULE · PAUSE · STOP · OUBLIE. Ask for the Nanba team to speak to a person."
+          : "Nanba : demande un parcours pour t’installer en France, trouver un logement, un emploi ou accompagner ta famille. Entraîne-toi en français pour une visite, un entretien ou un échange avec l’école, avec explications dans ta langue. Envoie la photo d’un courrier pour le comprendre et préparer une réponse. Audio, PDF, actualités, films, cuisine et jeux sont aussi disponibles. Rappels et alertes uniquement selon tes choix. MON PROGRAMME · PAUSE · STOP · OUBLIE. Demande l’équipe Nanba pour parler à un humain.";
     if (pause && Number(pause[1] || 0) > 365)
       return "PAUSE 1 à 365 JOURS, ou PAUSE sans durée.";
     if (pause) {

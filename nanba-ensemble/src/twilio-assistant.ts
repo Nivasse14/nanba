@@ -160,6 +160,12 @@ export class TwilioAssistant {
         voiceChoice: true,
         documents: true,
         humanSupport: true,
+        privateJourneys: true,
+        frenchPractice: true,
+        guidedLetters: true,
+        officialResources: true,
+        mainCataloguePublishingConfigured:
+          (this.env.NANBA_WHATSAPP_CATALOGUE_SECRET || "").length >= 32,
         maxAttachments: MEDIA_LIMITS.count,
         imageMaxBytes: MEDIA_LIMITS.image,
         audioMaxBytes: MEDIA_LIMITS.audio,
