@@ -32,3 +32,5 @@ Les brouillons sont chiffrés, séparés par identité et expirent au bout de se
 Les tests simulent les fournisseurs et couvrent le parcours complet, la persistance, l’isolation, le consentement, l’atomicité, l’arrêt, les doublons, l’entrée signée et le provisionnement. La validation sur un véritable téléphone WhatsApp reste distincte.
 
 Références vérifiées le 15 novembre 2026 : https://www.twilio.com/docs/content/flows et https://www.twilio.com/docs/content/twilio-quick-reply.
+
+Compatibilité API : les champs multiples utilisent `MULTIPLE_SELECT`, comme l’exemple de requête Twilio. Une seule reprise des créations v1 explicitement rejetées avec le code 1005 est autorisée. Les créations au résultat incertain ne sont jamais répétées automatiquement. Les détails d’erreur fournisseur sont réservés à l’API administrateur.
