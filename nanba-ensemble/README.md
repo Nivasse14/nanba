@@ -2,7 +2,7 @@
 
 Assistant WhatsApp Nanba pour la diaspora indienne en France, et application communautaire avec huit parcours métier. Backend TypeScript, base SQLite persistante et tests automatisés.
 
-**Version active : assistant-v4.2-diaspora**, déployée le 15 novembre 2026 à 18 h 15 (Paris). [Vérification de production](docs/diaspora-live-validation.json).
+**Version v4.3 : personnalisation directement dans WhatsApp.** Formulaire natif et questionnaire en conversation, brouillon privé, confirmation explicite, préférences et programme personnalisés. [Guide et commandes](docs/ONBOARDING.md). Consulter `/api/twilio/health` pour la version active et le statut Meta des formulaires.
 
 **Nouveaux services v4.2 :** parcours privés installation/logement/emploi/famille, exercices de français en situation, aide structurée aux courriers et orientation vers des sources officielles. [Exemples WhatsApp, confidentialité et vérifications](docs/DIASPORA.md). Compilation et **146 tests réussis**. L’état actif est consultable sur `/api/twilio/health` ; la publication du catalogue reste conditionnée au déploiement de son API principale.
 
@@ -12,7 +12,7 @@ Assistant WhatsApp Nanba pour la diaspora indienne en France, et application com
 
 - [Guide des fonctionnalités et limites](docs/WHATSAPP-COMPANION.md).
 - [Validation de la version 4](docs/assistant-v4-live-validation.json) et [du parcours horoscope](docs/horoscope-v4.1-live-validation.json).
-- **146 tests** réussis sur les sources v4.2 ; le diagnostic du déploiement est distinct de ces tests locaux.
+- **158 tests** réussis sur les sources v4.3 ; le diagnostic du déploiement est distinct de ces tests locaux.
 - Dépôt de publication : `Nivasse14/nanba`, branche `nanba-ensemble-pilot`. Le pilote utilise une archive source à la racine du dépôt ; le code de l’application mobile est séparé.
 - Les clés API, données des membres, sessions et bases de production ne font pas partie des sources.
 
