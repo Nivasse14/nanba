@@ -1,34 +1,23 @@
-# Nanba WhatsApp — services diaspora v4.2
+# Nanba WhatsApp — personnalisation v4.3
 
-**Version active : `assistant-v4.2-diaspora`.** Déployée sur Render le 15 novembre 2026 à **18 h 15 (Paris)**. Le service répond HTTP 200 et annonce les quatre nouvelles capacités. [Vérification en production](diaspora-live-validation.json).
+Version préparée : `assistant-v4.3-onboarding`. Consulter `/api/twilio/health` pour le statut actif.
 
-## Nouveautés prêtes
+- Accueil facultatif, sans quitter WhatsApp.
+- Formulaire natif en trois écrans, avec questionnaire en conversation si le formulaire attend l’approbation Meta.
+- Langue, texte/audio, intérêts, ville facultative, ton et longueur.
+- Brouillon par numéro et confirmation écrite avant enregistrement ou abonnement.
+- PERSONNALISER · QUESTIONS ICI · PASSER · RETOUR · PLUS TARD · CONFIRMER · MON PROFIL.
 
-- **Mon parcours en France** : installation, logement, emploi ou famille ; suivi privé par numéro et reprise de la prochaine étape.
-- **Mon français au quotidien** : six simulations — propriétaire, entretien, école, rendez-vous, courses et voisins — avec explications dans la langue choisie et audio à la demande via la voix IA existante.
-- **Je comprends mon courrier** : sens, demande, date lisible ou incertitude, prochaine action ; préparation d’une réponse, traduction ou rappel si demandé.
-- **Le bon interlocuteur** : orientation vers des ressources officielles et les administrateurs Nanba sur demande.
+[Guide et exemples](nanba-ensemble/docs/ONBOARDING.md) · [Code du questionnaire](nanba-ensemble/src/nanba-onboarding.ts) · [Serveur](nanba-ensemble/src/server.ts) · [Tests](nanba-ensemble/tests/onboarding.test.ts).
 
-[Exemples de messages WhatsApp et guide complet](nanba-ensemble/docs/DIASPORA.md).
+Compilation et 158 tests passent. Aucun message de test envoyé aux membres. Les validations sur téléphone et l’approbation des formulaires sont distinctes des tests locaux.
 
-Le suivi n’active aucune notification. Progression chiffrée, isolée entre numéros, effaçable avec OUBLIE. Aucun diplôme, droit administratif ou rendez-vous réel n’est déduit d’un exercice.
+Les fonctions diaspora v4.2 restent disponibles : parcours privés, français pratique, aide aux courriers et ressources officielles. [Guide diaspora](nanba-ensemble/docs/DIASPORA.md).
 
-## Sources et vérifications
+La publication des annonces dans le catalogue principal reste en attente de l’activation de l’API Google Cloud et du secret partagé. [État du catalogue](nanba-ensemble/docs/CATALOGUE-PRINCIPAL.md).
 
-Code directement consultable dans [nanba-ensemble/](nanba-ensemble/) : [nouveau module diaspora](nanba-ensemble/src/nanba-diaspora.ts), [assistant](nanba-ensemble/src/twilio-assistant.ts), [serveur](nanba-ensemble/src/server.ts), [tests](nanba-ensemble/tests/diaspora.test.ts).
+[Archive déployable](nanba-ensemble-source.tar.gz) · [Manifeste](SOURCE-MANIFEST.json). Le code est aussi lisible dans `nanba-ensemble/`.
 
-**146 tests passent.** L’archive a également été démarrée en mode production local sans l’ancien chargeur : HTTP 200, capacités diaspora présentes, base conservée après redémarrage et intégrité SQLite vérifiée. Aucun message envoyé aux membres. Voir [la vérification de démarrage](boot-validation.json).
+Commit source : `7a90aa348dc92c9c32d46dc212a2120ed515f814`.
 
-Archive complète : [nanba-ensemble-source.tar.gz](nanba-ensemble-source.tar.gz), **133 fichiers**, [manifeste SHA-256](SOURCE-MANIFEST.json).
-
-- Commit source : `e396ed6f444c2db54ead6dd6da915f5fe0cac38d`.
-- SHA-256 archive : `bd93c0b44e447f46a7acdc1a5f45d9106c2f5c4875fadd2b3057cf6269864474`.
-- L’archive ne contient ni secrets, ni données de membres, ni sessions, ni node_modules.
-
-## État du déploiement
-
-Après autorisation explicite, l’ancien chargement `NODE_OPTIONS` a été retiré. Le service utilise maintenant l’archive source complète vérifiée. Déploiement `dep-dbsugo8ae00c7394og7g` confirmé `live`, points de santé vérifiés et aucun échec de démarrage observé. Les autres variables et le disque persistent. Aucun message de test envoyé aux membres. [Détails](DEPLOYMENT-STATUS.md).
-
-Le raccordement des publications WhatsApp au catalogue principal reste séparément en attente du déploiement de l’API Google Cloud et du secret partagé. [État du catalogue](nanba-ensemble/docs/CATALOGUE-PRINCIPAL.md). Les nouvelles fonctions diaspora n’ont pas besoin de ce raccordement pour fonctionner.
-
-Pour travailler localement : Node 24.22.1, `npm ci`, `npm run check`. Pour reconstruire une archive depuis les sources committées : `node scripts/package-source.mjs`.
+SHA-256 archive : `ad7bae6dd8bbfa2251c9ccedc60e5f0360aa43c3fec3137507a0404f707cbb13`.

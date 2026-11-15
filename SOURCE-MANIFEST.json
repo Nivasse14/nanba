@@ -1,7 +1,7 @@
 {
-  "sourceCommit": "e396ed6f444c2db54ead6dd6da915f5fe0cac38d",
-  "release": "assistant-v4.2-diaspora",
-  "archiveSha256": "bd93c0b44e447f46a7acdc1a5f45d9106c2f5c4875fadd2b3057cf6269864474",
+  "sourceCommit": "7a90aa348dc92c9c32d46dc212a2120ed515f814",
+  "release": "assistant-v4.3-onboarding",
+  "archiveSha256": "ad7bae6dd8bbfa2251c9ccedc60e5f0360aa43c3fec3137507a0404f707cbb13",
   "files": [
     {
       "path": ".dockerignore",
@@ -21,7 +21,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "8497a1c2f273b1269c980ec17c3a9ad9cd93e73a8baab5c1ebbb42808d133e07"
+      "sha256": "3f189e65b2db6a5aee6998ed39213b2e4f5c54871064c0baf63c68a7f81885f4"
     },
     {
       "path": "assets/fonts/NotoSans-Regular.ttf",
@@ -77,7 +77,11 @@
     },
     {
       "path": "docs/DIASPORA.md",
-      "sha256": "6574290852cf173ffe414932739b24cb13e0b22d1de40a2381015be80e824513"
+      "sha256": "2c3585b87aaaad1845a57c85726c34e3bacebee07a67e4eb994ea4bdd5b1ee2b"
+    },
+    {
+      "path": "docs/ONBOARDING.md",
+      "sha256": "6197c5d97e18e84bc6f4851dcfb0522f76b54dbc4754a966e55974a3f3cff102"
     },
     {
       "path": "docs/OPERATIONS.md",
@@ -136,12 +140,28 @@
       "sha256": "ccc9d276693ec554f39f1723a2d5a6547ba47bfee2b17ca0cb8c9b3433c7ac54"
     },
     {
+      "path": "docs/diaspora-live-validation.json",
+      "sha256": "4c71409005e4f2c4e82be8ce4f9a87d4b749c52448795901fcd423592a6f1db7"
+    },
+    {
       "path": "docs/horoscope-v4.1-live-validation.json",
       "sha256": "0c8057a0a6b11ab2d80ca14f7b92b854e22ca4207ce7d136e0d2f4e3e55e9c45"
     },
     {
       "path": "docs/live-validation.json",
       "sha256": "d9df3ff84aee733ac2edfd46146adea8943d35a31056c6955fca1dba41999ca0"
+    },
+    {
+      "path": "docs/onboarding/en.json",
+      "sha256": "aad98be4b7018f06c7452a4794a65edb6572f0a157ae8bf02c41021913a4c112"
+    },
+    {
+      "path": "docs/onboarding/fr.json",
+      "sha256": "9b8c52f7e2c8e12252b200bb6e62b3f03d1742de5a76e23ed14552d213c291fe"
+    },
+    {
+      "path": "docs/onboarding/ta.json",
+      "sha256": "1814cd59fb6403a12e4a215b8e41c26b490288f12a901a5bb8dca10149f379c4"
     },
     {
       "path": "docs/qr-native-login-observations.json",
@@ -253,7 +273,7 @@
     },
     {
       "path": "scripts/package-source.mjs",
-      "sha256": "280bb839a1ee3ed5eb9d29292d5ac43b65178b3a2a890b7d4e4c4cc4116837c7"
+      "sha256": "1984a04fe4ad989e8357a4c9944c3cd4b1fdd94c1df9f4b06a5e2de446a0aeae"
     },
     {
       "path": "scripts/pilot-message-diagnostic.mjs",
@@ -393,7 +413,7 @@
     },
     {
       "path": "src/nanba-companion.ts",
-      "sha256": "aa3ebcf5c7dcfc4aba045275dc31d270b3135b83074f73924839d0ce91ea3ee8"
+      "sha256": "4215c3f7ff04b0d3de872a2fc4e30a398a5ddf1598a2c1307f3d3d8b572a806a"
     },
     {
       "path": "src/nanba-diaspora.ts",
@@ -406,6 +426,14 @@
     {
       "path": "src/nanba-fonts.ts",
       "sha256": "e3a009838d50ca8c736507e0b2f3658d25fb81ce5b60e76f839edecf9695a31f"
+    },
+    {
+      "path": "src/nanba-onboarding-copy.ts",
+      "sha256": "ea008d7dd3e74c4344d9a57490d0abb707366714ce5f447b69b1a02a80b3a245"
+    },
+    {
+      "path": "src/nanba-onboarding.ts",
+      "sha256": "0f59a8e3fb46936dc7f3cfaa1b4066e2bfa4b644320a613fa11b45ac835b9d8e"
     },
     {
       "path": "src/nanba-routines.ts",
@@ -437,11 +465,11 @@
     },
     {
       "path": "src/server.ts",
-      "sha256": "8b84f55c26cd20e50e226363ba92bfa241f17fb408a437c644cabf5a61eda562"
+      "sha256": "f8484aed309bbfdcbd516f54bda3ab2f1e3fe2105e386c16c5526c3480e9ffe5"
     },
     {
       "path": "src/twilio-assistant.ts",
-      "sha256": "7a22d87af2ef731c24eab63c993f6e3a7df372672087bcec289ca909c5df12d0"
+      "sha256": "e304593cef2ad02b214887ca982e418b304b5d630885e9fc6b29910b3dd04fcd"
     },
     {
       "path": "src/twilio-media.ts",
@@ -481,7 +509,7 @@
     },
     {
       "path": "tests/companion.test.ts",
-      "sha256": "6131ddab30ef1b49c601627d87a77c6dc32de103d655b025906850e48cf1d58f"
+      "sha256": "ab25b2918501b2805b1e90ec6e9498f13f271f26d8002f35cac61e3c5a54601d"
     },
     {
       "path": "tests/conversation.test.ts",
@@ -502,6 +530,10 @@
     {
       "path": "tests/http.test.ts",
       "sha256": "4998cbb710c17e49d840a1b6679e96c0c00b53af7acdaf0f36118df4b219cf9a"
+    },
+    {
+      "path": "tests/onboarding.test.ts",
+      "sha256": "5ddb5a92144e67a9faade0045b06105442a05a08cbddc53217d989ebc187ac21"
     },
     {
       "path": "tests/pilot.test.ts",
@@ -525,7 +557,7 @@
     },
     {
       "path": "tests/twilio.test.ts",
-      "sha256": "978131922ff7d6fa3e5f28a49d6313e157641122dbeba12a3f931117c467fabb"
+      "sha256": "71d9d257d01d3eaea3381a8b2d32591452649d90eee0c47cbd2034cafabea2e2"
     },
     {
       "path": "tests/whatsapp-full.test.ts",
