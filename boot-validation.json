@@ -1,0 +1,13 @@
+{
+  "archiveSource": "e396ed6f444c2db54ead6dd6da915f5fe0cac38d",
+  "archiveSha256": "bd93c0b44e447f46a7acdc1a5f45d9106c2f5c4875fadd2b3057cf6269864474",
+  "nodeOptions": "empty",
+  "productionMode": true,
+  "healthHTTP": 200,
+  "version": "assistant-v4.2-diaspora",
+  "newCapabilities": true,
+  "databasePreservedAfterRestart": true,
+  "sqliteIntegrity": "ok",
+  "externalCalls": 0,
+  "dependencies": "existing verified node_modules; Docker not available"
+}

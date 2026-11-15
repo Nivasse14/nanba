@@ -1,6 +1,7 @@
 {
-  "sourceCommit": "7605f09b69e392201d1288a33ca92bbc6f7e5281",
+  "sourceCommit": "e396ed6f444c2db54ead6dd6da915f5fe0cac38d",
   "release": "assistant-v4.2-diaspora",
+  "archiveSha256": "bd93c0b44e447f46a7acdc1a5f45d9106c2f5c4875fadd2b3057cf6269864474",
   "files": [
     {
       "path": ".dockerignore",
@@ -53,6 +54,10 @@
     {
       "path": "deployment/render.ensemble.yaml",
       "sha256": "901fdee7b40f36d676e2374ecd815d90f607754766dd5f14cc9d741c8cfe8940"
+    },
+    {
+      "path": "docs/AGENT_PROMPT.txt",
+      "sha256": "b1bc30da208d555bdd4164b0a6d806d4d96ac0a315a8b388ad408eb67286b547"
     },
     {
       "path": "docs/ARCHITECTURE.md",
@@ -245,6 +250,10 @@
     {
       "path": "scripts/companion-admin-check.py",
       "sha256": "a1e047b484068681ed5e5b7da8d0eac1d550c84a233cdf95bc9d5408231d3578"
+    },
+    {
+      "path": "scripts/package-source.mjs",
+      "sha256": "280bb839a1ee3ed5eb9d29292d5ac43b65178b3a2a890b7d4e4c4cc4116837c7"
     },
     {
       "path": "scripts/pilot-message-diagnostic.mjs",
@@ -526,6 +535,5 @@
       "path": "tsconfig.json",
       "sha256": "6b3552ef3e05c0b09c7c990392173d68b2f0453a1e6b18f0ef343a409d6b0b76"
     }
-  ],
-  "archiveSha256": "7476d9a1d1f370c095fd42bd6b507282f13fd12f136ee6771f32545535d2da7f"
+  ]
 }
