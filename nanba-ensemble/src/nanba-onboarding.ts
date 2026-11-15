@@ -71,13 +71,19 @@ export const onboardingParameters = {
       "Choix explicite: identifiant proposé; pour interests/dailyTopics tableau JSON des identifiants. Jamais de confirmation ni consentement inféré.",
   },
 };
+function providerDiagnostic(error: Row) {
+  return String(error.message || "")
+    .replace(/(?:AC|HX|SK)[0-9a-f]{32}/gi, "[redacted]")
+    .replace(/sk-[\w-]+/g, "[redacted]")
+    .slice(0, 1200);
+}
 export function onboardingTemplate(locale: string, kind: "welcome" | "flow") {
   const w = copy[locale] || copy.fr;
   const field = (key: string) =>
     values[key]
       ? {
           type: ["interests", "dailyTopics"].includes(key)
-            ? "MULTI_SELECT"
+            ? "MULTIPLE_SELECT"
             : "SINGLE_SELECT",
           name: key,
           label: w[key],
@@ -101,7 +107,7 @@ export function onboardingTemplate(locale: string, kind: "welcome" | "flow") {
           input_type: "TEXT",
         };
   return {
-    friendly_name: `nanba_onboarding_${kind}_${locale}_v1`,
+    friendly_name: `nanba_onboarding_${kind}_${locale}_${kind === "flow" ? "v2" : "v1"}`,
     language: locale,
     types:
       kind === "welcome"
@@ -657,13 +663,20 @@ export class Onboarding {
       return null;
     return { ContentSid: row.sid };
   }
-  status() {
+  status(includeDiagnostics = false) {
     return {
       conversation: true,
       optional: true,
-      templates: this.db.all(
-        "SELECT kind,locale,status,error FROM nanba_onboarding_templates",
-      ),
+      templates: this.db
+        .all("SELECT kind,locale,status,error FROM nanba_onboarding_templates")
+        .map(
+          (row): Row => ({
+            ...row,
+            error: includeDiagnostics
+              ? row.error
+              : (row.error?.split("|")[0] ?? null),
+          }),
+        ),
     };
   }
   async syncTemplates() {
@@ -674,6 +687,12 @@ export class Onboarding {
     )
       return;
     this.syncing = true;
+    // The live API rejects the documented MULTI_SELECT spelling (1005).
+    // Retry only the definitively rejected, SID-less v1 creates once with
+    // MULTIPLE_SELECT, matching Twilio's published request example.
+    this.db.run(
+      "UPDATE nanba_onboarding_templates SET status='retry_v2',error=NULL WHERE kind='flow' AND sid IS NULL AND status='rejected' AND error='http_400_code_1005'",
+    );
     const base = "https://content.twilio.com/v1/Content",
       headers = {
         Authorization: this.host.authorization(this.host.config()),
@@ -711,7 +730,7 @@ export class Onboarding {
                 this.db.run(
                   "UPDATE nanba_onboarding_templates SET status=?,error=? WHERE kind=? AND locale=?",
                   "rejected",
-                  `http_${r.status}_code_${Number(e.code) || 0}`,
+                  `v2_http_${r.status}_code_${Number(e.code) || 0}|${providerDiagnostic(e)}`,
                   kind,
                   locale,
                 );
@@ -749,17 +768,20 @@ export class Onboarding {
                 method: "POST",
                 headers,
                 body: JSON.stringify({
-                  name: `nanba_onboarding_flow_${locale}_v1`,
+                  name: `nanba_onboarding_flow_${locale}_v2`,
                   category: "MARKETING",
                 }),
                 signal: AbortSignal.timeout(15000),
                 redirect: "error",
               },
             );
+            const detail = r.ok
+              ? null
+              : providerDiagnostic((await r.json().catch(() => ({}))) as Row);
             this.db.run(
               "UPDATE nanba_onboarding_templates SET status=?,error=? WHERE kind=? AND locale=?",
               r.ok ? "pending" : "submission_failed",
-              r.ok ? null : `approval_http_${r.status}`,
+              r.ok ? null : `approval_http_${r.status}|${detail}`,
               kind,
               locale,
             );

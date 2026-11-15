@@ -458,7 +458,7 @@ export function createApplication(
         }
         if (path.pathname === "/api/twilio/onboarding") {
           check(method === "GET", "method_not_allowed", 405);
-          send(200, twilio.onboarding.status());
+          send(200, twilio.onboarding.status(true));
           return;
         }
         if (path.pathname === "/api/twilio/admin-link") {
