@@ -1,32 +1,34 @@
-# Nanba WhatsApp — sources et catalogue principal
+# Nanba WhatsApp — services diaspora v4.2
 
-Le code est consultable directement dans **[nanba-ensemble/](nanba-ensemble/)** : [serveur HTTP](nanba-ensemble/src/server.ts), [assistant WhatsApp](nanba-ensemble/src/twilio-assistant.ts), [horoscope](nanba-ensemble/src/nanba-astrology.ts), [tests](nanba-ensemble/tests/) et [documentation](nanba-ensemble/docs/).
+**Développé, testé et publié. Pas encore activé en production.** Le service WhatsApp reste sur `assistant-v4.1` ; le déploiement de la version `assistant-v4.2-diaspora` attend l’autorisation de modifier son chargement de démarrage.
 
-**Évolution catalogue principal prête, non déployée** : les sources individuelles comprennent maintenant la publication WhatsApp dans le catalogue Nanba, la recherche naturelle et les alertes consenties. [État et guide d’activation](nanba-ensemble/docs/CATALOGUE-PRINCIPAL.md). Les 138 tests de l’assistant passent. Le déploiement de l’API sur Google Cloud reste bloqué par l’accès à la console ; la production reste en v4.1.
+## Nouveautés prêtes
 
-Commit assistant : `42b1f60a9a21641860cd64324b943e49dc56c367`. Correctif de l’application principale inclus dans [integrations/](nanba-ensemble/integrations/).
+- **Mon parcours en France** : installation, logement, emploi ou famille ; suivi privé par numéro et reprise de la prochaine étape.
+- **Mon français au quotidien** : six simulations — propriétaire, entretien, école, rendez-vous, courses et voisins — avec explications dans la langue choisie et audio à la demande via la voix IA existante.
+- **Je comprends mon courrier** : sens, demande, date lisible ou incertitude, prochaine action ; préparation d’une réponse, traduction ou rappel si demandé.
+- **Le bon interlocuteur** : orientation vers des ressources officielles et les administrateurs Nanba sur demande.
 
-Archive conservée de la version stable v4.1 (sans cette évolution) : [nanba-ensemble-source.tar.gz](nanba-ensemble-source.tar.gz). Le [manifeste](SOURCE-MANIFEST.json) répertorie tous les fichiers et leurs empreintes SHA-256.
+[Exemples de messages WhatsApp et guide complet](nanba-ensemble/docs/DIASPORA.md).
 
-Commit source local : `1bb588c70dd58c9272ade1733221976b36676903`. Archive SHA-256 : `17d405de3e6931bfc5293cf80023b5f11a48e88d4c94eb71dd6d25f6bf202b7a`.
+Le suivi n’active aucune notification. Progression chiffrée, isolée entre numéros, effaçable avec OUBLIE. Aucun diplôme, droit administratif ou rendez-vous réel n’est déduit d’un exercice.
 
-## Fonctionnalités
+## Sources et vérifications
 
-- Twilio + OpenAI : dialogue, images, vocaux entrants et réponses audio au choix.
-- Mémoire par numéro, PDF/courriers, relais vers les administrateurs Nanba.
-- Rappels et sélections personnalisées matin/soir avec consentement, pause et limites de fréquence.
-- APIs publiques Nanba : actualités, cinéma, annonces, voyages en cache, devises et autres services.
-- Horoscope simplifié : date, ville/pays et heure de naissance si connue ; calcul Lahiri, sans demander le Rasi ou Nakshatra.
+Code directement consultable dans [nanba-ensemble/](nanba-ensemble/) : [nouveau module diaspora](nanba-ensemble/src/nanba-diaspora.ts), [assistant](nanba-ensemble/src/twilio-assistant.ts), [serveur](nanba-ensemble/src/server.ts), [tests](nanba-ensemble/tests/diaspora.test.ts).
 
-132 tests réussis sur les sources et sur le chargement de production. Diagnostic IA réel vérifié sans envoi à des membres. Version Render `assistant-v4.1`, déploiement `dep-dbs3jo3bc2fs73afj5t0`, confirmé actif le 14 novembre 2026.
+**146 tests passent.** L’archive a également été démarrée en mode production local sans l’ancien chargeur : HTTP 200, capacités diaspora présentes, base conservée après redémarrage et intégrité SQLite vérifiée. Aucun message envoyé aux membres. Voir [la vérification de démarrage](boot-validation.json).
 
-## Utiliser le code
+Archive complète : [nanba-ensemble-source.tar.gz](nanba-ensemble-source.tar.gz), **133 fichiers**, [manifeste SHA-256](SOURCE-MANIFEST.json).
 
-Cloner la branche `nanba-ensemble-pilot` puis ouvrir le dossier `nanba-ensemble/`, ou extraire l’archive dans un dossier vide. Avec Node 24.22.1 ou une version corrigée ultérieure de la branche 24 : `npm ci`, `npm run check`, puis suivre le README et `.env.example`. Les sources se trouvent dans `src/`, les tests dans `tests/`, la documentation dans `docs/`.
+- Commit source : `e396ed6f444c2db54ead6dd6da915f5fe0cac38d`.
+- SHA-256 archive : `bd93c0b44e447f46a7acdc1a5f45d9106c2f5c4875fadd2b3057cf6269864474`.
+- L’archive ne contient ni secrets, ni données de membres, ni sessions, ni node_modules.
 
-## Déploiement
+## État du déploiement
 
-Le service Render existant continue à fonctionner. Les déploiements automatiques sont désactivés. Le chargement de compatibilité actuel est conservé ; cette publication GitHub ne change ni les secrets, ni les données, ni la configuration du service. L’archive est utilisable avec `Dockerfile.ensemble`.
+Le contrôle automatique a refusé le changement de la variable `NODE_OPTIONS` sur Render, en raison du risque de panne pendant le passage de l’ancien chargeur à l’archive complète. Les tests locaux sont réussis, mais la modification et le déploiement restent en attente. **Aucun changement de configuration de production ni déclenchement de déploiement n’a été effectué.** [Détails](DEPLOYMENT-STATUS.md).
 
-L’archive ne contient ni clés API, ni base de données, ni session, ni `node_modules`. Les modèles WhatsApp restent soumis aux statuts d’approbation Meta décrits dans la documentation.
+Le raccordement des publications WhatsApp au catalogue principal reste séparément en attente du déploiement de l’API Google Cloud et du secret partagé. [État du catalogue](nanba-ensemble/docs/CATALOGUE-PRINCIPAL.md). Les nouvelles fonctions diaspora n’ont pas besoin de ce raccordement pour fonctionner.
 
+Pour travailler localement : Node 24.22.1, `npm ci`, `npm run check`. Pour reconstruire une archive depuis les sources committées : `node scripts/package-source.mjs`.
