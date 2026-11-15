@@ -1,6 +1,6 @@
 # Offres, demandes et alertes du catalogue principal
 
-État : prêt et testé localement, PAS ACTIVÉ EN PRODUCTION au 14 novembre 2026. L'API principale doit d'abord être déployée sur Google Cloud. La console affiche « Site unavailable » depuis l'environnement de travail. L'assistant actuellement en production reste la version précédente.
+État de la publication dans le catalogue : prêt et testé localement, PAS ACTIVÉ EN PRODUCTION au 15 novembre 2026. L'API principale doit d'abord être déployée sur Google Cloud et le secret partagé configuré des deux côtés. L'accès à la console était bloqué (« Site unavailable ») lors de la tentative du 14 novembre. Les services diaspora de l'assistant v4.2 sont indépendants de cette activation ; leur état est indiqué par `/api/twilio/health`.
 
 ## Ce qui change
 
