@@ -1,10 +1,12 @@
 {
-  "checkedAt": "2026-11-15T17:58:34.610211+00:00",
+  "checkedAt": "2026-11-15T19:09:20.374700+00:00",
   "httpStatus": 200,
-  "version": "assistant-v4.3-onboarding",
+  "version": "assistant-v4.4-buttons",
   "ready": true,
   "onboarding": {
     "conversation": true,
+    "buttons": true,
+    "buttonsReady": true,
     "optional": true,
     "templates": [
       {
@@ -16,7 +18,7 @@
       {
         "kind": "flow",
         "locale": "fr",
-        "status": "received",
+        "status": "rejected",
         "error": null
       },
       {
@@ -28,7 +30,7 @@
       {
         "kind": "flow",
         "locale": "en",
-        "status": "received",
+        "status": "rejected",
         "error": null
       },
       {
@@ -40,13 +42,103 @@
       {
         "kind": "flow",
         "locale": "ta",
-        "status": "received",
+        "status": "rejected",
+        "error": null
+      },
+      {
+        "kind": "welcome_buttons",
+        "locale": "fr",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "buttons3",
+        "locale": "fr",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "list7",
+        "locale": "fr",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "list8",
+        "locale": "fr",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "list10",
+        "locale": "fr",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "welcome_buttons",
+        "locale": "en",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "buttons3",
+        "locale": "en",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "list7",
+        "locale": "en",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "list8",
+        "locale": "en",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "list10",
+        "locale": "en",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "welcome_buttons",
+        "locale": "ta",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "buttons3",
+        "locale": "ta",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "list7",
+        "locale": "ta",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "list8",
+        "locale": "ta",
+        "status": "in_session",
+        "error": null
+      },
+      {
+        "kind": "list10",
+        "locale": "ta",
+        "status": "in_session",
         "error": null
       }
     ]
   },
-  "renderDeploy": "dep-dbsv4o3bc2fs73cljtcg",
-  "deployedGitCommit": "0b786e61d907fa1a7ddf36db05fbfb755ef485d4",
-  "testsPassed": 159,
+  "renderDeploy": "dep-dbt05pc9v7es73br3lng",
+  "deployedGitCommit": "0d463683ba44cdd326d2d4b44ef84e42eb8cade6",
+  "testsPassed": 163,
   "realWhatsAppMessageTest": false
 }
