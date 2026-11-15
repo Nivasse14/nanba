@@ -2,17 +2,19 @@
 
 Assistant WhatsApp Nanba pour la diaspora indienne en France, et application communautaire avec huit parcours métier. Backend TypeScript, base SQLite persistante et tests automatisés.
 
-**Version en production : assistant-v4.1, vérifiée le 14 novembre 2026.** Twilio reçoit les messages WhatsApp ; OpenAI assure le dialogue, l’analyse d’images, la transcription et les réponses vocales à la demande. L’assistant propose aussi des PDF et courriers, une mémoire par numéro, des rappels, des sélections personnalisées matin/soir et un relais vers les administrateurs. Les services publics déjà développés dans Nanba sont raccordés. L’horoscope demande la date, le lieu et l’heure de naissance si connue ; le calcul Lahiri respecte les incertitudes.
+**Nouveaux services v4.2 :** parcours privés installation/logement/emploi/famille, exercices de français en situation, aide structurée aux courriers et orientation vers des sources officielles. [Exemples WhatsApp, confidentialité et vérifications](docs/DIASPORA.md). Compilation et **146 tests réussis**. L’état actif est consultable sur `/api/twilio/health` ; la publication du catalogue reste conditionnée au déploiement de son API principale.
+
+**Fonctions existantes, vérifiées en v4.1 le 14 novembre 2026.** Twilio reçoit les messages WhatsApp ; OpenAI assure le dialogue, l’analyse d’images, la transcription et les réponses vocales à la demande. L’assistant propose aussi des PDF et courriers, une mémoire par numéro, des rappels, des sélections personnalisées matin/soir et un relais vers les administrateurs. Les services publics déjà développés dans Nanba sont raccordés. L’horoscope demande la date, le lieu et l’heure de naissance si connue ; le calcul Lahiri respecte les incertitudes.
 **Évolution catalogue principal préparée (non déployée)** : publication WhatsApp dans le catalogue applicatif, recherche naturelle et alertes de correspondance consenties. Compilation et 138 tests réussis. Voir [état et recette](docs/CATALOGUE-PRINCIPAL.md). Le déploiement Google Cloud reste bloqué par l’accès à la console.
 
 
 - [Guide des fonctionnalités et limites](docs/WHATSAPP-COMPANION.md).
 - [Validation de la version 4](docs/assistant-v4-live-validation.json) et [du parcours horoscope](docs/horoscope-v4.1-live-validation.json).
-- **132 tests** réussis sur les sources et sur le chargement utilisé en production.
+- **146 tests** réussis sur les sources v4.2 ; le diagnostic du déploiement est distinct de ces tests locaux.
 - Dépôt de publication : `Nivasse14/nanba`, branche `nanba-ensemble-pilot`. Le pilote utilise une archive source à la racine du dépôt ; le code de l’application mobile est séparé.
 - Les clés API, données des membres, sessions et bases de production ne font pas partie des sources.
 
-Les sections ci-dessous décrivent aussi les parcours communautaires historiques et le démarrage local de démonstration. Elles ne signifient pas que Twilio ou l’IA sont simulés sur le service de production. Le déploiement automatique est désactivé ; le chargement de compatibilité Render reste actif tant qu’une migration de déploiement explicite n’est pas effectuée.
+Les sections ci-dessous décrivent aussi les parcours communautaires historiques et le démarrage local de démonstration. Elles ne signifient pas que Twilio ou l’IA sont simulés sur le service de production. Le déploiement automatique est désactivé. L’activation de l’archive v4.2 exige de vider l’ancien chargement `NODE_OPTIONS` ; voir [le guide](docs/DIASPORA.md).
 
 ## Lancer localement
 
