@@ -107,7 +107,7 @@ export function onboardingTemplate(locale: string, kind: "welcome" | "flow") {
           input_type: "TEXT",
         };
   return {
-    friendly_name: `nanba_onboarding_${kind}_${locale}_${kind === "flow" ? "v2" : "v1"}`,
+    friendly_name: `nanba_onboarding_${kind}_${locale}_${kind === "flow" ? "v3" : "v1"}`,
     language: locale,
     types:
       kind === "welcome"
@@ -688,10 +688,10 @@ export class Onboarding {
       return;
     this.syncing = true;
     // The live API rejects the documented MULTI_SELECT spelling (1005).
-    // Retry only the definitively rejected, SID-less v1 creates once with
-    // MULTIPLE_SELECT, matching Twilio's published request example.
+    // Retry only known, definitively rejected SID-less v1/v2 creates once.
+    // v3 also respects the live API's 60-character helper/footer limit.
     this.db.run(
-      "UPDATE nanba_onboarding_templates SET status='retry_v2',error=NULL WHERE kind='flow' AND sid IS NULL AND status='rejected' AND error='http_400_code_1005'",
+      "UPDATE nanba_onboarding_templates SET status='retry_v3',error=NULL WHERE kind='flow' AND sid IS NULL AND status='rejected' AND (error='http_400_code_1005' OR error LIKE 'v2_http_400_code_%|%cannot exceed 60 characters')",
     );
     const base = "https://content.twilio.com/v1/Content",
       headers = {
@@ -730,7 +730,7 @@ export class Onboarding {
                 this.db.run(
                   "UPDATE nanba_onboarding_templates SET status=?,error=? WHERE kind=? AND locale=?",
                   "rejected",
-                  `v2_http_${r.status}_code_${Number(e.code) || 0}|${providerDiagnostic(e)}`,
+                  `v3_http_${r.status}_code_${Number(e.code) || 0}|${providerDiagnostic(e)}`,
                   kind,
                   locale,
                 );
@@ -768,7 +768,7 @@ export class Onboarding {
                 method: "POST",
                 headers,
                 body: JSON.stringify({
-                  name: `nanba_onboarding_flow_${locale}_v2`,
+                  name: `nanba_onboarding_flow_${locale}_v3`,
                   category: "MARKETING",
                 }),
                 signal: AbortSignal.timeout(15000),
