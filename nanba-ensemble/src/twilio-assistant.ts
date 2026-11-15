@@ -1,3 +1,4 @@
+import { Onboarding } from "./nanba-onboarding.ts";
 import { Presence } from "./twilio-presence.ts";
 import { Deliverables, requestsVoice } from "./nanba-files.ts";
 import { HumanSupport } from "./nanba-support.ts";
@@ -51,6 +52,7 @@ type Config = {
 export class TwilioAssistant {
   busy = false;
   companion: Companion;
+  onboarding: Onboarding;
   deliverables: Deliverables;
   support: HumanSupport;
   presence: Presence;
@@ -86,6 +88,7 @@ export class TwilioAssistant {
     this.deliverables = new Deliverables(this);
     this.support = new HumanSupport(this);
     this.presence = new Presence(this);
+    this.onboarding = new Onboarding(this);
     // The service has one process and one disk. An interrupted send is never retried.
     db.run(
       "UPDATE twilio_jobs SET state='uncertain',error='interrupted_send' WHERE state='sending'",
@@ -139,6 +142,7 @@ export class TwilioAssistant {
     const c = this.config();
     return {
       companion: this.companion.status(),
+      onboarding: this.onboarding.status(),
       humanSupport: this.support.status(),
       presence: this.presence.status(),
       voice: {
@@ -306,7 +310,18 @@ export class TwilioAssistant {
       "invalid_whatsapp_route",
       403,
     );
-    const body = (params.Body ?? "").trim();
+    const buttons: Record<string, string> = {
+      "nanba:onboarding:start": "PERSONNALISER",
+      "nanba:onboarding:chat": "QUESTIONS ICI",
+      "nanba:onboarding:later": "PLUS TARD",
+    };
+    const interactive = params.InteractiveData || "";
+    check(interactive.length <= 12000, "flow_too_large", 413);
+    const body = (
+      buttons[params.ButtonPayload] ||
+      params.Body ||
+      (interactive ? "[Formulaire Nanba]" : "")
+    ).trim();
     check(body.length <= 4000, "message_too_long", 413);
     const identity = createHmac("sha256", this.env.IDENTITY_ENCRYPTION_KEY!)
       .update("twilio:" + c.accountSid + ":" + c.from + ":" + params.From)
@@ -383,7 +398,11 @@ export class TwilioAssistant {
         identity,
         this.now() - 60000,
       )!.n;
-      if (recent >= 12 && !stop && !start && !forget) state = "ignored";
+      const onboardingActive = ["chat", "flow", "review"].includes(
+        this.onboarding.state(identity)?.mode,
+      );
+      if (recent >= (onboardingActive ? 24 : 12) && !stop && !start && !forget)
+        state = "ignored";
       const epoch = this.db.get(
         "SELECT epoch FROM twilio_contacts WHERE identity=?",
         identity,
@@ -407,6 +426,19 @@ export class TwilioAssistant {
         media.some((x) => x.kind === "audio") ? 1 : 0,
         params.MessageSid,
       );
+      if (
+        interactive &&
+        state === "queued" &&
+        !stop &&
+        !forget &&
+        !start &&
+        !old?.stopped
+      )
+        this.db.run(
+          "UPDATE twilio_jobs SET onboarding_payload=? WHERE sid=?",
+          this.seal(interactive),
+          params.MessageSid,
+        );
       return EMPTY_XML;
     });
   }
@@ -765,7 +797,11 @@ export class TwilioAssistant {
       if (!output && !job.file_id) {
         const direct =
           this.support.command(job, this.unseal(job.input)) ??
-          this.companion.routines.command(job.identity, this.unseal(job.input));
+          this.companion.routines.command(
+            job.identity,
+            this.unseal(job.input),
+          ) ??
+          this.onboarding.command(job, this.unseal(job.input));
         if (direct !== null) {
           output = direct;
           job.human_reply = 1;
@@ -858,14 +894,20 @@ export class TwilioAssistant {
               )
               .reverse()
               .map((x) => ({ role: x.role, content: this.unseal(x.content) }));
+            job.media = null;
+            const onboardingReply = media.some((x) => x.kind === "image")
+              ? null
+              : this.onboarding.command(job, prepared.history);
             const result = this.support.active(job.identity)
               ? { text: await this.support.incoming(job, prepared), tokens: 0 }
-              : await this.generate(
-                  c,
-                  [...history, { role: "user", content: prepared.content }],
-                  6500,
-                  job,
-                );
+              : onboardingReply !== null
+                ? { text: onboardingReply, tokens: 0 }
+                : await this.generate(
+                    c,
+                    [...history, { role: "user", content: prepared.content }],
+                    6500,
+                    job,
+                  );
             output = result.text;
             this.db.run(
               "UPDATE twilio_usage SET tokens=tokens+? WHERE day=? AND identity=?",
@@ -897,6 +939,7 @@ export class TwilioAssistant {
         !this.companion.routines.deliveryAllowed(job)
       )
         return;
+      output = this.onboarding.invite(job, output);
       const scheduleNotice = this.companion.routines.subscriptionNotice(job);
       if (scheduleNotice)
         output = output.slice(0, 1250) + "\n\n" + scheduleNotice;
@@ -938,7 +981,8 @@ export class TwilioAssistant {
         ? this.now() - contactForFile.last_at < 23 * 3600000
           ? { MediaUrl: this.deliverables.url(job.file_id) }
           : null
-        : await this.companion.templateForm(job, output);
+        : this.onboarding.form(job) ||
+          (await this.companion.templateForm(job, output));
       if (!form) {
         this.db.run(
           "UPDATE twilio_jobs SET state=?,error=? WHERE sid=? AND state IN('ready','generating')",
@@ -1408,6 +1452,10 @@ export class TwilioAssistant {
     }
   }
   cleanup() {
+    this.db.run(
+      "DELETE FROM nanba_onboarding WHERE updated_at<?",
+      this.now() - 7 * 86400000,
+    );
     this.companion.cleanup();
     this.deliverables.cleanup();
     this.support.cleanup();

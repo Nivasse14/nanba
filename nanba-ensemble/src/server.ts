@@ -278,8 +278,10 @@ export function createApplication(
         send(200, {
           implemented: true,
           ready: twilio.ready(),
-          version: "assistant-v4.2-diaspora",
+          version: "assistant-v4.3-onboarding",
+          onboarding: twilio.onboarding.status(),
           capabilities: {
+            whatsappOnboarding: true,
             text: true,
             images: true,
             audio: true,
@@ -427,7 +429,11 @@ export function createApplication(
         return;
       }
       if (
-        ["/api/twilio/setup", "/api/twilio/admin-link"].includes(path.pathname)
+        [
+          "/api/twilio/setup",
+          "/api/twilio/admin-link",
+          "/api/twilio/onboarding",
+        ].includes(path.pathname)
       ) {
         let linkedOwner: string | null = null;
         const key = req.headers["x-nanba-setup-key"];
@@ -449,6 +455,11 @@ export function createApplication(
               403,
             );
           rate("twilio-setup:" + owner.id, 10, 60000);
+        }
+        if (path.pathname === "/api/twilio/onboarding") {
+          check(method === "GET", "method_not_allowed", 405);
+          send(200, twilio.onboarding.status());
+          return;
         }
         if (path.pathname === "/api/twilio/admin-link") {
           check(method === "POST", "method_not_allowed", 405);
@@ -884,6 +895,16 @@ if (
         .catch(() => console.error("Twilio worker failed")),
     1000,
   );
+  void instance.twilio.onboarding
+    .syncTemplates()
+    .catch(() => console.error("Onboarding template sync failed"));
+  const onboardingSync = setInterval(
+    () =>
+      void instance.twilio.onboarding
+        .syncTemplates()
+        .catch(() => console.error("Onboarding template sync failed")),
+    300000,
+  );
   const twilioCleanup = setInterval(() => instance.twilio.cleanup(), 3600000);
   const cleanup = setInterval(() => instance.admin.retention(), 3600000);
   const stop = () => {
@@ -892,6 +913,7 @@ if (
     clearInterval(cleanup);
     clearInterval(twilioTick);
     clearInterval(twilioCleanup);
+    clearInterval(onboardingSync);
     instance.server.close(() => {
       instance.db.close();
       process.exit(0);
