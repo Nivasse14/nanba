@@ -434,6 +434,45 @@ test("voice answers can advance a question but cannot apply a confirmation", asy
     f.db.close();
   }
 });
+test("schema correction retries known rejected creates once, preserves uncertain creates and keeps diagnostics private", async () => {
+  const f = fixture();
+  try {
+    f.a.env.NANBA_ONBOARDING_PROVISION = "true";
+    f.db.run(
+      "INSERT INTO nanba_onboarding_templates VALUES('flow','fr',NULL,'rejected','http_400_code_1005')",
+    );
+    f.db.run(
+      "INSERT INTO nanba_onboarding_templates VALUES('flow','en',NULL,'uncertain','create_response_unknown')",
+    );
+    let frenchCreates = 0,
+      englishCreates = 0;
+    f.a.fetcher = async (_url, init) => {
+      const body = JSON.parse(String(init?.body));
+      if (body.types["twilio/flows"]) {
+        if (body.language === "fr") frenchCreates++;
+        if (body.language === "en") englishCreates++;
+        assert.ok(JSON.stringify(body).includes("MULTIPLE_SELECT"));
+      }
+      return Response.json(
+        { code: 1005, message: "Invalid field in AC" + "a".repeat(32) },
+        { status: 400 },
+      );
+    };
+    await f.a.onboarding.syncTemplates();
+    await f.a.onboarding.syncTemplates();
+    assert.equal(frenchCreates, 1);
+    assert.equal(englishCreates, 0);
+    assert.ok(
+      !JSON.stringify(f.a.onboarding.status()).includes("Invalid field"),
+    );
+    const diagnostics = JSON.stringify(f.a.onboarding.status(true));
+    assert.ok(diagnostics.includes("Invalid field"));
+    assert.ok(!diagnostics.includes("a".repeat(32)));
+    assert.equal(f.sent.length, 0);
+  } finally {
+    f.db.close();
+  }
+});
 test("normal questionnaire with welcome fits rate limit and native approval failures leave chat available", async () => {
   const f = fixture();
   try {
