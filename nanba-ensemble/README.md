@@ -2,6 +2,8 @@
 
 Assistant WhatsApp Nanba pour la diaspora indienne en France, et application communautaire avec huit parcours métier. Backend TypeScript, base SQLite persistante et tests automatisés.
 
+**Version active : assistant-v4.2-diaspora**, déployée le 15 novembre 2026 à 18 h 15 (Paris). [Vérification de production](docs/diaspora-live-validation.json).
+
 **Nouveaux services v4.2 :** parcours privés installation/logement/emploi/famille, exercices de français en situation, aide structurée aux courriers et orientation vers des sources officielles. [Exemples WhatsApp, confidentialité et vérifications](docs/DIASPORA.md). Compilation et **146 tests réussis**. L’état actif est consultable sur `/api/twilio/health` ; la publication du catalogue reste conditionnée au déploiement de son API principale.
 
 **Fonctions existantes, vérifiées en v4.1 le 14 novembre 2026.** Twilio reçoit les messages WhatsApp ; OpenAI assure le dialogue, l’analyse d’images, la transcription et les réponses vocales à la demande. L’assistant propose aussi des PDF et courriers, une mémoire par numéro, des rappels, des sélections personnalisées matin/soir et un relais vers les administrateurs. Les services publics déjà développés dans Nanba sont raccordés. L’horoscope demande la date, le lieu et l’heure de naissance si connue ; le calcul Lahiri respecte les incertitudes.
