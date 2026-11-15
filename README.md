@@ -1,6 +1,10 @@
 # Nanba WhatsApp — personnalisation v4.3
 
-Version préparée : `assistant-v4.3-onboarding`. Consulter `/api/twilio/health` pour le statut actif.
+Version **en ligne** : `assistant-v4.3-onboarding`, vérifiée le 15 novembre 2026.
+
+**À tester dans WhatsApp : PERSONNALISER**, ou **QUESTIONS ICI** pour le parcours en conversation. Terminer par **CONFIRMER** ; consulter ensuite **MON PROFIL**.
+
+Le questionnaire en conversation et les accueils à boutons sont actifs. Les formulaires FR/EN/TA ont été créés et soumis ; leur statut observé est `received`, sans erreur, en attente d’approbation Meta. Ils seront proposés automatiquement une fois approuvés. [Contrôle en production](live-validation.json).
 
 - Accueil facultatif, sans quitter WhatsApp.
 - Formulaire natif en trois écrans, avec questionnaire en conversation si le formulaire attend l’approbation Meta.
@@ -18,6 +22,6 @@ La publication des annonces dans le catalogue principal reste en attente de l’
 
 [Archive déployable](nanba-ensemble-source.tar.gz) · [Manifeste](SOURCE-MANIFEST.json). Le code est aussi lisible dans `nanba-ensemble/`.
 
-Commit source : `184a781569b2864daca5251aea6d39009a73c034`.
+Commit source : `d649e6a33e80d2a22b04ae7c88c1ae63fe643911`.
 
-SHA-256 archive : `b12534e69bf1810bf5cf40afe917f0e004e27d1be8b8dfabf4549e10c1f7cb3a`.
+SHA-256 archive : `009653f91f65bb461f36dcfc185c55a328cf1c1d1986ec70c6fcb2e48aa9bdf5`.
