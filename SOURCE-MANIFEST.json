@@ -1,7 +1,7 @@
 {
-  "sourceCommit": "184a781569b2864daca5251aea6d39009a73c034",
+  "sourceCommit": "d649e6a33e80d2a22b04ae7c88c1ae63fe643911",
   "release": "assistant-v4.3-onboarding",
-  "archiveSha256": "b12534e69bf1810bf5cf40afe917f0e004e27d1be8b8dfabf4549e10c1f7cb3a",
+  "archiveSha256": "009653f91f65bb461f36dcfc185c55a328cf1c1d1986ec70c6fcb2e48aa9bdf5",
   "files": [
     {
       "path": ".dockerignore",
@@ -81,7 +81,7 @@
     },
     {
       "path": "docs/ONBOARDING.md",
-      "sha256": "4317eb65f094ce5a6c98c9886a4a6da56511818d81443caf8d5c87cba58b1071"
+      "sha256": "ad2faca2e7db97089f6b7789b66986a44829084a05853858c8cf5069f31e0331"
     },
     {
       "path": "docs/OPERATIONS.md",
@@ -153,15 +153,15 @@
     },
     {
       "path": "docs/onboarding/en.json",
-      "sha256": "2dbd1fdc5ae43d1d3c867992623925b7f0061aa40faf3d8df6ff88b618eac2b4"
+      "sha256": "30d3d9566fc8fcd15adf5e59af58980e7ba4c14d2e2eb7a43bbbf584636172fa"
     },
     {
       "path": "docs/onboarding/fr.json",
-      "sha256": "a1a69510a0d34103efa6cc31e7b4a6ffea98f9fd189033699b60544aca4bdb54"
+      "sha256": "7f310b2bbb6b3454674156f45794ef7a2aabb60c41fdf422cd81a01825980178"
     },
     {
       "path": "docs/onboarding/ta.json",
-      "sha256": "0747ab39d4a693e3251091e12e4ab692800bf32fc2ecddb563c76eb05b102874"
+      "sha256": "2cd59b5f63d58640d0a55415547fd8aeb9dddbf914ca0549e8af41dd186796ec"
     },
     {
       "path": "docs/qr-native-login-observations.json",
@@ -429,11 +429,11 @@
     },
     {
       "path": "src/nanba-onboarding-copy.ts",
-      "sha256": "ea008d7dd3e74c4344d9a57490d0abb707366714ce5f447b69b1a02a80b3a245"
+      "sha256": "5ef55600fc9322405b10629081cf2718b2a16ddecdf193ada91953c4b71b10a8"
     },
     {
       "path": "src/nanba-onboarding.ts",
-      "sha256": "5951acdc338a8377f2630e223c20d96c23e707e4a4eb0f838eaac76388f0647a"
+      "sha256": "131a2fc136fd120dac550afdb1276ea5b0689704b0073ff5360b1a270f533d38"
     },
     {
       "path": "src/nanba-routines.ts",
@@ -533,7 +533,7 @@
     },
     {
       "path": "tests/onboarding.test.ts",
-      "sha256": "9814f319d5ce74c1a679719d65ddbec55c7d1048bc11dde462d050e5be1c5dc3"
+      "sha256": "1a6f50bdb1105355d149dff6830cf937d2a15622d6dbea5f9e3a45a7be275478"
     },
     {
       "path": "tests/pilot.test.ts",
