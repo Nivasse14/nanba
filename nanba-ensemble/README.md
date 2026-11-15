@@ -12,7 +12,7 @@ Assistant WhatsApp Nanba pour la diaspora indienne en France, et application com
 
 - [Guide des fonctionnalités et limites](docs/WHATSAPP-COMPANION.md).
 - [Validation de la version 4](docs/assistant-v4-live-validation.json) et [du parcours horoscope](docs/horoscope-v4.1-live-validation.json).
-- **158 tests** réussis sur les sources v4.3 ; le diagnostic du déploiement est distinct de ces tests locaux.
+- **159 tests** réussis sur les sources v4.3 ; le diagnostic du déploiement est distinct de ces tests locaux.
 - Dépôt de publication : `Nivasse14/nanba`, branche `nanba-ensemble-pilot`. Le pilote utilise une archive source à la racine du dépôt ; le code de l’application mobile est séparé.
 - Les clés API, données des membres, sessions et bases de production ne font pas partie des sources.
 
