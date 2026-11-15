@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { DB } from "../src/db.ts";
 import { TwilioAssistant } from "../src/twilio-assistant.ts";
 import { onboardingTemplate } from "../src/nanba-onboarding.ts";
+import { buttonKinds } from "../src/nanba-onboarding-buttons.ts";
 import { getExpectedTwilioSignature } from "twilio/lib/webhooks/webhooks.js";
 const sid = (n: number) => "SM" + n.toString(16).padStart(32, "0");
 function fixture() {
@@ -83,6 +84,149 @@ function fixture() {
   };
 }
 type Row = Record<string, any>;
+function enableButtons(f: ReturnType<typeof fixture>) {
+  let n = 20;
+  for (const locale of ["fr", "en", "ta"])
+    for (const kind of buttonKinds)
+      f.db.run(
+        "INSERT INTO nanba_onboarding_templates VALUES(?,?,?,'in_session',NULL)",
+        kind,
+        locale,
+        "HX" + (++n).toString(16).padStart(32, "0"),
+      );
+}
+async function tapChoice(
+  f: ReturnType<typeof fixture>,
+  identity: string,
+  op: string,
+  value?: string,
+) {
+  const c = f.a.onboarding.state(identity)!.controls;
+  assert.ok(c, "question offers native choices");
+  const i = c.options.findIndex(
+    (o: Row) => o.op === op && (value === undefined || o.value === value),
+  );
+  assert.ok(i >= 0, `missing choice ${op}:${value}`);
+  const form = f.sent.at(-1)!;
+  assert.ok(form.get("ContentSid"));
+  const variables = JSON.parse(form.get("ContentVariables")!);
+  const token = variables[String(3 + i * 2)];
+  assert.equal(token, `nbq:${c.nonce}:${i}`);
+  // Both quick-reply payload and list-row ID returned as Body are accepted.
+  return c.options.length === 3
+    ? f.send("untrusted title", undefined, { ButtonPayload: token })
+    : f.send(token);
+}
+
+test("tappable questionnaire handles single and multiple choices and saves only the exact confirmed review", async () => {
+  const f = fixture();
+  try {
+    enableButtons(f);
+    const j = await f.send("PERSONNALISER");
+    await tapChoice(f, j.identity, "select", "fr");
+    await tapChoice(f, j.identity, "select", "audio");
+    await tapChoice(f, j.identity, "toggle", "housing");
+    await tapChoice(f, j.identity, "toggle", "jobs");
+    await tapChoice(f, j.identity, "toggle", "housing");
+    await tapChoice(f, j.identity, "done");
+    await tapChoice(f, j.identity, "skip");
+    await tapChoice(f, j.identity, "select", "direct");
+    await tapChoice(f, j.identity, "select", "short");
+    const review = await tapChoice(f, j.identity, "select", "none");
+    assert.match(review.text, /Confirmer/);
+    assert.deepEqual(f.a.companion.profile(j.identity), {});
+    const oldReview = JSON.parse(f.sent.at(-1)!.get("ContentVariables")!)["3"];
+    const confirmed = await tapChoice(f, j.identity, "confirm");
+    assert.equal(confirmed.state, "sent");
+    assert.deepEqual(f.a.companion.profile(j.identity), {
+      language: "fr",
+      replyMode: "audio",
+      interests: ["jobs"],
+      tone: "direct",
+      answerLength: "short",
+    });
+    const replay = await f.send("Confirmer", undefined, {
+      ButtonPayload: oldReview,
+    });
+    assert.match(replay.text, /ancien/);
+    assert.equal(f.a.companion.tasks(j.identity).length, 0);
+    assert.equal(
+      f.requests.filter((r) => r.url.endsWith("/responses")).length,
+      0,
+    );
+  } finally {
+    f.db.close();
+  }
+});
+test("daily opt-in can be completed entirely by taps and is not subscribed before confirmation", async () => {
+  const f = fixture();
+  try {
+    enableButtons(f);
+    const j = await f.send("PERSONNALISER");
+    for (const [op, value] of [
+      ["select", "fr"],
+      ["select", "text"],
+      ["done"],
+      ["skip"],
+      ["select", "warm"],
+      ["select", "short"],
+      ["select", "morning"],
+      ["toggle", "news"],
+      ["done"],
+      ["select", "08:30"],
+      ["select", "Europe/Paris"],
+    ])
+      await tapChoice(f, j.identity, op!, value);
+    assert.equal(f.a.companion.tasks(j.identity).length, 0);
+    await tapChoice(f, j.identity, "confirm");
+    const tasks = f.a.companion.tasks(j.identity);
+    assert.equal(tasks.length, 1);
+    assert.equal(tasks[0].at, "08:30");
+    assert.equal(tasks[0].timezone, "Europe/Paris");
+    assert.deepEqual(tasks[0].topics, ["news"]);
+  } finally {
+    f.db.close();
+  }
+});
+test("old, cross-number, expired and stopped buttons cannot advance or confirm a draft", async () => {
+  const f = fixture();
+  try {
+    enableButtons(f);
+    const j = await f.send("PERSONNALISER");
+    const oldToken = JSON.parse(f.sent.at(-1)!.get("ContentVariables")!)["3"];
+    const other = await f.send(oldToken, "whatsapp:+33600000002");
+    assert.match(other.text, /ancien/);
+    assert.equal(f.a.onboarding.state(other.identity), null);
+    const first = await f.send("language", undefined, { ListId: oldToken });
+    assert.match(first.text, /Format/);
+    assert.match((await f.send(oldToken)).text, /ancien/);
+    assert.equal(f.a.onboarding.context(j.identity)?.currentField, "replyMode");
+    const c = f.a.onboarding.state(j.identity)!.controls;
+    const next = `nbq:${c.nonce}:0`;
+    await f.send("STOP");
+    await f.send("START");
+    assert.match((await f.send(next)).text, /ancien/);
+    await f.send("QUESTIONS ICI");
+    const exp = f.a.onboarding.state(j.identity)!.controls;
+    f.advance(24 * 3600000);
+    assert.match((await f.send(`nbq:${exp.nonce}:0`)).text, /ancien/);
+    assert.deepEqual(f.a.companion.profile(j.identity), {});
+  } finally {
+    f.db.close();
+  }
+});
+test("all interactive templates respect channel counts and labels and are never submitted for approval", () => {
+  for (const locale of ["fr", "en", "ta"])
+    for (const kind of buttonKinds) {
+      const t = onboardingTemplate(locale, kind) as Row;
+      const quick = t.types["twilio/quick-reply"],
+        list = t.types["twilio/list-picker"];
+      assert.ok(quick ? quick.actions.length === 3 : list.items.length <= 10);
+      assert.ok(!JSON.stringify(t).includes("birth"));
+      if (list)
+        for (const item of list.items) assert.ok(item.description.length <= 72);
+    }
+});
 
 test("welcome is optional, button payload is routed and no AI call is charged", async () => {
   const f = fixture();
@@ -242,7 +386,7 @@ test("native form is verified, bounded and draft-only; stale replays cannot subs
       "INSERT INTO nanba_onboarding_templates VALUES('flow','fr',?,'approved',NULL)",
       "HX" + "a".repeat(32),
     );
-    const j = await f.send("PERSONNALISER");
+    const j = await f.send("FORMULAIRE");
     assert.equal(f.sent.at(-1)?.get("ContentSid"), "HX" + "a".repeat(32));
     const params = f.form("", undefined, {
       InteractiveData: JSON.stringify({
@@ -391,7 +535,7 @@ test("Twilio content provisioning creates three locale forms, preserves pending 
     };
     await f.a.onboarding.syncTemplates();
     await f.a.onboarding.syncTemplates();
-    assert.equal(posted.length, 6);
+    assert.equal(posted.length, 18);
     assert.equal(
       f.a.onboarding.status().templates.filter((x) => x.status === "pending")
         .length,
@@ -503,7 +647,7 @@ test("normal questionnaire with welcome fits rate limit and native approval fail
     f.a.env.NANBA_ONBOARDING_PROVISION = "true";
     f.a.fetcher = async () => Response.json({ code: 12345 }, { status: 400 });
     await f.a.onboarding.syncTemplates();
-    assert.equal(f.a.onboarding.status().templates.length, 6);
+    assert.equal(f.a.onboarding.status().templates.length, 18);
     assert.ok(
       f.a.onboarding.status().templates.every((x) => x.status === "rejected"),
     );
