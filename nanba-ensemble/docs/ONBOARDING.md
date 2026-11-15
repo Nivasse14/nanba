@@ -33,4 +33,4 @@ Les tests simulent les fournisseurs et couvrent le parcours complet, la persista
 
 Références vérifiées le 15 novembre 2026 : https://www.twilio.com/docs/content/flows et https://www.twilio.com/docs/content/twilio-quick-reply.
 
-Compatibilité API : les champs multiples utilisent `MULTIPLE_SELECT`, comme l’exemple de requête Twilio. Une seule reprise des créations v1 explicitement rejetées avec le code 1005 est autorisée. Les créations au résultat incertain ne sont jamais répétées automatiquement. Les détails d’erreur fournisseur sont réservés à l’API administrateur.
+Compatibilité API : les champs multiples utilisent `MULTIPLE_SELECT`, comme l’exemple de requête Twilio. Les textes respectent aussi la limite effective de 60 caractères des aides et du pied de page. Une seule reprise des créations v1/v2 explicitement rejetées pour ces erreurs de schéma est autorisée. Les créations au résultat incertain ne sont jamais répétées automatiquement. Les détails d’erreur fournisseur sont réservés à l’API administrateur.
