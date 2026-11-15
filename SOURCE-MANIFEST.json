@@ -1,7 +1,7 @@
 {
-  "sourceCommit": "d649e6a33e80d2a22b04ae7c88c1ae63fe643911",
-  "release": "assistant-v4.3-onboarding",
-  "archiveSha256": "009653f91f65bb461f36dcfc185c55a328cf1c1d1986ec70c6fcb2e48aa9bdf5",
+  "sourceCommit": "5888b0225cb2e7d5954320d2dda3c5014693b175",
+  "release": "assistant-v4.4-buttons",
+  "archiveSha256": "c8d76c9140293565cbf5967ab618b075025b054f59be121981495a68d74d8c0b",
   "files": [
     {
       "path": ".dockerignore",
@@ -21,7 +21,7 @@
     },
     {
       "path": "README.md",
-      "sha256": "c33505e63dc3706aea2da3da69c4a91c8c63a427be87d258f69e7821d01bd89d"
+      "sha256": "8379a8551f7558b873c5005d4c6898b06a75ea50d8edbf6c5870a0d9b20c4258"
     },
     {
       "path": "assets/fonts/NotoSans-Regular.ttf",
@@ -81,7 +81,7 @@
     },
     {
       "path": "docs/ONBOARDING.md",
-      "sha256": "ad2faca2e7db97089f6b7789b66986a44829084a05853858c8cf5069f31e0331"
+      "sha256": "58e4cf101132cd40ac75ec23589c92bfaa2fada1c35473960893764f133b0ff2"
     },
     {
       "path": "docs/OPERATIONS.md",
@@ -273,7 +273,7 @@
     },
     {
       "path": "scripts/package-source.mjs",
-      "sha256": "1984a04fe4ad989e8357a4c9944c3cd4b1fdd94c1df9f4b06a5e2de446a0aeae"
+      "sha256": "c28b413cdcf461dcde77a862e5632ebb60a414de7b287e225b17dad70855e428"
     },
     {
       "path": "scripts/pilot-message-diagnostic.mjs",
@@ -428,12 +428,16 @@
       "sha256": "e3a009838d50ca8c736507e0b2f3658d25fb81ce5b60e76f839edecf9695a31f"
     },
     {
+      "path": "src/nanba-onboarding-buttons.ts",
+      "sha256": "96ef9500ff28467e360c57c1de7eef6bdd2ac940aeadb24f132ea4c50d062154"
+    },
+    {
       "path": "src/nanba-onboarding-copy.ts",
       "sha256": "5ef55600fc9322405b10629081cf2718b2a16ddecdf193ada91953c4b71b10a8"
     },
     {
       "path": "src/nanba-onboarding.ts",
-      "sha256": "131a2fc136fd120dac550afdb1276ea5b0689704b0073ff5360b1a270f533d38"
+      "sha256": "40e254b8476c0d136e21b391b12319465a4bc0a3ddcd8eef6837eb2c05a53ff7"
     },
     {
       "path": "src/nanba-routines.ts",
@@ -465,11 +469,11 @@
     },
     {
       "path": "src/server.ts",
-      "sha256": "38c35a7e4cd46aeeaa9de349860daf1cdfd62370ed32412a1d49fa6e3287dc8c"
+      "sha256": "b36be0d76df22e8a37a28de38aa803e269e0c6c1cd7720bb2ce7af862ba2a7ff"
     },
     {
       "path": "src/twilio-assistant.ts",
-      "sha256": "e304593cef2ad02b214887ca982e418b304b5d630885e9fc6b29910b3dd04fcd"
+      "sha256": "54001362e07eec11af4400e26d6d9897dcde17ff0f589a482f059a9f9b55a168"
     },
     {
       "path": "src/twilio-media.ts",
@@ -533,7 +537,7 @@
     },
     {
       "path": "tests/onboarding.test.ts",
-      "sha256": "1a6f50bdb1105355d149dff6830cf937d2a15622d6dbea5f9e3a45a7be275478"
+      "sha256": "552c36189bca09e08585b53874bea61cbb6da90155d2d13d609b3fd7461ae672"
     },
     {
       "path": "tests/pilot.test.ts",

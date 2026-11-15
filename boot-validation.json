@@ -1,10 +1,10 @@
 {
-  "archiveSource": "d649e6a33e80d2a22b04ae7c88c1ae63fe643911",
-  "archiveSha256": "009653f91f65bb461f36dcfc185c55a328cf1c1d1986ec70c6fcb2e48aa9bdf5",
+  "archiveSource": "5888b0225cb2e7d5954320d2dda3c5014693b175",
+  "archiveSha256": "c8d76c9140293565cbf5967ab618b075025b054f59be121981495a68d74d8c0b",
   "nodeOptions": "empty",
   "productionMode": true,
   "healthHTTP": 200,
-  "version": "assistant-v4.3-onboarding",
+  "version": "assistant-v4.4-buttons",
   "onboarding": true,
   "databasePreservedAfterRestart": true,
   "sqliteIntegrity": "ok",
