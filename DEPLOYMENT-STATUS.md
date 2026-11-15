@@ -1,21 +1,28 @@
-# État au 15 novembre 2026
+# Déploiement vérifié le 15 novembre 2026
+
+**Version active : `assistant-v4.2-diaspora`, depuis 18 h 15 (Paris).**
 
 - Service Render : `nanba-ensemble-pilot-ufgg` (`srv-dbr36g0n74is73d71k8g`).
-- Production inchangée : version `assistant-v4.1`, dernier déploiement actif vérifié `dep-dbs3jo3bc2fs73afj5t0`.
-- Version prête : `assistant-v4.2-diaspora`, source `e396ed6f444c2db54ead6dd6da915f5fe0cac38d`.
-- Déploiement automatique : désactivé.
-- Base SQLite : disque persistant conservé ; deux tables additives pour les parcours et exercices.
+- Déploiement : `dep-dbsugo8ae00c7394og7g`, confirmé `live` à `2026-11-15T17:15:01.825895Z`.
+- Commit GitHub déployé : `5a82317b1a6459657d8cf074417dead1dc91f4fa`.
+- Source de l’archive : `e396ed6f444c2db54ead6dd6da915f5fe0cac38d`.
+- SHA-256 de l’archive : `bd93c0b44e447f46a7acdc1a5f45d9106c2f5c4875fadd2b3057cf6269864474`.
 
-## Validation
+Après l’accord explicite de l’utilisateur, seule la variable `NODE_OPTIONS` a été vidée pour retirer le chargeur de compatibilité. Les autres variables ont été préservées par une mise à jour partielle. Cette mise à jour a déclenché le déploiement Render ; aucun second déploiement n’a été lancé. Le disque persistant existant est conservé. Le service utilise désormais directement l’archive source complète.
 
-146 tests passent. L’archive exacte publiée a démarré localement avec `NODE_OPTIONS=''`, en mode production et avec configuration synthétique : `/health` et `/api/twilio/health` répondent, les nouvelles capacités sont présentes, la base est conservée après redémarrage et `PRAGMA integrity_check` retourne `ok`. Aucun appel externe ni message aux membres. Les dépendances vérifiées du workspace ont été utilisées ; Docker n’est pas disponible dans cet environnement.
+## Résultat des contrôles
 
-## Blocage actuel
+- `/api/twilio/health` répond HTTP 200 avec `ready: true` et la version v4.2.
+- Capacités présentes : `privateJourneys`, `frenchPractice`, `guidedLetters`, `officialResources`.
+- Les capacités existantes restent présentes : voix, images, PDF, mémoire, rappels, sélections, horoscope et relais humain.
+- Logs de démarrage : serveur prêt sur le port 3000, statut Render `live`, aucun échec de démarrage observé.
+- 146 tests locaux avaient réussi ; l’archive avait aussi passé un démarrage en mode production local et un contrôle de conservation de base après redémarrage.
+- Aucun message WhatsApp de test n’a été envoyé aux membres pendant cette activation.
 
-L’activation exige de remplacer l’ancien chargement de code via `NODE_OPTIONS` par le démarrage direct de l’archive complète. Deux demandes de modification de cette seule variable ont été rejetées par le contrôle automatique. Le second refus indique que les tests locaux ne prouvent pas que le service Render actuel utilise déjà la nouvelle archive et que la transition peut interrompre la production.
+[Résultat détaillé de la vérification](diaspora-live-validation.json).
 
-Les refus n’ont appliqué aucune modification. Aucun déploiement n’a été déclenché. L’autorisation explicite de cette transition de production est demandée avant une nouvelle tentative. Ne pas contourner le refus via le Dockerfile, un script de démarrage ou un autre canal.
+## Limite restante
 
-Après autorisation : modifier uniquement `NODE_OPTIONS` en préservant toutes les autres variables, déclencher le déploiement manuel de l’archive vérifiée, attendre son statut `live`, contrôler la nouvelle version, les capacités et les logs. Une courte interruption est possible car ce service utilise un disque persistant.
+La publication WhatsApp dans le catalogue principal n’est pas encore activée : `mainCataloguePublishingConfigured: false`. Elle nécessite le déploiement de l’API Nanba sur Google Cloud et le secret partagé. Les services diaspora ci-dessus sont indépendants de cette activation.
 
-La publication dans le catalogue principal nécessite encore le déploiement de l’API Nanba sur Google Cloud et la configuration du secret partagé. Elle ne doit pas être annoncée comme active.
+Les mises à jour de documentation après ce déploiement ne déclenchent pas de redéploiement : le déploiement automatique du service reste désactivé.

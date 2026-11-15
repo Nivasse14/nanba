@@ -1,6 +1,6 @@
 # Nanba WhatsApp — services diaspora v4.2
 
-**Développé, testé et publié. Pas encore activé en production.** Le service WhatsApp reste sur `assistant-v4.1` ; le déploiement de la version `assistant-v4.2-diaspora` attend l’autorisation de modifier son chargement de démarrage.
+**Version active : `assistant-v4.2-diaspora`.** Déployée sur Render le 15 novembre 2026 à **18 h 15 (Paris)**. Le service répond HTTP 200 et annonce les quatre nouvelles capacités. [Vérification en production](diaspora-live-validation.json).
 
 ## Nouveautés prêtes
 
@@ -27,7 +27,7 @@ Archive complète : [nanba-ensemble-source.tar.gz](nanba-ensemble-source.tar.gz)
 
 ## État du déploiement
 
-Le contrôle automatique a refusé le changement de la variable `NODE_OPTIONS` sur Render, en raison du risque de panne pendant le passage de l’ancien chargeur à l’archive complète. Les tests locaux sont réussis, mais la modification et le déploiement restent en attente. **Aucun changement de configuration de production ni déclenchement de déploiement n’a été effectué.** [Détails](DEPLOYMENT-STATUS.md).
+Après autorisation explicite, l’ancien chargement `NODE_OPTIONS` a été retiré. Le service utilise maintenant l’archive source complète vérifiée. Déploiement `dep-dbsugo8ae00c7394og7g` confirmé `live`, points de santé vérifiés et aucun échec de démarrage observé. Les autres variables et le disque persistent. Aucun message de test envoyé aux membres. [Détails](DEPLOYMENT-STATUS.md).
 
 Le raccordement des publications WhatsApp au catalogue principal reste séparément en attente du déploiement de l’API Google Cloud et du secret partagé. [État du catalogue](nanba-ensemble/docs/CATALOGUE-PRINCIPAL.md). Les nouvelles fonctions diaspora n’ont pas besoin de ce raccordement pour fonctionner.
 
