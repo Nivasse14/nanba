@@ -401,6 +401,20 @@ test("Twilio content provisioning creates three locale forms, preserves pending 
       const t = onboardingTemplate(locale, "flow") as Row;
       assert.equal(t.types["twilio/flows"].pages.length, 3);
       assert.ok(!JSON.stringify(t).includes("birthDate"));
+      assert.ok(t.types["twilio/flows"].subtitle.length <= 60);
+      for (const page of t.types["twilio/flows"].pages) {
+        assert.ok(page.title.length <= 30);
+        for (const field of page.layout) {
+          assert.ok(
+            !field.text || field.text.length <= 60,
+            `${locale} helper: ${field.text}`,
+          );
+          assert.ok(
+            !field.label || field.label.length <= 20,
+            `${locale} label: ${field.label}`,
+          );
+        }
+      }
     }
     assert.equal(f.sent.length, 0);
   } finally {
@@ -439,7 +453,7 @@ test("schema correction retries known rejected creates once, preserves uncertain
   try {
     f.a.env.NANBA_ONBOARDING_PROVISION = "true";
     f.db.run(
-      "INSERT INTO nanba_onboarding_templates VALUES('flow','fr',NULL,'rejected','http_400_code_1005')",
+      "INSERT INTO nanba_onboarding_templates VALUES('flow','fr',NULL,'rejected','v2_http_400_code_21658|subtitle cannot exceed 60 characters')",
     );
     f.db.run(
       "INSERT INTO nanba_onboarding_templates VALUES('flow','en',NULL,'uncertain','create_response_unknown')",
