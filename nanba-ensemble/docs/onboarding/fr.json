@@ -1,5 +1,5 @@
 {
-  "friendly_name": "nanba_onboarding_flow_fr_v1",
+  "friendly_name": "nanba_onboarding_flow_fr_v2",
   "language": "fr",
   "types": {
     "twilio/flows": {
@@ -37,7 +37,7 @@
           "title": "Mes intérêts",
           "layout": [
             {
-              "type": "MULTI_SELECT",
+              "type": "MULTIPLE_SELECT",
               "name": "interests",
               "label": "Quels sujets t’intéressent ? (4 maximum)",
               "text": "Facultatif. PASSER garde le réglage actuel.",
@@ -88,7 +88,7 @@
               "text": "Sans heure ou sujets, aucun envoi activé. Fuseau par défaut : Europe/Paris. Confirmation dans la conversation."
             },
             {
-              "type": "MULTI_SELECT",
+              "type": "MULTIPLE_SELECT",
               "name": "dailyTopics",
               "label": "Quels sujets pour cette sélection ? (4 maximum)",
               "text": "Facultatif. PASSER garde le réglage actuel.",

@@ -1,5 +1,5 @@
 {
-  "friendly_name": "nanba_onboarding_flow_en_v1",
+  "friendly_name": "nanba_onboarding_flow_en_v2",
   "language": "en",
   "types": {
     "twilio/flows": {
@@ -37,7 +37,7 @@
           "title": "My interests",
           "layout": [
             {
-              "type": "MULTI_SELECT",
+              "type": "MULTIPLE_SELECT",
               "name": "interests",
               "label": "Which topics interest you? (up to 4)",
               "text": "Optional. SKIP keeps the current setting.",
@@ -88,7 +88,7 @@
               "text": "No time or topics means no subscription. Default time zone: Europe/Paris. Confirm in the chat."
             },
             {
-              "type": "MULTI_SELECT",
+              "type": "MULTIPLE_SELECT",
               "name": "dailyTopics",
               "label": "Topics for this selection? (up to 4)",
               "text": "Optional. SKIP keeps the current setting.",

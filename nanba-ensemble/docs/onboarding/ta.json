@@ -1,5 +1,5 @@
 {
-  "friendly_name": "nanba_onboarding_flow_ta_v1",
+  "friendly_name": "nanba_onboarding_flow_ta_v2",
   "language": "ta",
   "types": {
     "twilio/flows": {
@@ -37,7 +37,7 @@
           "title": "எனது விருப்பங்கள்",
           "layout": [
             {
-              "type": "MULTI_SELECT",
+              "type": "MULTIPLE_SELECT",
               "name": "interests",
               "label": "எந்தத் தலைப்புகள்? (4 வரை)",
               "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
@@ -88,7 +88,7 @@
               "text": "நேரமும் தலைப்புகளும் இல்லாமல் பதிவு இல்லை. இயல்பு Europe/Paris. உரையாடலில் உறுதிப்படுத்தவும்."
             },
             {
-              "type": "MULTI_SELECT",
+              "type": "MULTIPLE_SELECT",
               "name": "dailyTopics",
               "label": "தொகுப்பின் தலைப்புகள்? (4 வரை)",
               "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
