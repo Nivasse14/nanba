@@ -207,7 +207,7 @@ test("memory is scoped per person and OUBLIE clears it before the next model cal
         x.content.includes("Sevran"),
       ),
     );
-    f.assistant.receive(f.form(3, "Bonjour", other));
+    f.assistant.receive(f.form(3, "Explique-moi Nanba", other));
     await f.assistant.tick();
     assert.equal(JSON.parse(f.calls[4].init!.body as string).input.length, 1);
     f.assistant.receive(f.form(4, "OUBLIE"));
@@ -300,7 +300,7 @@ test("ambiguous sends never retry, signed delivery can reconcile and never downg
       if (String(url).endsWith("/Messages.json")) throw Error("network");
       return fetcher(url, init);
     };
-    f.assistant.receive(f.form(1));
+    f.assistant.receive(f.form(1, "Explique-moi Nanba"));
     await f.assistant.tick();
     assert.equal(f.db.get("SELECT state FROM twilio_jobs")!.state, "uncertain");
     await f.assistant.tick();

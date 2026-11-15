@@ -361,7 +361,10 @@ test("news uses actual Nanba endpoints, rejects stale digest and unsafe links; w
 test("function call loop executes real tool before answer, passes isolated profile, checks budget per call", async () => {
   const f = fixture();
   try {
-    const j = f.receive();
+    const j = f.receive(
+      1,
+      "Mémorise que je parle français et que j’ai 60 ans.",
+    );
     f.setResponse({
       output: [
         {
