@@ -1,0 +1,119 @@
+{
+  "friendly_name": "nanba_onboarding_flow_ta_v1",
+  "language": "ta",
+  "types": {
+    "twilio/flows": {
+      "body": "WhatsApp படிவத்தில் தேர்வு செய்யவும் அல்லது QUESTIONS HERE என்று எழுதவும். சேமிக்கும் முன் உறுதிப்படுத்த வேண்டும்.",
+      "subtitle": "உறுதிப்படுத்தாமல் பதிவு இல்லை. MY PROFILE மூலம் மாற்றலாம்.",
+      "type": "SURVEY",
+      "button_text": "தனிப்பயனாக்கு",
+      "pages": [
+        {
+          "id": "replies",
+          "next_page_id": "interests",
+          "title": "எனது பதில்கள்",
+          "layout": [
+            {
+              "type": "SINGLE_SELECT",
+              "name": "language",
+              "label": "எந்த மொழி?",
+              "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
+              "required": false,
+              "options": "[{\"id\":\"fr\",\"title\":\"Français\"},{\"id\":\"en\",\"title\":\"English\"},{\"id\":\"ta\",\"title\":\"தமிழ்\"},{\"id\":\"tanglish\",\"title\":\"Tanglish\"}]"
+            },
+            {
+              "type": "SINGLE_SELECT",
+              "name": "replyMode",
+              "label": "எந்த பதில் முறை?",
+              "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
+              "required": false,
+              "options": "[{\"id\":\"text\",\"title\":\"எழுத்து\"},{\"id\":\"audio\",\"title\":\"ஒலி (AI குரல்)\"},{\"id\":\"auto\",\"title\":\"என் செய்தியைப் போல\"}]"
+            }
+          ]
+        },
+        {
+          "id": "interests",
+          "next_page_id": "preferences",
+          "title": "எனது விருப்பங்கள்",
+          "layout": [
+            {
+              "type": "MULTI_SELECT",
+              "name": "interests",
+              "label": "எந்தத் தலைப்புகள்? (4 வரை)",
+              "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
+              "required": false,
+              "options": "[{\"id\":\"housing\",\"title\":\"வீடு\"},{\"id\":\"jobs\",\"title\":\"வேலை\"},{\"id\":\"services\",\"title\":\"நடைமுறை உதவி\"},{\"id\":\"news\",\"title\":\"செய்திகள்\"},{\"id\":\"events\",\"title\":\"நிகழ்ச்சிகள்\"},{\"id\":\"cinema\",\"title\":\"சினிமா\"},{\"id\":\"cuisine\",\"title\":\"சமையல்\"},{\"id\":\"image\",\"title\":\"படங்கள்\"},{\"id\":\"horoscope\",\"title\":\"ஜாதகம்\"}]"
+            },
+            {
+              "type": "SHORT_TEXT",
+              "name": "city",
+              "label": "எந்த நகரம்? (விருப்பம்)",
+              "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
+              "required": false,
+              "input_type": "TEXT"
+            }
+          ]
+        },
+        {
+          "id": "preferences",
+          "next_page_id": null,
+          "title": "எனது உதவியாளர்",
+          "layout": [
+            {
+              "type": "SINGLE_SELECT",
+              "name": "tone",
+              "label": "எப்படிப் பேச வேண்டும்?",
+              "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
+              "required": false,
+              "options": "[{\"id\":\"warm\",\"title\":\"நட்பாக\"},{\"id\":\"direct\",\"title\":\"நேரடியாக\"},{\"id\":\"calm\",\"title\":\"அமைதியாக\"}]"
+            },
+            {
+              "type": "SINGLE_SELECT",
+              "name": "length",
+              "label": "எவ்வளவு விளக்கம்?",
+              "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
+              "required": false,
+              "options": "[{\"id\":\"short\",\"title\":\"சுருக்கமாக\"},{\"id\":\"detailed\",\"title\":\"விரிவாக\"}]"
+            },
+            {
+              "type": "SINGLE_SELECT",
+              "name": "notifications",
+              "label": "தானாக ஒரு தொகுப்பு வேண்டுமா?",
+              "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
+              "required": false,
+              "options": "[{\"id\":\"none\",\"title\":\"தானியங்கி தொகுப்பு வேண்டாம்\"},{\"id\":\"morning\",\"title\":\"காலையில் ஒரு தொகுப்பு\"},{\"id\":\"evening\",\"title\":\"மாலையில் ஒரு தொகுப்பு\"},{\"id\":\"keep\",\"title\":\"தற்போதைய அட்டவணை தொடரட்டும்\"}]"
+            },
+            {
+              "type": "TEXT_BODY",
+              "text": "நேரமும் தலைப்புகளும் இல்லாமல் பதிவு இல்லை. இயல்பு Europe/Paris. உரையாடலில் உறுதிப்படுத்தவும்."
+            },
+            {
+              "type": "MULTI_SELECT",
+              "name": "dailyTopics",
+              "label": "தொகுப்பின் தலைப்புகள்? (4 வரை)",
+              "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
+              "required": false,
+              "options": "[{\"id\":\"news\",\"title\":\"செய்திகள்\"},{\"id\":\"events\",\"title\":\"நிகழ்ச்சிகள்\"},{\"id\":\"cinema\",\"title\":\"சினிமா\"},{\"id\":\"cuisine\",\"title\":\"சமையல்\"},{\"id\":\"image\",\"title\":\"படங்கள்\"}]"
+            },
+            {
+              "type": "SHORT_TEXT",
+              "name": "at",
+              "label": "எத்தனை மணிக்கு? (HH:MM)",
+              "text": "உள்ளூர் நேரம் HH:MM, எ.கா. 08:30. அமைதி நேரம் 22:00–07:00.",
+              "required": false,
+              "input_type": "TEXT"
+            },
+            {
+              "type": "SHORT_TEXT",
+              "name": "timezone",
+              "label": "எந்த நேர மண்டலம்?",
+              "text": "பிரான்ஸ்: Europe/Paris · இந்தியா: Asia/Kolkata · அல்லது IANA நேர மண்டலம்.",
+              "required": false,
+              "input_type": "TEXT"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

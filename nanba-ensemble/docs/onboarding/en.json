@@ -1,0 +1,119 @@
+{
+  "friendly_name": "nanba_onboarding_flow_en_v1",
+  "language": "en",
+  "types": {
+    "twilio/flows": {
+      "body": "Choose preferences in the WhatsApp form, or write QUESTIONS HERE. Review a summary before saving.",
+      "subtitle": "No subscription without confirmation. Change with MY PROFILE.",
+      "type": "SURVEY",
+      "button_text": "Personalise",
+      "pages": [
+        {
+          "id": "replies",
+          "next_page_id": "interests",
+          "title": "My replies",
+          "layout": [
+            {
+              "type": "SINGLE_SELECT",
+              "name": "language",
+              "label": "Which language?",
+              "text": "Optional. SKIP keeps the current setting.",
+              "required": false,
+              "options": "[{\"id\":\"fr\",\"title\":\"Français\"},{\"id\":\"en\",\"title\":\"English\"},{\"id\":\"ta\",\"title\":\"தமிழ்\"},{\"id\":\"tanglish\",\"title\":\"Tanglish\"}]"
+            },
+            {
+              "type": "SINGLE_SELECT",
+              "name": "replyMode",
+              "label": "Which reply format?",
+              "text": "Optional. SKIP keeps the current setting.",
+              "required": false,
+              "options": "[{\"id\":\"text\",\"title\":\"Text\"},{\"id\":\"audio\",\"title\":\"Audio (AI voice)\"},{\"id\":\"auto\",\"title\":\"Match my messages\"}]"
+            }
+          ]
+        },
+        {
+          "id": "interests",
+          "next_page_id": "preferences",
+          "title": "My interests",
+          "layout": [
+            {
+              "type": "MULTI_SELECT",
+              "name": "interests",
+              "label": "Which topics interest you? (up to 4)",
+              "text": "Optional. SKIP keeps the current setting.",
+              "required": false,
+              "options": "[{\"id\":\"housing\",\"title\":\"Housing\"},{\"id\":\"jobs\",\"title\":\"Jobs\"},{\"id\":\"services\",\"title\":\"Practical help\"},{\"id\":\"news\",\"title\":\"News\"},{\"id\":\"events\",\"title\":\"Events\"},{\"id\":\"cinema\",\"title\":\"Cinema\"},{\"id\":\"cuisine\",\"title\":\"Cooking\"},{\"id\":\"image\",\"title\":\"Images\"},{\"id\":\"horoscope\",\"title\":\"Horoscope\"}]"
+            },
+            {
+              "type": "SHORT_TEXT",
+              "name": "city",
+              "label": "Which town or city? (optional)",
+              "text": "Optional. SKIP keeps the current setting.",
+              "required": false,
+              "input_type": "TEXT"
+            }
+          ]
+        },
+        {
+          "id": "preferences",
+          "next_page_id": null,
+          "title": "My assistant",
+          "layout": [
+            {
+              "type": "SINGLE_SELECT",
+              "name": "tone",
+              "label": "Which tone?",
+              "text": "Optional. SKIP keeps the current setting.",
+              "required": false,
+              "options": "[{\"id\":\"warm\",\"title\":\"Friendly\"},{\"id\":\"direct\",\"title\":\"Direct\"},{\"id\":\"calm\",\"title\":\"Calm\"}]"
+            },
+            {
+              "type": "SINGLE_SELECT",
+              "name": "length",
+              "label": "How much detail?",
+              "text": "Optional. SKIP keeps the current setting.",
+              "required": false,
+              "options": "[{\"id\":\"short\",\"title\":\"Short\"},{\"id\":\"detailed\",\"title\":\"Detailed\"}]"
+            },
+            {
+              "type": "SINGLE_SELECT",
+              "name": "notifications",
+              "label": "An automatic selection?",
+              "text": "Optional. SKIP keeps the current setting.",
+              "required": false,
+              "options": "[{\"id\":\"none\",\"title\":\"No automatic selection\"},{\"id\":\"morning\",\"title\":\"One morning selection\"},{\"id\":\"evening\",\"title\":\"One evening selection\"},{\"id\":\"keep\",\"title\":\"Keep my current schedule\"}]"
+            },
+            {
+              "type": "TEXT_BODY",
+              "text": "No time or topics means no subscription. Default time zone: Europe/Paris. Confirm in the chat."
+            },
+            {
+              "type": "MULTI_SELECT",
+              "name": "dailyTopics",
+              "label": "Topics for this selection? (up to 4)",
+              "text": "Optional. SKIP keeps the current setting.",
+              "required": false,
+              "options": "[{\"id\":\"news\",\"title\":\"News\"},{\"id\":\"events\",\"title\":\"Events\"},{\"id\":\"cinema\",\"title\":\"Cinema\"},{\"id\":\"cuisine\",\"title\":\"Cooking\"},{\"id\":\"image\",\"title\":\"Images\"}]"
+            },
+            {
+              "type": "SHORT_TEXT",
+              "name": "at",
+              "label": "At what time? (HH:MM)",
+              "text": "Local time HH:MM, e.g. 08:30. Quiet hours apply (22:00–07:00 by default).",
+              "required": false,
+              "input_type": "TEXT"
+            },
+            {
+              "type": "SHORT_TEXT",
+              "name": "timezone",
+              "label": "Which time zone?",
+              "text": "France: Europe/Paris · India: Asia/Kolkata · or your IANA time zone.",
+              "required": false,
+              "input_type": "TEXT"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}
