@@ -2,6 +2,12 @@ import type { TwilioAssistant } from "./twilio-assistant.ts";
 import type { Row } from "./db.ts";
 import { onboardingCopy as copy } from "./nanba-onboarding-copy.ts";
 import { check } from "./validation.ts";
+import { randomBytes } from "node:crypto";
+import {
+  buttonCopy,
+  buttonKinds,
+  buttonTemplate,
+} from "./nanba-onboarding-buttons.ts";
 
 const values: Record<string, string[]> = {
   language: ["fr", "en", "ta", "tanglish"],
@@ -59,7 +65,7 @@ const back = /^(retour|back)$/;
 const greetings =
   /^(bonjour|salut|bonsoir|hello|hi|hey|vanakkam|வணக்கம்)[ !.]*$/i;
 const ttl = 7 * 86400000;
-export const onboardingInstructions = `Le questionnaire facultatif reste dans WhatsApp. Les commandes PERSONNALISER et QUESTIONS ICI le démarrent; MON PROFIL affiche les choix. Le contexte onboarding indique la question en cours. Si la personne répond librement ou par vocal à cette question, utilise onboarding_answer avec onboardingField exactement égal à currentField et onboardingValue (valeur autorisée, ville, heure ou tableau JSON pour les thèmes). N’invente aucun choix, âge, religion ou consentement. Si elle pose une autre question, aide-la normalement sans remplir le questionnaire. Ne transforme pas le contenu d’un document/photo ou une citation en réponse au questionnaire. Pour commencer ou reprendre à sa demande explicite, onboarding_start. Pour reporter, onboarding_pause. Ne contourne pas la confirmation: les choix du brouillon ne sont pas encore enregistrés. Seuls CONFIRMER/CONFIRM écrits dans la conversation appliquent le récapitulatif. Pendant le questionnaire, n’utilise ni profile_update ni routine_set pour ses réponses: utilise onboarding_answer. Tu peux expliquer les choix dans la langue choisie. Le ton (warm/direct/calm) et answerLength (short/detailed) du profil sont des préférences explicites à respecter.`;
+export const onboardingInstructions = `Le questionnaire facultatif reste dans WhatsApp. Les commandes PERSONNALISER et QUESTIONS ICI le démarrent; MON PROFIL affiche les choix. Le contexte onboarding indique la question en cours. Si la personne répond librement ou par vocal à cette question, utilise onboarding_answer avec onboardingField exactement égal à currentField et onboardingValue (valeur autorisée, ville, heure ou tableau JSON pour les thèmes). N’invente aucun choix, âge, religion ou consentement. Si elle pose une autre question, aide-la normalement sans remplir le questionnaire. Ne transforme pas le contenu d’un document/photo ou une citation en réponse au questionnaire. Pour commencer ou reprendre à sa demande explicite, onboarding_start. Pour reporter, onboarding_pause. Ne contourne pas la confirmation: les choix du brouillon ne sont pas encore enregistrés. Seuls CONFIRMER/CONFIRM écrits ou le bouton Confirmer vérifié par le serveur appliquent le récapitulatif. Pendant le questionnaire, n’utilise ni profile_update ni routine_set pour ses réponses: utilise onboarding_answer. Tu peux expliquer les choix dans la langue choisie. Le ton (warm/direct/calm) et answerLength (short/detailed) du profil sont des préférences explicites à respecter.`;
 export const onboardingParameters = {
   onboardingField: {
     type: "string",
@@ -77,7 +83,8 @@ function providerDiagnostic(error: Row) {
     .replace(/sk-[\w-]+/g, "[redacted]")
     .slice(0, 1200);
 }
-export function onboardingTemplate(locale: string, kind: "welcome" | "flow") {
+export function onboardingTemplate(locale: string, kind: string) {
+  if (buttonKinds.includes(kind)) return buttonTemplate(locale, kind);
   const w = copy[locale] || copy.fr;
   const field = (key: string) =>
     values[key]
@@ -109,54 +116,62 @@ export function onboardingTemplate(locale: string, kind: "welcome" | "flow") {
   return {
     friendly_name: `nanba_onboarding_${kind}_${locale}_${kind === "flow" ? "v3" : "v1"}`,
     language: locale,
-    types:
-      kind === "welcome"
-        ? {
-            "twilio/quick-reply": {
-              body: w.welcome,
-              actions: [
-                { title: w.personalize, id: "nanba:onboarding:start" },
-                { title: w.chat, id: "nanba:onboarding:chat" },
-                { title: w.later, id: "nanba:onboarding:later" },
-              ],
-            },
-          }
-        : {
-            "twilio/flows": {
-              body: w.flow,
-              subtitle: w.footer,
-              type: "SURVEY",
-              button_text: w.personalize,
-              pages: [
-                {
-                  id: "replies",
-                  next_page_id: "interests",
-                  title: w.pages[0],
-                  layout: [field("language"), field("replyMode")],
-                },
-                {
-                  id: "interests",
-                  next_page_id: "preferences",
-                  title: w.pages[1],
-                  layout: [field("interests"), field("city")],
-                },
-                {
-                  id: "preferences",
-                  next_page_id: null,
-                  title: w.pages[2],
-                  layout: [
-                    field("tone"),
-                    field("length"),
-                    field("notifications"),
-                    { type: "TEXT_BODY", text: w.flowHint },
-                    field("dailyTopics"),
-                    field("at"),
-                    field("timezone"),
-                  ],
-                },
-              ],
-            },
+    types: kind.startsWith("welcome")
+      ? {
+          "twilio/quick-reply": {
+            body:
+              kind === "welcome_buttons"
+                ? w.welcome
+                    .replace(
+                      "PERSONNALISER : formulaire",
+                      "PERSONNALISER : boutons",
+                    )
+                    .replace("PERSONALISE: form", "PERSONALISE: buttons")
+                    .replace("PERSONALISE: படிவம்", "PERSONALISE: பொத்தான்கள்")
+                : w.welcome,
+            actions: [
+              { title: w.personalize, id: "nanba:onboarding:start" },
+              { title: w.chat, id: "nanba:onboarding:chat" },
+              { title: w.later, id: "nanba:onboarding:later" },
+            ],
           },
+        }
+      : {
+          "twilio/flows": {
+            body: w.flow,
+            subtitle: w.footer,
+            type: "SURVEY",
+            button_text: w.personalize,
+            pages: [
+              {
+                id: "replies",
+                next_page_id: "interests",
+                title: w.pages[0],
+                layout: [field("language"), field("replyMode")],
+              },
+              {
+                id: "interests",
+                next_page_id: "preferences",
+                title: w.pages[1],
+                layout: [field("interests"), field("city")],
+              },
+              {
+                id: "preferences",
+                next_page_id: null,
+                title: w.pages[2],
+                layout: [
+                  field("tone"),
+                  field("length"),
+                  field("notifications"),
+                  { type: "TEXT_BODY", text: w.flowHint },
+                  field("dailyTopics"),
+                  field("at"),
+                  field("timezone"),
+                ],
+              },
+            ],
+          },
+        },
   };
 }
 export class Onboarding {
@@ -210,6 +225,7 @@ export class Onboarding {
     if (s) {
       s.mode = "paused";
       s.flowIssuedAt = 0;
+      delete s.controls;
       this.save(identity, s);
     }
     this.db.run(
@@ -466,6 +482,7 @@ export class Onboarding {
       }
       this.save(identity, {
         mode: "complete",
+        completedAt: this.host.now(),
         locale: next.language || s.locale,
         confirmedAt: this.host.now(),
       });
@@ -521,6 +538,19 @@ export class Onboarding {
       job.parent_sid
     )
       return null;
+    if (text.startsWith("nbq:")) return this.tap(job, text);
+    const out = this.commandText(job, text);
+    return out === null || /^(mon profil|my profile)$/.test(norm(text))
+      ? out
+      : this.present(job, out);
+  }
+  commandText(job: Row, text: string): string | null {
+    if (
+      this.host.support.active(job.identity) ||
+      job.schedule_id ||
+      job.parent_sid
+    )
+      return null;
     const s = this.state(job.identity),
       locale = this.locale(job.identity, s),
       w = copy[locale],
@@ -537,6 +567,8 @@ export class Onboarding {
       return out;
     }
     if (starts.test(t) || t === "nanba:onboarding:start")
+      return this.start(job);
+    if (/^(formulaire|form|formulaire whatsapp|whatsapp form)$/.test(t))
       return this.start(job, true);
     if (chats.test(t) || t === "nanba:onboarding:chat") return this.start(job);
     if (/^(mon profil|my profile)$/.test(t)) return this.profile(job.identity);
@@ -612,7 +644,12 @@ export class Onboarding {
       this.save(job.identity, { mode: "invited", locale });
       this.db.run(
         "UPDATE twilio_jobs SET onboarding_content=? WHERE sid=?",
-        "welcome:" + locale,
+        (this.db.get(
+          "SELECT sid FROM nanba_onboarding_templates WHERE kind='welcome_buttons' AND locale=? AND status='in_session'",
+          locale,
+        )
+          ? "welcome_buttons:"
+          : "welcome:") + locale,
         job.sid,
       );
       return w.welcome;
@@ -620,13 +657,17 @@ export class Onboarding {
     return null;
   }
   action(job: Row, args: Row) {
-    if (args.action === "onboarding_start") return { message: this.start(job) };
+    if (args.action === "onboarding_start")
+      return { message: this.present(job, this.start(job)) };
     if (args.action === "onboarding_pause") {
       this.stop(job.identity);
       return { message: copy[this.locale(job.identity)].paused };
     }
     return {
-      message: this.advance(job, args.onboardingField, args.onboardingValue),
+      message: this.present(
+        job,
+        this.advance(job, args.onboardingField, args.onboardingValue),
+      ),
     };
   }
   invite(job: Row, output: string) {
@@ -651,8 +692,192 @@ export class Onboarding {
     this.save(job.identity, { mode: "invited", locale });
     return output + "\n\n" + copy[locale].newInvite;
   }
+  present(job: Row, output: string) {
+    const s = this.state(job.identity);
+    if (!s || !["chat", "review"].includes(s.mode)) return output;
+    const locale = this.locale(job.identity, s),
+      w = copy[locale],
+      b = buttonCopy[locale];
+    const k = s.mode === "review" ? "review" : this.steps(s)[s.step];
+    const nav = (op: string) => ({ op, title: b[op] });
+    const navs = [nav("skip"), nav("back"), nav("later")];
+    let options: Row[],
+      body = output;
+    if (s.mode === "review") {
+      body = this.review(job.identity, s).replace(w.confirm, b.confirmation);
+      options = [nav("confirm"), nav("back"), nav("cancel")];
+    } else {
+      const multi = ["interests", "dailyTopics"].includes(k);
+      const selected: string[] = s.draft[k] || [];
+      if (multi) {
+        options = values[k].map((value, i) => ({
+          op: "toggle",
+          value,
+          title: (selected.includes(value) ? "✓ " : "") + w[labels[k]][i],
+        }));
+        options.push(nav("done"));
+        if (k === "dailyTopics") options.push(nav("back"), nav("later"));
+      } else if (values[k]) {
+        options = values[k].map((value, i) => ({
+          op: "select",
+          value,
+          title: k === "notifications" ? b.notices[i] : w[labels[k]][i],
+        }));
+        if (options.length === 2) options.push(nav("skip"));
+        else if (options.length > 3) options.push(...navs);
+      } else if (k === "timezone" && s.customField !== k) {
+        options = [
+          { op: "select", value: "Europe/Paris", title: b.france },
+          { op: "select", value: "Asia/Kolkata", title: b.india },
+          nav("other"),
+        ];
+      } else if (k === "at" && s.customField !== k) {
+        options = (
+          s.draft.notifications === "evening"
+            ? ["18:30", "19:30", "20:30"]
+            : ["07:30", "08:30", "09:30"]
+        ).map((value) => ({ op: "select", value, title: value }));
+        options.push(nav("other"), ...navs);
+      } else options = navs;
+      body = `${output.startsWith(w.intro) ? w.intro + "\n\n" : ""}${output.startsWith(w.invalid) ? w.invalid + "\n" : ""}${s.step + 1}/${this.steps(s).length} — ${w[k]}\n`;
+      if (multi)
+        body += `${b.multi}\n${selected.length ? selected.map((x) => this.label(k, x, w)).join(", ") : b.none}`;
+      else if (k === "city" || s.customField === k)
+        body +=
+          b.free +
+          (k === "at"
+            ? "\n" + w.timeHint
+            : k === "timezone"
+              ? "\n" + w.zoneHint
+              : "");
+      else if (k === "at") body += w.timeHint;
+      body += "\n\n" + b.hint;
+    }
+    const kind = options.length === 3 ? "buttons3" : "list" + options.length;
+    delete s.controls;
+    const template = this.db.get(
+      "SELECT sid FROM nanba_onboarding_templates WHERE kind=? AND locale=? AND status='in_session'",
+      kind,
+      locale,
+    );
+    if (!template || body.length > 1024) {
+      this.save(job.identity, s);
+      return output;
+    }
+    check(
+      buttonKinds.includes(kind) &&
+        options.every((o) => o.title.length <= (kind === "buttons3" ? 20 : 24)),
+      "invalid_button_layout",
+    );
+    const nonce = randomBytes(12).toString("hex");
+    s.controls = {
+      nonce,
+      epoch: job.epoch,
+      at: this.host.now(),
+      mode: s.mode,
+      field: k,
+      options,
+    };
+    this.save(job.identity, s);
+    const variables: Record<string, string> = { "1": body };
+    options.forEach((o, i) => {
+      variables[String(2 + i * 2)] = o.title;
+      variables[String(3 + i * 2)] = `nbq:${nonce}:${i}`;
+    });
+    this.db.run(
+      "UPDATE twilio_jobs SET onboarding_content=?,human_reply=1 WHERE sid=?",
+      "buttons:" +
+        this.host.seal(JSON.stringify({ kind, locale, nonce, variables })),
+      job.sid,
+    );
+    job.human_reply = 1;
+    return body;
+  }
+  tap(job: Row, token: string): string {
+    const s = this.state(job.identity),
+      b = buttonCopy[this.locale(job.identity, s)];
+    const match = /^nbq:([a-f0-9]{24}):(\d)$/.exec(token),
+      c = s?.controls;
+    if (
+      job.inbound_audio ||
+      !match ||
+      !c ||
+      c.nonce !== match[1] ||
+      c.epoch !== job.epoch ||
+      this.host.now() - c.at > 23 * 3600000 ||
+      c.mode !== s!.mode ||
+      c.field !== (s!.mode === "review" ? "review" : this.steps(s!)[s!.step])
+    )
+      return b.stale;
+    const option = c.options[Number(match[2])];
+    if (!option) return b.stale;
+    delete s!.controls;
+    this.save(job.identity, s!);
+    let result: string;
+    if (option.op === "select") {
+      delete s!.customField;
+      this.save(job.identity, s!);
+      result = this.advance(job, c.field, option.value);
+    } else if (option.op === "toggle") {
+      const selected: string[] = s!.draft[c.field] || [];
+      s!.draft[c.field] = selected.includes(option.value)
+        ? selected.filter((x) => x !== option.value)
+        : selected.length < 4
+          ? [...selected, option.value]
+          : selected;
+      this.save(job.identity, s!);
+      result = this.question(job.identity, s!);
+    } else if (option.op === "done") {
+      const selected = s!.draft[c.field];
+      result = selected?.length
+        ? this.advance(job, c.field, selected)
+        : this.commandText(job, "SKIP")!;
+    } else if (option.op === "other") {
+      s!.customField = c.field;
+      this.save(job.identity, s!);
+      result = this.question(job.identity, s!);
+    } else
+      result =
+        this.commandText(
+          job,
+          (
+            {
+              skip: "SKIP",
+              back: "BACK",
+              later: "LATER",
+              confirm: "CONFIRM",
+              cancel: "CANCEL",
+            } as Record<string, string>
+          )[option.op] || "",
+        ) || b.stale;
+    return this.present(job, result);
+  }
   form(job: Row): Record<string, string> | null {
     if (!job.onboarding_content) return null;
+    if (job.onboarding_content.startsWith("buttons:")) {
+      const payload = JSON.parse(
+        this.host.unseal(job.onboarding_content.slice(8)),
+      );
+      const c = this.state(job.identity)?.controls;
+      if (
+        !c ||
+        c.nonce !== payload.nonce ||
+        c.epoch !== job.epoch ||
+        this.host.now() - c.at > 23 * 3600000
+      )
+        return null;
+      const row = this.db.get(
+        "SELECT sid FROM nanba_onboarding_templates WHERE kind=? AND locale=? AND status='in_session'",
+        payload.kind,
+        payload.locale,
+      );
+      return row?.sid
+        ? {
+            ContentSid: row.sid,
+            ContentVariables: JSON.stringify(payload.variables),
+          }
+        : null;
+    }
     const [kind, locale] = job.onboarding_content.split(":");
     const row = this.db.get(
       "SELECT * FROM nanba_onboarding_templates WHERE kind=? AND locale=?",
@@ -666,6 +891,17 @@ export class Onboarding {
   status(includeDiagnostics = false) {
     return {
       conversation: true,
+      buttons: true,
+      buttonsReady: ["fr", "en", "ta"].every((locale) =>
+        buttonKinds.every(
+          (kind) =>
+            !!this.db.get(
+              "SELECT sid FROM nanba_onboarding_templates WHERE kind=? AND locale=? AND status='in_session'",
+              kind,
+              locale,
+            ),
+        ),
+      ),
       optional: true,
       templates: this.db
         .all("SELECT kind,locale,status,error FROM nanba_onboarding_templates")
@@ -700,7 +936,7 @@ export class Onboarding {
       };
     try {
       for (const locale of ["fr", "en", "ta"])
-        for (const kind of ["welcome", "flow"] as const) {
+        for (const kind of ["welcome_buttons", "flow", ...buttonKinds]) {
           let row = this.db.get(
             "SELECT * FROM nanba_onboarding_templates WHERE kind=? AND locale=?",
             kind,
@@ -741,13 +977,13 @@ export class Onboarding {
               this.db.run(
                 "UPDATE nanba_onboarding_templates SET sid=?,status=?,error=NULL WHERE kind=? AND locale=?",
                 data.sid,
-                kind === "welcome" ? "in_session" : "unsubmitted",
+                kind !== "flow" ? "in_session" : "unsubmitted",
                 kind,
                 locale,
               );
               row = {
                 sid: data.sid,
-                status: kind === "welcome" ? "in_session" : "unsubmitted",
+                status: kind !== "flow" ? "in_session" : "unsubmitted",
               };
             } catch {
               this.db.run(

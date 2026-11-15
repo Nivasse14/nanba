@@ -318,6 +318,8 @@ export class TwilioAssistant {
     const interactive = params.InteractiveData || "";
     check(interactive.length <= 12000, "flow_too_large", 413);
     const body = (
+      (params.ButtonPayload?.startsWith("nbq:") ? params.ButtonPayload : "") ||
+      (params.ListId?.startsWith("nbq:") ? params.ListId : "") ||
       buttons[params.ButtonPayload] ||
       params.Body ||
       (interactive ? "[Formulaire Nanba]" : "")
@@ -398,9 +400,10 @@ export class TwilioAssistant {
         identity,
         this.now() - 60000,
       )!.n;
-      const onboardingActive = ["chat", "flow", "review"].includes(
-        this.onboarding.state(identity)?.mode,
-      );
+      const onboardingState = this.onboarding.state(identity);
+      const onboardingActive =
+        ["chat", "flow", "review"].includes(onboardingState?.mode) ||
+        onboardingState?.completedAt > this.now() - 60000;
       if (recent >= (onboardingActive ? 24 : 12) && !stop && !start && !forget)
         state = "ignored";
       const epoch = this.db.get(

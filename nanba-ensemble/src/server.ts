@@ -278,10 +278,11 @@ export function createApplication(
         send(200, {
           implemented: true,
           ready: twilio.ready(),
-          version: "assistant-v4.3-onboarding",
+          version: "assistant-v4.4-buttons",
           onboarding: twilio.onboarding.status(),
           capabilities: {
             whatsappOnboarding: true,
+            whatsappOnboardingButtons: true,
             text: true,
             images: true,
             audio: true,
