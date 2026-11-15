@@ -10,12 +10,12 @@ const sha256 = data => createHash('sha256').update(data).digest('hex');
 const sourceCommit = git('rev-parse', 'HEAD').toString().trim();
 const paths = git('ls-tree', '-r', '-z', '--name-only', 'HEAD').toString().split('\0').filter(p => p && p !== 'docs/SPECIFICATION.txt');
 if (paths.some(p => /^(data|sessions|node_modules)\//.test(p) || /^\.env(?:\.|$)/.test(p) && p !== '.env.example')) throw Error('private_file_in_archive');
-for (const required of ['docs/AGENT_PROMPT.txt', 'src/server.ts', 'src/nanba-diaspora.ts', 'scripts/start-container.sh', 'package-lock.json']) {
+for (const required of ['docs/AGENT_PROMPT.txt', 'src/server.ts', 'src/nanba-diaspora.ts', 'src/nanba-onboarding.ts', 'src/nanba-onboarding-copy.ts', 'scripts/start-container.sh', 'package-lock.json']) {
   if (!paths.includes(required)) throw Error('missing_runtime_file:' + required);
 }
 const files = paths.map(path => ({ path, sha256: sha256(git('show', sourceCommit + ':' + path)) }));
 const archive = gzipSync(git('archive', '--format=tar', sourceCommit, '--', '.', ':(exclude)docs/SPECIFICATION.txt'), { level: 9 });
-const manifest = { sourceCommit, release: 'assistant-v4.2-diaspora', archiveSha256: sha256(archive), files };
+const manifest = { sourceCommit, release: 'assistant-v4.3-onboarding', archiveSha256: sha256(archive), files };
 mkdirSync(output, { recursive: true });
 writeFileSync(resolve(output, 'nanba-ensemble-source.tar.gz'), archive);
 writeFileSync(resolve(output, 'SOURCE-MANIFEST.json'), JSON.stringify(manifest, null, 2) + '\n');
