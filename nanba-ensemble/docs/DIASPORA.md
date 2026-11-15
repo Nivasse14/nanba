@@ -1,6 +1,6 @@
 # Les nouveaux services diaspora sur WhatsApp
 
-Version source : **assistant-v4.2-diaspora**, préparée et validée le 15 novembre 2026. L’état de la version réellement active est donné par `/api/twilio/health`. Les nouveautés ci-dessous utilisent la connexion Twilio/OpenAI existante, sans nouvelle clé API et sans dépendre du déploiement de l’API catalogue.
+Version **assistant-v4.2-diaspora déployée sur Render le 15 novembre 2026 à 18 h 15 (Paris)**. Service et capacités vérifiés ; voir [la validation de production](diaspora-live-validation.json). L’état de la version réellement active est donné par `/api/twilio/health`. Les nouveautés ci-dessous utilisent la connexion Twilio/OpenAI existante, sans nouvelle clé API et sans dépendre du déploiement de l’API catalogue.
 
 ## Ce que l’on peut demander
 
