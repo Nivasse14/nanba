@@ -1,10 +1,10 @@
 {
-  "friendly_name": "nanba_onboarding_flow_fr_v2",
+  "friendly_name": "nanba_onboarding_flow_fr_v3",
   "language": "fr",
   "types": {
     "twilio/flows": {
       "body": "Choisis tes préférences dans le formulaire WhatsApp, ou écris QUESTIONS ICI. Un récapitulatif sera demandé avant enregistrement.",
-      "subtitle": "Aucun abonnement sans confirmation. Modifiable avec MON PROFIL.",
+      "subtitle": "Tes choix seront confirmés dans la conversation.",
       "type": "SURVEY",
       "button_text": "Personnaliser",
       "pages": [
@@ -24,7 +24,7 @@
             {
               "type": "SINGLE_SELECT",
               "name": "replyMode",
-              "label": "Quel format de réponse ?",
+              "label": "Format de réponse",
               "text": "Facultatif. PASSER garde le réglage actuel.",
               "required": false,
               "options": "[{\"id\":\"text\",\"title\":\"Texte\"},{\"id\":\"audio\",\"title\":\"Audio (voix IA)\"},{\"id\":\"auto\",\"title\":\"Comme mes messages\"}]"
@@ -39,7 +39,7 @@
             {
               "type": "MULTIPLE_SELECT",
               "name": "interests",
-              "label": "Quels sujets t’intéressent ? (4 maximum)",
+              "label": "Sujets (4 maximum)",
               "text": "Facultatif. PASSER garde le réglage actuel.",
               "required": false,
               "options": "[{\"id\":\"housing\",\"title\":\"Logement\"},{\"id\":\"jobs\",\"title\":\"Emploi\"},{\"id\":\"services\",\"title\":\"Démarches et services\"},{\"id\":\"news\",\"title\":\"Actualités\"},{\"id\":\"events\",\"title\":\"Sorties\"},{\"id\":\"cinema\",\"title\":\"Cinéma\"},{\"id\":\"cuisine\",\"title\":\"Cuisine\"},{\"id\":\"image\",\"title\":\"Images\"},{\"id\":\"horoscope\",\"title\":\"Horoscope\"}]"
@@ -47,7 +47,7 @@
             {
               "type": "SHORT_TEXT",
               "name": "city",
-              "label": "Quelle ville ? (facultatif)",
+              "label": "Ta ville ?",
               "text": "Facultatif. PASSER garde le réglage actuel.",
               "required": false,
               "input_type": "TEXT"
@@ -62,7 +62,7 @@
             {
               "type": "SINGLE_SELECT",
               "name": "tone",
-              "label": "Quel ton préfères-tu ?",
+              "label": "Ton de l’assistant",
               "text": "Facultatif. PASSER garde le réglage actuel.",
               "required": false,
               "options": "[{\"id\":\"warm\",\"title\":\"Chaleureux\"},{\"id\":\"direct\",\"title\":\"Direct\"},{\"id\":\"calm\",\"title\":\"Posé\"}]"
@@ -70,7 +70,7 @@
             {
               "type": "SINGLE_SELECT",
               "name": "length",
-              "label": "Quelle longueur de réponse ?",
+              "label": "Niveau de détail",
               "text": "Facultatif. PASSER garde le réglage actuel.",
               "required": false,
               "options": "[{\"id\":\"short\",\"title\":\"Court\"},{\"id\":\"detailed\",\"title\":\"Détaillé\"}]"
@@ -78,19 +78,19 @@
             {
               "type": "SINGLE_SELECT",
               "name": "notifications",
-              "label": "Une sélection automatique ?",
+              "label": "Envoi automatique ?",
               "text": "Facultatif. PASSER garde le réglage actuel.",
               "required": false,
               "options": "[{\"id\":\"none\",\"title\":\"Aucune sélection automatique\"},{\"id\":\"morning\",\"title\":\"Une sélection le matin\"},{\"id\":\"evening\",\"title\":\"Une sélection le soir\"},{\"id\":\"keep\",\"title\":\"Garder mon programme actuel\"}]"
             },
             {
               "type": "TEXT_BODY",
-              "text": "Sans heure ou sujets, aucun envoi activé. Fuseau par défaut : Europe/Paris. Confirmation dans la conversation."
+              "text": "Envoi sur confirmation. Fuseau par défaut : Europe/Paris."
             },
             {
               "type": "MULTIPLE_SELECT",
               "name": "dailyTopics",
-              "label": "Quels sujets pour cette sélection ? (4 maximum)",
+              "label": "Thèmes (4 maximum)",
               "text": "Facultatif. PASSER garde le réglage actuel.",
               "required": false,
               "options": "[{\"id\":\"news\",\"title\":\"Actualités\"},{\"id\":\"events\",\"title\":\"Sorties\"},{\"id\":\"cinema\",\"title\":\"Cinéma\"},{\"id\":\"cuisine\",\"title\":\"Cuisine\"},{\"id\":\"image\",\"title\":\"Images\"}]"
@@ -98,16 +98,16 @@
             {
               "type": "SHORT_TEXT",
               "name": "at",
-              "label": "À quelle heure ? (HH:MM)",
-              "text": "Heure locale HH:MM, par exemple 08:30. Heures calmes respectées (22h–7h par défaut).",
+              "label": "Heure (HH:MM)",
+              "text": "Exemple : 08:30. Heures calmes : 22h–7h par défaut.",
               "required": false,
               "input_type": "TEXT"
             },
             {
               "type": "SHORT_TEXT",
               "name": "timezone",
-              "label": "Quel fuseau horaire ?",
-              "text": "France : Europe/Paris · Inde : Asia/Kolkata · ou ton fuseau IANA.",
+              "label": "Fuseau horaire",
+              "text": "Europe/Paris · Asia/Kolkata · ou autre fuseau IANA.",
               "required": false,
               "input_type": "TEXT"
             }

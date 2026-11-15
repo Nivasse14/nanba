@@ -1,5 +1,5 @@
 {
-  "friendly_name": "nanba_onboarding_flow_ta_v2",
+  "friendly_name": "nanba_onboarding_flow_ta_v3",
   "language": "ta",
   "types": {
     "twilio/flows": {
@@ -39,7 +39,7 @@
             {
               "type": "MULTIPLE_SELECT",
               "name": "interests",
-              "label": "எந்தத் தலைப்புகள்? (4 வரை)",
+              "label": "தலைப்புகள் (4 வரை)",
               "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
               "required": false,
               "options": "[{\"id\":\"housing\",\"title\":\"வீடு\"},{\"id\":\"jobs\",\"title\":\"வேலை\"},{\"id\":\"services\",\"title\":\"நடைமுறை உதவி\"},{\"id\":\"news\",\"title\":\"செய்திகள்\"},{\"id\":\"events\",\"title\":\"நிகழ்ச்சிகள்\"},{\"id\":\"cinema\",\"title\":\"சினிமா\"},{\"id\":\"cuisine\",\"title\":\"சமையல்\"},{\"id\":\"image\",\"title\":\"படங்கள்\"},{\"id\":\"horoscope\",\"title\":\"ஜாதகம்\"}]"
@@ -47,7 +47,7 @@
             {
               "type": "SHORT_TEXT",
               "name": "city",
-              "label": "எந்த நகரம்? (விருப்பம்)",
+              "label": "நகரம்?",
               "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
               "required": false,
               "input_type": "TEXT"
@@ -62,7 +62,7 @@
             {
               "type": "SINGLE_SELECT",
               "name": "tone",
-              "label": "எப்படிப் பேச வேண்டும்?",
+              "label": "பேசும் விதம்",
               "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
               "required": false,
               "options": "[{\"id\":\"warm\",\"title\":\"நட்பாக\"},{\"id\":\"direct\",\"title\":\"நேரடியாக\"},{\"id\":\"calm\",\"title\":\"அமைதியாக\"}]"
@@ -78,19 +78,19 @@
             {
               "type": "SINGLE_SELECT",
               "name": "notifications",
-              "label": "தானாக ஒரு தொகுப்பு வேண்டுமா?",
+              "label": "தினமும் தொகுப்பு?",
               "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
               "required": false,
               "options": "[{\"id\":\"none\",\"title\":\"தானியங்கி தொகுப்பு வேண்டாம்\"},{\"id\":\"morning\",\"title\":\"காலையில் ஒரு தொகுப்பு\"},{\"id\":\"evening\",\"title\":\"மாலையில் ஒரு தொகுப்பு\"},{\"id\":\"keep\",\"title\":\"தற்போதைய அட்டவணை தொடரட்டும்\"}]"
             },
             {
               "type": "TEXT_BODY",
-              "text": "நேரமும் தலைப்புகளும் இல்லாமல் பதிவு இல்லை. இயல்பு Europe/Paris. உரையாடலில் உறுதிப்படுத்தவும்."
+              "text": "உரையாடலில் உறுதிப்படுத்தவும். இயல்பு Europe/Paris."
             },
             {
               "type": "MULTIPLE_SELECT",
               "name": "dailyTopics",
-              "label": "தொகுப்பின் தலைப்புகள்? (4 வரை)",
+              "label": "தொகுப்பு (4 வரை)",
               "text": "கட்டாயமில்லை. SKIP: தற்போதைய அமைப்பு தொடரும்.",
               "required": false,
               "options": "[{\"id\":\"news\",\"title\":\"செய்திகள்\"},{\"id\":\"events\",\"title\":\"நிகழ்ச்சிகள்\"},{\"id\":\"cinema\",\"title\":\"சினிமா\"},{\"id\":\"cuisine\",\"title\":\"சமையல்\"},{\"id\":\"image\",\"title\":\"படங்கள்\"}]"
@@ -98,7 +98,7 @@
             {
               "type": "SHORT_TEXT",
               "name": "at",
-              "label": "எத்தனை மணிக்கு? (HH:MM)",
+              "label": "நேரம் (HH:MM)",
               "text": "உள்ளூர் நேரம் HH:MM, எ.கா. 08:30. அமைதி நேரம் 22:00–07:00.",
               "required": false,
               "input_type": "TEXT"
@@ -106,8 +106,8 @@
             {
               "type": "SHORT_TEXT",
               "name": "timezone",
-              "label": "எந்த நேர மண்டலம்?",
-              "text": "பிரான்ஸ்: Europe/Paris · இந்தியா: Asia/Kolkata · அல்லது IANA நேர மண்டலம்.",
+              "label": "நேர மண்டலம்",
+              "text": "Europe/Paris · Asia/Kolkata · அல்லது IANA.",
               "required": false,
               "input_type": "TEXT"
             }

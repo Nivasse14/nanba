@@ -1,10 +1,10 @@
 {
-  "friendly_name": "nanba_onboarding_flow_en_v2",
+  "friendly_name": "nanba_onboarding_flow_en_v3",
   "language": "en",
   "types": {
     "twilio/flows": {
       "body": "Choose preferences in the WhatsApp form, or write QUESTIONS HERE. Review a summary before saving.",
-      "subtitle": "No subscription without confirmation. Change with MY PROFILE.",
+      "subtitle": "Confirm your choices in the chat.",
       "type": "SURVEY",
       "button_text": "Personalise",
       "pages": [
@@ -39,7 +39,7 @@
             {
               "type": "MULTIPLE_SELECT",
               "name": "interests",
-              "label": "Which topics interest you? (up to 4)",
+              "label": "Topics (up to 4)",
               "text": "Optional. SKIP keeps the current setting.",
               "required": false,
               "options": "[{\"id\":\"housing\",\"title\":\"Housing\"},{\"id\":\"jobs\",\"title\":\"Jobs\"},{\"id\":\"services\",\"title\":\"Practical help\"},{\"id\":\"news\",\"title\":\"News\"},{\"id\":\"events\",\"title\":\"Events\"},{\"id\":\"cinema\",\"title\":\"Cinema\"},{\"id\":\"cuisine\",\"title\":\"Cooking\"},{\"id\":\"image\",\"title\":\"Images\"},{\"id\":\"horoscope\",\"title\":\"Horoscope\"}]"
@@ -47,7 +47,7 @@
             {
               "type": "SHORT_TEXT",
               "name": "city",
-              "label": "Which town or city? (optional)",
+              "label": "Town or city?",
               "text": "Optional. SKIP keeps the current setting.",
               "required": false,
               "input_type": "TEXT"
@@ -78,19 +78,19 @@
             {
               "type": "SINGLE_SELECT",
               "name": "notifications",
-              "label": "An automatic selection?",
+              "label": "Daily selection?",
               "text": "Optional. SKIP keeps the current setting.",
               "required": false,
               "options": "[{\"id\":\"none\",\"title\":\"No automatic selection\"},{\"id\":\"morning\",\"title\":\"One morning selection\"},{\"id\":\"evening\",\"title\":\"One evening selection\"},{\"id\":\"keep\",\"title\":\"Keep my current schedule\"}]"
             },
             {
               "type": "TEXT_BODY",
-              "text": "No time or topics means no subscription. Default time zone: Europe/Paris. Confirm in the chat."
+              "text": "Confirm in chat. Default time zone: Europe/Paris."
             },
             {
               "type": "MULTIPLE_SELECT",
               "name": "dailyTopics",
-              "label": "Topics for this selection? (up to 4)",
+              "label": "Daily topics (max 4)",
               "text": "Optional. SKIP keeps the current setting.",
               "required": false,
               "options": "[{\"id\":\"news\",\"title\":\"News\"},{\"id\":\"events\",\"title\":\"Events\"},{\"id\":\"cinema\",\"title\":\"Cinema\"},{\"id\":\"cuisine\",\"title\":\"Cooking\"},{\"id\":\"image\",\"title\":\"Images\"}]"
@@ -98,16 +98,16 @@
             {
               "type": "SHORT_TEXT",
               "name": "at",
-              "label": "At what time? (HH:MM)",
-              "text": "Local time HH:MM, e.g. 08:30. Quiet hours apply (22:00–07:00 by default).",
+              "label": "Time (HH:MM)",
+              "text": "Example: 08:30. Default quiet hours: 22:00–07:00.",
               "required": false,
               "input_type": "TEXT"
             },
             {
               "type": "SHORT_TEXT",
               "name": "timezone",
-              "label": "Which time zone?",
-              "text": "France: Europe/Paris · India: Asia/Kolkata · or your IANA time zone.",
+              "label": "Time zone",
+              "text": "Europe/Paris · Asia/Kolkata · or another IANA time zone.",
               "required": false,
               "input_type": "TEXT"
             }
